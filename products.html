@@ -470,8 +470,8 @@
   <div class="filter-bar">
     <span class="filter-label">Filter:</span>
     <button class="filter-btn active" onclick="filterProducts('all', this)">Semua</button>
-    <button class="filter-btn" onclick="filterProducts('game', this)">🌆 Game</button>
-    <button class="filter-btn" onclick="filterProducts('film', this)">🏠 Film</button>
+    <button class="filter-btn" onclick="filterProducts('scene', this)">🌆 Scene & Lanskap</button>
+    <button class="filter-btn" onclick="filterProducts('interior', this)">🏠 Interior</button>
     <button class="filter-btn" onclick="filterProducts('custom', this)">⭐ Custom Order</button>
   </div>
 
@@ -540,16 +540,16 @@
     /* ✏️ EDIT: Sesuaikan nama, harga, deskripsi, dan kategori produkmu */
     const products = [
       {
-        id: 1, name: "Stardew Valley",
-        cat: "game", catLabel: "Game & Pixel",
-        emoji: "☕", badge: "new", badgeLabel: "Baru", "Terlaris",
-        price: 245000,
-        desc: "Wujudkan karakter Stardew Valley versimu sendiri, Dapat dikustomisasi sesuai keinginan🌻🐔🎣 Ukuran 11x11x11,5cm.",
+        id: 1, name: "Warung Kopi Vintage",
+        cat: "scene", catLabel: "Scene & Lanskap",
+        emoji: "☕", badge: "new", badgeLabel: "Baru",
+        price: 285000,
+        desc: "Diorama warung kopi jadul dengan detail neon sign, kursi rotan, dan nuansa sore hari. Ukuran 20x15x18cm.",
         stock: true
       },
       {
         id: 2, name: "Kamar Tidur Aesthetic",
-        cat: "film", catLabel: "Film & Fiksi",
+        cat: "interior", catLabel: "Interior",
         emoji: "🛏️", badge: "hot", badgeLabel: "Terlaris",
         price: 320000,
         desc: "Miniatur kamar tidur dengan nuansa cozy — lampu tidur, buku, tanaman kecil. Ukuran 22x18x16cm.",
@@ -557,7 +557,7 @@
       },
       {
         id: 3, name: "Gang Hujan Tokyo",
-        cat: "game", catLabel: "Game",
+        cat: "scene", catLabel: "Scene & Lanskap",
         emoji: "🌧️", badge: null, badgeLabel: null,
         price: 450000,
         desc: "Diorama gang malam kota Tokyo dengan efek basah, lampion, dan refleksi cahaya. Ukuran 25x20x22cm.",
@@ -565,7 +565,7 @@
       },
       {
         id: 4, name: "Dapur Mini Klasik",
-        cat: "film", catLabel: "Film",
+        cat: "interior", catLabel: "Interior",
         emoji: "🍳", badge: "limited", badgeLabel: "Terbatas",
         price: 275000,
         desc: "Dapur mungil dengan detail kompor, rak bumbu, dan suasana pagi yang hangat. Ukuran 18x15x14cm.",
@@ -573,7 +573,7 @@
       },
       {
         id: 5, name: "Toko Bunga Shabby Chic",
-        cat: "game", catLabel: "Game & Komunitas",
+        cat: "scene", catLabel: "Scene & Lanskap",
         emoji: "🌸", badge: null, badgeLabel: null,
         price: 380000,
         desc: "Miniatur toko bunga estetik dengan etalase kaca, berbagai bunga miniatur, dan papan nama vintage.",
@@ -683,7 +683,7 @@
       const msg = encodeURIComponent(
         `Halo Nald Studio! Saya ingin memesan diorama:\n\n${lines}\n\n` +
         (total > 0 ? `Total: ${formatRp(total)}\n\n` : '') +
-        `Mohon konfirmasi ketersediaan & info pengiriman ya. Terima kasih!`
+        `Mohon konfirmasi ketersediaan & info pengiriman ya. Terima kasih! 😊`
       );
       window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
     }
