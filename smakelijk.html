@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smakelijk — Dutch Colonial Pastry, Surabaya</title>
+<meta name="description" content="Smakelijk is a Dutch colonial pastry house baked in Surabaya, Indonesia. Six recipes carried through the colonial archive: Putu Belanda, Brownmix, Boterkoek, English Fruitcake, Onbijtkoek, Kattentongen. A brand of Eden Bakery Cake.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Schibsted+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!--
+  =========================================================================
+  HOW TO SWAP IN REAL PRODUCT PHOTOS
+  Each product has an <img> tag pointing to assets/<product-name>.jpg
+  The SAME file is reused automatically in both the Catalog and the Ledger
+  thumbnail. Until the file exists, an elegant placeholder is shown.
+  To go live: host your photos at those exact relative paths inside /assets,
+  or replace each src="assets/xxx.jpg" with your real image URL.
+  Search "PRODUCT IMAGE" comments to find every image slot.
+  =========================================================================
+-->
+
+<style>
+  :root{
+    --cream:      #ECE8D7;
+    --cream-deep: #DEDAC2;
+    --charcoal:   #3E3A39;
+    --ink:        #2A2624;
+    --salmon:     #EFA0A0;
+    --salmon-deep:#DD7E7E;
+    --salmon-wash: color-mix(in srgb, #EFA0A0 42%, #ECE8D7 58%);
+    --gold:       #B8863B;
+    --delft:      #3A5A78;
+    --line-on-cream: rgba(62,58,57,0.16);
+    --line-on-ink:   rgba(236,232,215,0.18);
+
+    --display: 'Fraunces', 'Iowan Old Style', serif;
+    --body:    'Schibsted Grotesk', -apple-system, sans-serif;
+    --mono:    'Space Mono', monospace;
+
+    --ease: cubic-bezier(.22,1,.36,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.5;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--salmon); color:var(--ink); }
+
+  body::after{
+    content:'';
+    position:fixed; inset:0; z-index:9999; pointer-events:none;
+    opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--gold);
+  }
+
+  /* ---------- custom cursor ---------- */
+  #cursor{
+    position:fixed; top:0; left:0; width:14px; height:14px; border-radius:50%;
+    background:var(--salmon-deep); pointer-events:none; z-index:10000;
+    transform:translate(-50%,-50%); mix-blend-mode:multiply;
+    transition:width .25s var(--ease), height .25s var(--ease);
+  }
+  #cursor.grow{ width:44px; height:44px; }
+  @media (hover:none), (pointer:coarse){ #cursor{ display:none; } }
+
+  /* ---------- header: masthead (kop) + main nav ---------- */
+  #siteHeader{
+    position:fixed; top:0; left:0; right:0; z-index:500;
+    background:rgba(236,232,215,.88); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-on-cream);
+    transition:transform .4s var(--ease);
+  }
+  #siteHeader.hide{ transform:translateY(-100%); }
+  .masthead{
+    display:flex; align-items:center; justify-content:center; gap:.6rem;
+    padding:.4rem clamp(1.2rem,4vw,3rem);
+    border-bottom:1px solid var(--line-on-cream);
+    font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--charcoal); opacity:.65;
+  }
+  .masthead img{ height:15px; width:auto; opacity:.9; }
+  .mainnav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:.95rem clamp(1.2rem,4vw,3rem);
+  }
+  .nav-mark{ display:flex; align-items:center; gap:.5rem; font-family:var(--display); font-weight:600; font-size:1.05rem; letter-spacing:.02em; }
+  .nav-mark img{ height:24px; width:auto; }
+  .nav-links{ display:flex; align-items:center; gap:2.1rem; font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; }
+  .nav-links a{ position:relative; padding-bottom:2px; }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:100%; height:1px;
+    background:var(--gold); transform:scaleX(0); transform-origin:right; transition:transform .35s var(--ease);
+  }
+  .nav-links a:hover::after{ transform:scaleX(1); transform-origin:left; }
+  .nav-links a.nav-order{
+    padding:.42rem .95rem; border:1px solid var(--salmon-deep); border-radius:2px; transition:background .3s var(--ease);
+  }
+  .nav-links a.nav-order::after{ display:none; }
+  .nav-links a.nav-order:hover{ background:var(--salmon); }
+  @media (max-width:820px){ .nav-links a:not(.nav-order){ display:none; } .masthead span{ display:none; } }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh; background:var(--cream); color:var(--charcoal);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; position:relative; padding:8rem 1.5rem 4rem; overflow:hidden;
+  }
+  .hero-gable{ width:150px; height:auto; margin-bottom:2.2rem; opacity:.8; }
+  .hero-gable path{ stroke:var(--gold); }
+  .hero h1{
+    font-family:var(--display); font-weight:600; font-size:clamp(3.2rem,13vw,8.5rem);
+    letter-spacing:-.01em; line-height:.92;
+  }
+  .hero h1 .word{ overflow:hidden; display:inline-block; vertical-align:top; }
+  .hero h1 .word-inner{ display:inline-block; }
+  .hero-sub{
+    margin-top:1.6rem; font-size:clamp(1rem,2vw,1.25rem); color:var(--charcoal); opacity:.72; max-width:34ch;
+  }
+  .hero-scroll{
+    position:absolute; bottom:2.2rem; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:.65rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--charcoal); opacity:.55; display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  }
+  .hero-scroll .line{ width:1px; height:34px; background:var(--charcoal); opacity:.4; overflow:hidden; }
+  .hero-scroll .line i{ display:block; width:100%; height:50%; background:var(--salmon-deep); animation:scrollpulse 1.8s ease-in-out infinite; }
+  @keyframes scrollpulse{ 0%{ transform:translateY(-100%);} 100%{ transform:translateY(200%);} }
+
+  section{ position:relative; padding:clamp(5rem,10vw,9rem) clamp(1.4rem,6vw,5rem); }
+  .max{ max-width:1180px; margin:0 auto; }
+
+  /* ---------- manifesto ---------- */
+  .manifesto{ text-align:center; }
+  .manifesto .eyebrow{ display:block; margin-bottom:1.4rem; }
+  .manifesto p{
+    font-family:var(--display); font-weight:400; font-style:italic;
+    font-size:clamp(1.4rem,3.4vw,2.5rem); line-height:1.35; max-width:22ch; margin:0 auto;
+  }
+  .manifesto p .word{ overflow:hidden; display:inline-block; }
+  .manifesto p .word-inner{ display:inline-block; }
+  .tile-divider{ display:flex; align-items:center; gap:1rem; max-width:340px; margin:3.2rem auto 0; }
+  .tile-divider .rule{ flex:1; height:1px; background:var(--line-on-cream); }
+  .tile-divider .diamond{ width:8px; height:8px; background:var(--delft); transform:rotate(45deg); }
+
+  /* ---------- catalog head ---------- */
+  .catalog-head{ text-align:center; margin-bottom:clamp(2.5rem,6vw,4rem); }
+  .catalog-head h2{ font-family:var(--display); font-weight:600; font-size:clamp(2.2rem,5.5vw,3.6rem); margin-top:.6rem; }
+
+  /* ---------- catalog: horizontal pinned slider ---------- */
+  .catalog-pin{ position:relative; }
+  .catalog-viewport{
+    position:relative; height:auto; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+    padding:.5rem 0 1.4rem; cursor:grab;
+  }
+  .catalog-viewport.dragging{ cursor:grabbing; scroll-snap-type:none; }
+  .catalog-track{ display:flex; gap:clamp(1.6rem,4vw,3.4rem); padding:0 clamp(1.4rem,6vw,6rem); }
+
+  .product-card{ flex:0 0 auto; width:clamp(260px,32vw,400px); display:flex; flex-direction:column; scroll-snap-align:center; transform-origin:center bottom; }
+  .product-card .product-copy{ margin-top:1.3rem; }
+  .product-card .product-copy h3{ font-size:clamp(1.5rem,2.6vw,2rem); margin:.6rem 0 .8rem; }
+  .product-card .product-copy p{ max-width:none; font-size:.92rem; }
+
+  .frame{ position:relative; aspect-ratio:4/5; overflow:hidden; background:linear-gradient(160deg,var(--cream-deep),var(--cream)); }
+  .frame-clip{ position:absolute; inset:0; }
+  .specimen-img{ width:100%; height:100%; object-fit:cover; }
+  .specimen-placeholder{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:.9rem; text-align:center; padding:1.5rem;
+  }
+  .specimen-placeholder svg{ width:42px; height:42px; opacity:.5; }
+  .specimen-placeholder .ph-name{ font-family:var(--display); font-style:italic; font-size:1.05rem; color:var(--charcoal); opacity:.7; }
+  .specimen-placeholder .ph-label{ font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--charcoal); opacity:.4; }
+
+  .corner{ position:absolute; width:22px; height:22px; }
+  .corner svg{ width:100%; height:100%; }
+  .corner path{ stroke:var(--gold); stroke-width:1.4; fill:none; }
+  .corner.tl{ top:10px; left:10px; }
+  .corner.tr{ top:10px; right:10px; transform:rotate(90deg); }
+  .corner.br{ bottom:10px; right:10px; transform:rotate(180deg); }
+  .corner.bl{ bottom:10px; left:10px; transform:rotate(270deg); }
+
+  .product-copy .idx{ font-family:var(--mono); font-size:.78rem; color:var(--gold); letter-spacing:.08em; }
+  .product-copy h3{ font-family:var(--display); font-weight:600; }
+  .product-copy p{ color:var(--charcoal); opacity:.82; }
+  .price-tag{
+    display:inline-flex; align-items:baseline; gap:.5rem; margin-top:1.4rem;
+    font-family:var(--mono); font-size:.9rem; padding:.45rem .9rem; border:1px solid var(--gold); color:var(--gold);
+  }
+  .price-tag .cur{ font-size:.68rem; opacity:.7; }
+
+  .catalog-hud{
+    display:flex; align-items:center; justify-content:space-between; gap:1.6rem;
+    max-width:1180px; margin:1rem auto 0; padding:0 clamp(1.4rem,6vw,6rem);
+  }
+  .catalog-counter{ font-family:var(--mono); font-size:.78rem; letter-spacing:.1em; color:var(--gold); white-space:nowrap; }
+  .catalog-track-bar{ flex:1; max-width:220px; height:1px; background:var(--line-on-cream); position:relative; }
+  .catalog-track-fill{ position:absolute; left:0; top:0; height:100%; width:100%; background:var(--gold); transform:scaleX(0); transform-origin:left; }
+  .catalog-hint{
+    font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--charcoal); opacity:.5; transition:opacity .6s var(--ease);
+  }
+
+  /* ---------- heritage ---------- */
+  .heritage-panel{ background:var(--cream-deep); }
+  .heritage{ text-align:center; }
+  .heritage .eyebrow{ color:var(--salmon-deep); display:block; margin-bottom:1.4rem; }
+  .heritage p{
+    font-family:var(--display); font-weight:400; font-size:clamp(1.3rem,3vw,2.1rem); line-height:1.45;
+    max-width:30ch; margin:0 auto; color:var(--charcoal);
+  }
+  .heritage p .word{ overflow:hidden; display:inline-block; }
+  .heritage p .word-inner{ display:inline-block; }
+  .heritage-frame{ display:flex; justify-content:center; gap:1.2rem; margin-top:3rem; opacity:.75; }
+  .heritage-frame .corner{ position:static; width:26px; height:26px; }
+  .heritage-frame .corner path{ stroke:var(--salmon-deep); }
+
+  /* ---------- ledger (menu book) ---------- */
+  .ledger .eyebrow{ display:block; text-align:center; margin-bottom:1rem; }
+  .ledger h2{ font-family:var(--display); font-weight:600; text-align:center; font-size:clamp(2.2rem,5vw,3.4rem); margin-bottom:3.2rem; }
+  .ledger-table{ max-width:760px; margin:0 auto; }
+  .ledger-row{ display:flex; align-items:center; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--line-on-cream); }
+  .ledger-row:last-child{ border-bottom:none; }
+  .ledger-thumb{
+    width:52px; height:52px; flex:0 0 auto; overflow:hidden; position:relative;
+    background:linear-gradient(160deg,var(--cream-deep),var(--cream)); border:1px solid var(--line-on-cream);
+  }
+  .ledger-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .ledger-thumb .thumb-placeholder{ position:absolute; inset:0; display:none; align-items:center; justify-content:center; }
+  .ledger-thumb .thumb-placeholder svg{ width:20px; height:20px; opacity:.4; }
+  .ledger-row .name{ font-size:1.02rem; }
+  .ledger-row .name span{ display:block; font-family:var(--mono); font-size:.64rem; color:var(--charcoal); opacity:.5; margin-top:.15rem; letter-spacing:.03em; }
+  .ledger-row .leader{ flex:1; min-width:20px; border-bottom:1px dotted var(--charcoal); opacity:.35; transform:translateY(-3px); }
+  .ledger-row .amount{ font-family:var(--mono); font-size:.96rem; color:var(--gold); white-space:nowrap; }
+  .ledger-note{ text-align:center; font-family:var(--mono); font-size:.72rem; opacity:.55; margin-top:2rem; letter-spacing:.03em; }
+
+  /* ---------- contact ---------- */
+  .contact{ text-align:center; background:var(--salmon-wash); color:var(--charcoal); }
+  .contact h2{ font-family:var(--display); font-weight:600; font-style:italic; font-size:clamp(2.4rem,6vw,4.4rem); margin-bottom:1.6rem; }
+  .contact p{ max-width:40ch; margin:0 auto 2.2rem; opacity:.78; }
+  .contact-links{ display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+  .contact-links a{
+    font-family:var(--mono); font-size:.78rem; letter-spacing:.06em; text-transform:uppercase;
+    padding:.9rem 1.6rem; border:1px solid var(--charcoal); color:var(--charcoal);
+    transition:background .3s var(--ease), color .3s var(--ease);
+  }
+  .contact-links a:hover{ background:var(--charcoal); color:var(--cream); }
+  .contact-url{ margin-top:2rem; font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; opacity:.6; }
+
+  .cityscape{
+    background:var(--cream-deep); border-top:1px solid var(--line-on-cream); border-bottom:1px solid var(--line-on-cream);
+    padding:1.5rem clamp(1rem,4vw,3rem); display:flex; justify-content:center;
+  }
+  .cityscape img{ width:100%; max-width:1400px; height:auto; max-height:150px; object-fit:contain; opacity:.85; }
+  @media (max-width:700px){ .cityscape img{ max-height:88px; } }
+
+  footer{
+    padding:2.4rem clamp(1.4rem,6vw,5rem); display:flex; flex-wrap:wrap; gap:1rem;
+    align-items:center; justify-content:space-between; background:var(--ink); color:var(--cream);
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.05em; opacity:.85;
+  }
+  footer a{ opacity:.85; }
+  footer a:hover{ opacity:1; text-decoration:underline; }
+
+  @media (max-width:760px){
+    .contact-url{ word-break:break-all; }
+  }
+
+  /* ---------- floating ornament layer (parallax, on-brand line-art) ---------- */
+  .ornament{ position:absolute; pointer-events:none; color:var(--charcoal); will-change:transform; z-index:1; }
+  .ornament.o-gold{ color:var(--gold); }
+  .ornament.o-salmon{ color:var(--salmon-deep); }
+  .ornament.o-delft{ color:var(--delft); }
+  .ornament svg{ width:100%; height:100%; display:block; }
+  .ornament-windmill .orn-blades{ transform-origin:30px 28px; animation:orn-spin 38s linear infinite; }
+  @keyframes orn-spin{ to{ transform:rotate(360deg); } }
+  @media (prefers-reduced-motion:reduce){ .ornament-windmill .orn-blades{ animation:none; } .ornament{ display:none; } }
+  @media (max-width:700px){ .ornament{ opacity:.6; } }
+
+  /* ---------- corner-bracket frames beyond the catalog ---------- */
+  .quote-frame, .ledger-frame{ position:relative; }
+  .quote-frame{ padding:2.6rem clamp(1rem,6vw,4rem); }
+  .ledger-frame{ padding:2rem clamp(1rem,5vw,3rem) 2.6rem; }
+  .quote-frame > .corner, .ledger-frame > .corner{ width:26px; height:26px; }
+  .quote-frame > .corner.tl, .ledger-frame > .corner.tl{ top:0; left:0; }
+  .quote-frame > .corner.tr, .ledger-frame > .corner.tr{ top:0; right:0; transform:rotate(90deg); }
+  .quote-frame > .corner.br, .ledger-frame > .corner.br{ bottom:0; right:0; transform:rotate(180deg); }
+  .quote-frame > .corner.bl, .ledger-frame > .corner.bl{ bottom:0; left:0; transform:rotate(270deg); }
+
+  /* ---------- stamp ornament near eyebrows ---------- */
+  .stamp-eyebrow{ position:relative; display:inline-flex; align-items:center; justify-content:center; }
+  .stamp-eyebrow .stamp-ring{ position:absolute; width:64px; height:64px; color:var(--gold); opacity:.35; pointer-events:none; }
+
+  /* ---------- stitched seam divider (ledger binding) ---------- */
+  .stitch{
+    height:1px; max-width:1180px; margin:0 auto;
+    background-image:repeating-linear-gradient(90deg, var(--charcoal) 0 7px, transparent 7px 16px);
+    opacity:.22;
+  }
+
+  /* ---------- tactile micro-interactions ---------- */
+  .price-tag{ transition:transform .3s var(--ease); }
+  .price-tag:hover{ transform:rotate(-2deg) scale(1.05); }
+  .ledger-thumb{ transition:transform .3s var(--ease); }
+  .ledger-row:hover .ledger-thumb{ transform:scale(1.1) rotate(-3deg); }
+  .nav-links a, .contact-links a{ display:inline-block; }
+
+  @media (prefers-reduced-motion:reduce){
+    .hero-scroll .line i{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<svg style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+  <symbol id="orn-tulip" viewBox="0 0 24 40" fill="none" stroke="currentColor" stroke-width="1.3">
+    <path d="M12 40 V16 M12 22 Q4 22 4 14 Q4 8 12 10 Q20 8 20 14 Q20 22 12 22"/>
+  </symbol>
+  <symbol id="orn-wheat" viewBox="0 0 20 40" fill="none" stroke="currentColor" stroke-width="1.2">
+    <path d="M10 40 V4 M10 10 L4 6 M10 10 L16 6 M10 16 L4 12 M10 16 L16 12 M10 22 L4 18 M10 22 L16 18"/>
+  </symbol>
+  <symbol id="orn-diamond" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+    <rect x="5" y="5" width="14" height="14" transform="rotate(45 12 12)"/>
+  </symbol>
+  <symbol id="orn-quill" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3">
+    <path d="M4 26 L22 4 M22 4 Q26 4 26 8 Q26 12 22 12 M4 26 L8 24"/>
+  </symbol>
+  <symbol id="orn-windmill" viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="1.4">
+    <path d="M20 78 L26 30 L34 30 L40 78 Z"/>
+    <g class="orn-blades">
+      <path d="M30 28 L10 8 M30 28 L50 8 M30 28 L10 48 M30 28 L50 48"/>
+      <circle cx="30" cy="28" r="2"/>
+    </g>
+  </symbol>
+  <symbol id="orn-stamp" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1">
+    <circle cx="30" cy="30" r="27"/>
+    <circle cx="30" cy="30" r="21"/>
+  </symbol>
+</svg>
+
+<header id="siteHeader">
+  <div class="masthead">
+    <span>A Brand of</span>
+    <img src="assets/eden-icon.png" alt="Eden Bakery Cake">
+  </div>
+  <div class="mainnav">
+    <div class="nav-mark">
+      <img src="assets/smakelijk-icon.png" alt="Smakelijk icon">
+      Smakelijk
+    </div>
+    <div class="nav-links">
+      <a href="#catalog">Catalog</a>
+      <a href="#heritage">Heritage</a>
+      <a href="#ledger">Ledger</a>
+      <a href="#contact" class="nav-order">Order</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <svg class="hero-gable" viewBox="0 0 150 60" fill="none">
+    <path d="M2 58 L2 30 L28 30 L28 18 L52 18 L52 8 L75 8 L98 8 L98 18 L122 18 L122 30 L148 30 L148 58"
+          stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <h1 id="heroTitle">SMAKELIJK</h1>
+  <p class="hero-sub">Dutch colonial pastry, baked in Surabaya. Six recipes, carried through the archive.</p>
+  <div class="hero-scroll"><span>Scroll</span><div class="line"><i></i></div></div>
+
+  <div class="ornament ornament-windmill o-gold" data-depth="0.2" style="top:12%; right:6%; width:70px; height:94px; opacity:.16;"><svg><use href="#orn-windmill"/></svg></div>
+  <div class="ornament o-salmon" data-depth="0.4" style="bottom:16%; left:7%; width:34px; height:56px; opacity:.18;"><svg><use href="#orn-tulip"/></svg></div>
+  <div class="ornament o-delft" data-depth="0.55" style="top:20%; left:10%; width:20px; height:20px; opacity:.14;"><svg><use href="#orn-diamond"/></svg></div>
+  <div class="ornament o-gold" data-depth="0.3" style="bottom:24%; right:12%; width:26px; height:44px; opacity:.15;"><svg><use href="#orn-wheat"/></svg></div>
+</section>
+
+<div class="stitch"></div>
+
+<!-- ============ MANIFESTO ============ -->
+<section class="manifesto max">
+  <div class="quote-frame">
+    <span class="eyebrow">A Note on Heritage</span>
+    <p class="split-reveal">Long before Surabaya's harbour became a city, Dutch kitchens and Javanese hands met over the same oven — butter, spice, and steamed rice flour, learning a shared language they never forgot.</p>
+    <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+    <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+    <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+    <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+  </div>
+  <div class="tile-divider"><div class="rule"></div><div class="diamond"></div><div class="rule"></div></div>
+  <div class="ornament o-gold" data-depth="0.35" style="top:2%; right:4%; width:24px; height:24px; opacity:.16;"><svg><use href="#orn-quill"/></svg></div>
+  <div class="ornament o-salmon" data-depth="0.5" style="bottom:0%; left:5%; width:20px; height:34px; opacity:.14;"><svg><use href="#orn-wheat"/></svg></div>
+</section>
+
+<!-- ============ CATALOG ============ -->
+<section class="max" id="catalog">
+  <div class="catalog-head">
+    <span class="eyebrow">The Catalog — Six Recipes</span>
+    <h2>One archive, reopened</h2>
+  </div>
+
+  <div class="catalog-pin" id="catalogPin">
+    <div class="catalog-viewport" id="catalogViewport">
+      <div class="catalog-track" id="catalogTrack">
+
+        <div class="product-card">
+          <div class="frame"><div class="frame-clip">
+            <img class="specimen-img" src="assets/putu-belanda.jpg" alt="Putu Belanda" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="specimen-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+              <span class="ph-name">Putu Belanda</span><span class="ph-label">assets/putu-belanda.jpg</span>
+            </div></div>
+            <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+          </div>
+          <div class="product-copy">
+            <span class="idx">01 — 06</span>
+            <h3>Putu Belanda</h3>
+            <p>Steamed rice flour and coconut, given a Dutch colonial correction: dense, fragrant, faintly sweet — sitting exactly between two kitchens.</p>
+            <div class="price-tag"><span class="cur">USD</span> 8.00</div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="frame"><div class="frame-clip">
+            <img class="specimen-img" src="assets/brownmix.jpg" alt="Brownmix" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="specimen-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><rect x="4" y="4" width="16" height="16" rx="1"/></svg>
+              <span class="ph-name">Brownmix</span><span class="ph-label">assets/brownmix.jpg</span>
+            </div></div>
+            <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+          </div>
+          <div class="product-copy">
+            <span class="idx">02 — 06</span>
+            <h3>Brownmix</h3>
+            <p>Dark, dense, unapologetically fudged — Smakelijk's cocoa-forward brownie, built for a single perfect square and nothing more.</p>
+            <div class="price-tag"><span class="cur">USD</span> 6.00 – 6.50</div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="frame"><div class="frame-clip">
+            <img class="specimen-img" src="assets/boterkoek.jpg" alt="Boterkoek" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="specimen-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/></svg>
+              <span class="ph-name">Boterkoek</span><span class="ph-label">assets/boterkoek.jpg</span>
+            </div></div>
+            <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+          </div>
+          <div class="product-copy">
+            <span class="idx">03 — 06</span>
+            <h3>Boterkoek</h3>
+            <p>Dutch butter cake at its most honest: equal parts butter, sugar, and patience — dense enough to slice thin and still taste whole.</p>
+            <div class="price-tag"><span class="cur">USD</span> 6.00 – 6.50</div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="frame"><div class="frame-clip">
+            <img class="specimen-img" src="assets/english-fruitcake.jpg" alt="English Fruitcake" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="specimen-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><rect x="3" y="7" width="18" height="12" rx="1"/><path d="M3 7l9-4 9 4"/></svg>
+              <span class="ph-name">English Fruitcake</span><span class="ph-label">assets/english-fruitcake.jpg</span>
+            </div></div>
+            <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+          </div>
+          <div class="product-copy">
+            <span class="idx">04 — 06</span>
+            <h3>English Fruitcake</h3>
+            <p>Dried fruit, long-soaked, folded into a spiced colonial loaf — built to be cut thin, kept long, and shared slowly.</p>
+            <div class="price-tag"><span class="cur">USD</span> 6.00 – 6.50</div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="frame"><div class="frame-clip">
+            <img class="specimen-img" src="assets/onbijtkoek.jpg" alt="Onbijtkoek" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="specimen-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>
+              <span class="ph-name">Onbijtkoek</span><span class="ph-label">assets/onbijtkoek.jpg</span>
+            </div></div>
+            <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+          </div>
+          <div class="product-copy">
+            <span class="idx">05 — 06</span>
+            <h3>Onbijtkoek</h3>
+            <p>A Dutch breakfast loaf of honey and warm spice, dense as gingerbread and twice as patient with a slow morning.</p>
+            <div class="price-tag"><span class="cur">USD</span> 6.00 – 6.50</div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="frame"><div class="frame-clip">
+            <img class="specimen-img" src="assets/kattentongen.jpg" alt="Kattentongen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="specimen-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><ellipse cx="12" cy="12" rx="9" ry="4"/></svg>
+              <span class="ph-name">Kattentongen</span><span class="ph-label">assets/kattentongen.jpg</span>
+            </div></div>
+            <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+            <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+          </div>
+          <div class="product-copy">
+            <span class="idx">06 — 06</span>
+            <h3>Kattentongen</h3>
+            <p>Cat's tongues: thin, brittle butter cookies snapped from a colonial recipe book. Six pieces disappear before the tea does.</p>
+            <div class="price-tag"><span class="cur">USD</span> 2.90</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="catalog-hud">
+    <span class="catalog-counter" id="catalogCounter">01 — 06</span>
+    <div class="catalog-track-bar"><div class="catalog-track-fill" id="catalogFill"></div></div>
+    <span class="catalog-hint" id="catalogHint">Drag to explore →</span>
+  </div>
+</section>
+
+<!-- ============ HERITAGE ============ -->
+<section class="heritage-panel heritage" id="heritage">
+  <span class="eyebrow">Surabaya, Revisited</span>
+  <p class="split-reveal">We're not restoring a museum. We're reopening a pantry — every recipe checked against what a colonial-era kitchen would actually have had on hand.</p>
+  <div class="heritage-frame">
+    <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+    <div class="corner tr" style="transform:rotate(90deg)"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+  </div>
+  <div class="ornament ornament-windmill" data-depth="0.25" style="top:8%; right:8%; width:64px; height:86px; opacity:.14;"><svg><use href="#orn-windmill"/></svg></div>
+  <div class="ornament o-salmon" data-depth="0.4" style="bottom:12%; left:8%; width:18px; height:18px; opacity:.16;"><svg><use href="#orn-diamond"/></svg></div>
+  <div class="ornament o-gold" data-depth="0.55" style="top:14%; left:14%; width:18px; height:18px; opacity:.14;"><svg><use href="#orn-diamond"/></svg></div>
+</section>
+
+<!-- ============ LEDGER ============ -->
+<section class="max ledger" id="ledger">
+  <span class="eyebrow stamp-eyebrow">The Ledger<svg class="stamp-ring"><use href="#orn-stamp"/></svg></span>
+  <h2>Priced by the piece</h2>
+  <div class="ledger-frame">
+  <div class="ledger-table">
+
+    <div class="ledger-row">
+      <div class="ledger-thumb"><img src="assets/putu-belanda.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><circle cx="12" cy="12" r="9"/></svg></div></div>
+      <div class="name">Putu Belanda<span>Steamed rice flour &amp; coconut</span></div>
+      <div class="leader"></div>
+      <div class="amount">USD 8.00</div>
+    </div>
+
+    <div class="ledger-row">
+      <div class="ledger-thumb"><img src="assets/brownmix.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><rect x="4" y="4" width="16" height="16"/></svg></div></div>
+      <div class="name">Brownmix<span>Cocoa-forward brownie</span></div>
+      <div class="leader"></div>
+      <div class="amount">USD 6.00 – 6.50</div>
+    </div>
+
+    <div class="ledger-row">
+      <div class="ledger-thumb"><img src="assets/boterkoek.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><circle cx="12" cy="12" r="8"/></svg></div></div>
+      <div class="name">Boterkoek<span>Dutch butter cake</span></div>
+      <div class="leader"></div>
+      <div class="amount">USD 6.00 – 6.50</div>
+    </div>
+
+    <div class="ledger-row">
+      <div class="ledger-thumb"><img src="assets/english-fruitcake.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><rect x="3" y="7" width="18" height="12"/></svg></div></div>
+      <div class="name">English Fruitcake<span>Spiced dried-fruit loaf</span></div>
+      <div class="leader"></div>
+      <div class="amount">USD 6.00 – 6.50</div>
+    </div>
+
+    <div class="ledger-row">
+      <div class="ledger-thumb"><img src="assets/onbijtkoek.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><rect x="5" y="3" width="14" height="18"/></svg></div></div>
+      <div class="name">Onbijtkoek<span>Honey &amp; spice breakfast loaf</span></div>
+      <div class="leader"></div>
+      <div class="amount">USD 6.00 – 6.50</div>
+    </div>
+
+    <div class="ledger-row">
+      <div class="ledger-thumb"><img src="assets/kattentongen.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#3E3A39" stroke-width="1.2"><ellipse cx="12" cy="12" rx="9" ry="4"/></svg></div></div>
+      <div class="name">Kattentongen<span>Thin butter cookies, 6 pcs</span></div>
+      <div class="leader"></div>
+      <div class="amount">USD 2.90</div>
+    </div>
+
+  </div>
+  <div class="corner tl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 14 14"><path d="M1,13 L1,1 L13,1"/></svg></div>
+  </div>
+  <p class="ledger-note">Prices shown for reference. To place an order, reach us directly below.</p>
+</section>
+
+<div class="stitch"></div>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="ornament o-delft" data-depth="0.3" style="top:10%; left:8%; width:22px; height:22px; opacity:.2;"><svg><use href="#orn-diamond"/></svg></div>
+  <div class="ornament" data-depth="0.45" style="bottom:14%; right:9%; width:26px; height:42px; opacity:.18;"><svg><use href="#orn-tulip"/></svg></div>
+  <h2>To order</h2>
+  <p>Smakelijk is made to order in Surabaya. Reach out and we'll confirm availability, batch size, and pickup or delivery.</p>
+  <div class="contact-links">
+    <a href="https://wa.me/6282233019996" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://instagram.com/smakelijk_id" target="_blank" rel="noopener">Instagram @smakelijk_id</a>
+  </div>
+  <p class="contact-url">www.smakelijk.id</p>
+</section>
+
+<div class="cityscape">
+  <img src="assets/smakelijk-cityscape.png" alt="Smakelijk colonial townscape illustration — windmill, row houses, and canal street">
+</div>
+
+<footer>
+  <span>Smakelijk — Surabaya, Indonesia · A Brand of Eden Bakery Cake</span>
+  <span>&copy; 2026. Dutch colonial pastry, baked today.</span>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+  const cur = document.getElementById('cursor');
+  window.addEventListener('mousemove', e=>{
+    gsap.to(cur, {x:e.clientX, y:e.clientY, duration:.35, ease:'power3.out'});
+  });
+  document.querySelectorAll('a, .frame, .corner').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>cur.classList.add('grow'));
+    el.addEventListener('mouseleave', ()=>cur.classList.remove('grow'));
+  });
+}
+
+function splitWords(el){
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map(w => `<span class="word"><span class="word-inner">${w}</span></span>`).join(' ');
+  return el.querySelectorAll('.word-inner');
+}
+
+if(!reduced){
+  const heroWords = splitWords(document.getElementById('heroTitle'));
+  gsap.set(heroWords, {yPercent:120});
+  gsap.to(heroWords, {yPercent:0, duration:1.1, stagger:.05, ease:'power4.out', delay:.2});
+  gsap.from('.hero-sub', {opacity:0, y:16, duration:1, delay:.7, ease:'power2.out'});
+  gsap.from('.hero-gable', {opacity:0, y:-10, duration:1, delay:.1, ease:'power2.out'});
+
+  document.querySelectorAll('.split-reveal').forEach(p=>{
+    const words = splitWords(p);
+    gsap.set(words, {yPercent:120, opacity:0});
+    gsap.to(words, {
+      yPercent:0, opacity:1, duration:.9, stagger:.02, ease:'power3.out',
+      scrollTrigger:{ trigger:p, start:'top 80%' }
+    });
+  });
+} else {
+  document.querySelectorAll('.split-reveal').forEach(el=>{ el.style.opacity = 1; });
+}
+
+(function initCatalog(){
+  const viewport = document.getElementById('catalogViewport');
+  const track = document.getElementById('catalogTrack');
+  const cards = gsap.utils.toArray('.product-card');
+  const counterEl = document.getElementById('catalogCounter');
+  const fillEl = document.getElementById('catalogFill');
+  const hintEl = document.getElementById('catalogHint');
+  if(!viewport || !cards.length) return;
+
+  /* prep corner-bracket stroke-draw */
+  cards.forEach(card=>{
+    const paths = card.querySelectorAll('.corner svg path');
+    paths.forEach(p=>{
+      const len = p.getTotalLength();
+      p.dataset.len = len;
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = reduced ? 0 : len;
+    });
+  });
+
+  /* active-card highlight + corner draw, driven by visibility inside the viewport
+     — works identically whether the user wheel-scrolls, drags, or swipes */
+  if(!reduced){
+    const steps = Array.from({length:21}, (_,i)=> i/20);
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        const ratio = entry.intersectionRatio;
+        const paths = entry.target.querySelectorAll('.corner svg path');
+        const len = paths[0] ? paths[0].dataset.len : 0;
+        gsap.to(entry.target, {scale:0.9+0.1*ratio, opacity:0.32+0.68*ratio, duration:.35, ease:'power2.out', overwrite:'auto'});
+        gsap.to(paths, {strokeDashoffset: ratio>0.6 ? 0 : len, duration:.45, ease:'power2.out', overwrite:'auto'});
+      });
+    }, {root:viewport, threshold:steps});
+    cards.forEach(c=> io.observe(c));
+  } else {
+    cards.forEach(c=> c.style.opacity = 1);
+  }
+
+  /* HUD counter + progress bar, driven by native horizontal scroll position */
+  function updateHUD(){
+    const max = track.scrollWidth - viewport.clientWidth;
+    const progress = max > 0 ? Math.min(1, Math.max(0, viewport.scrollLeft/max)) : 0;
+    const idx = Math.min(cards.length-1, Math.round(progress*(cards.length-1)));
+    if(counterEl) counterEl.textContent = String(idx+1).padStart(2,'0') + ' — ' + String(cards.length).padStart(2,'0');
+    if(fillEl) fillEl.style.transform = 'scaleX(' + progress + ')';
+  }
+  let ticking = false;
+  viewport.addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(()=>{ updateHUD(); ticking=false; }); ticking = true; }
+    if(hintEl) hintEl.style.opacity = 0;
+  }, {passive:true});
+  updateHUD();
+
+  /* mouse-drag-to-scroll (desktop only — touch already gets native swipe) */
+  let drag = null;
+  viewport.addEventListener('pointerdown', e=>{
+    if(e.pointerType !== 'mouse') return;
+    drag = {x:e.clientX, scrollLeft:viewport.scrollLeft};
+    viewport.classList.add('dragging');
+    viewport.setPointerCapture(e.pointerId);
+  });
+  viewport.addEventListener('pointermove', e=>{
+    if(!drag) return;
+    viewport.scrollLeft = drag.scrollLeft - (e.clientX - drag.x);
+  });
+  ['pointerup','pointercancel'].forEach(evt=>{
+    viewport.addEventListener(evt, ()=>{ drag = null; viewport.classList.remove('dragging'); });
+  });
+})();
+
+/* ---------- header: hide on scroll down, reveal on scroll up ---------- */
+(function initHeaderAutoHide(){
+  const header = document.getElementById('siteHeader');
+  if(!header) return;
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY;
+    if(y > lastY && y > 140){ header.classList.add('hide'); }
+    else { header.classList.remove('hide'); }
+    lastY = y;
+  }, {passive:true});
+})();
+
+/* ---------- floating ornaments: per-section parallax depth ---------- */
+if(!reduced){
+  gsap.utils.toArray('.ornament').forEach(el=>{
+    const depth = parseFloat(el.dataset.depth || 0.3);
+    const section = el.closest('section');
+    if(!section) return;
+    gsap.to(el, {
+      yPercent: -60*depth, ease:'none',
+      scrollTrigger:{ trigger:section, start:'top bottom', end:'bottom top', scrub:true }
+    });
+  });
+}
+
+/* ---------- corner-bracket frames: manifesto quote + ledger table ---------- */
+document.querySelectorAll('.quote-frame, .ledger-frame').forEach(frame=>{
+  const paths = frame.querySelectorAll(':scope > .corner svg path');
+  paths.forEach(p=>{
+    const len = p.getTotalLength();
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = reduced ? 0 : len;
+  });
+  if(reduced) return;
+  gsap.to(paths, {
+    strokeDashoffset:0, duration:.7, stagger:.08, ease:'power2.out',
+    scrollTrigger:{ trigger:frame, start:'top 82%' }
+  });
+});
+
+/* ---------- magnetic hover: nav links + contact CTAs ---------- */
+if(!reduced && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+  document.querySelectorAll('.nav-links a, .contact-links a').forEach(el=>{
+    el.addEventListener('mousemove', e=>{
+      const r = el.getBoundingClientRect();
+      const relX = e.clientX - (r.left + r.width/2);
+      const relY = e.clientY - (r.top + r.height/2);
+      gsap.to(el, {x:relX*0.28, y:relY*0.35, duration:.3, ease:'power2.out'});
+    });
+    el.addEventListener('mouseleave', ()=>{
+      gsap.to(el, {x:0, y:0, duration:.5, ease:'elastic.out(1,0.45)'});
+    });
+  });
+}
+</script>
+</body>
+</html>
