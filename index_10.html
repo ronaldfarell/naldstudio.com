@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nald Studio — Imagination Into Reality</title>
+<meta name="description" content="Studio kreatif premium — diorama pixel art handmade & layanan konten digital kreatif."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --gold:#FFC107;--gold2:#FFD54F;--bk:#111111;--wh:#F5F5F5;
+  --or:#FF6B35;--pk:#FF4D8D;--bl:#2D9CFF;--gr:#3DDC68;
+  --sh:5px 6px 0 var(--bk);--sh2:9px 11px 0 var(--bk);--rad:18px
+}
+body{background:var(--bk);color:var(--wh);font-family:'Nunito',sans-serif;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cur{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;will-change:transform}
+.cd{position:absolute;width:10px;height:10px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+.cr{position:absolute;width:40px;height:40px;border:1.5px solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);opacity:.55;transition:width .35s cubic-bezier(.34,1.56,.64,1),height .35s}
+.cur-big .cd{width:16px;height:16px}
+.cur-big .cr{width:62px;height:62px}
+
+/* HERO */
+.hero-scene{position:relative;width:100%;height:100vh;background:var(--bk);overflow:hidden}
+#heroCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;z-index:1;display:block}
+
+/* SPEECH BUBBLE */
+#speech{
+  position:absolute;z-index:20;
+  background:var(--gold);color:var(--bk);
+  font-family:'Fredoka',sans-serif;font-size:.9rem;font-weight:600;
+  padding:9px 18px;border-radius:14px;white-space:nowrap;
+  box-shadow:4px 4px 0 rgba(0,0,0,.3);
+  opacity:0;transform:scale(.7) translateY(8px);
+  transition:opacity .4s cubic-bezier(.34,1.56,.64,1),transform .4s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;
+  /* Positioned relative to center — JavaScript will update */
+  top:50%;left:50%;margin-top:-120px;margin-left:80px
+}
+#speech::before{content:'';position:absolute;bottom:-9px;left:16px;border:5px solid transparent;border-top-color:var(--gold)}
+#speech.show{opacity:1;transform:scale(1) translateY(0)}
+
+/* HERO TEXT */
+.hero-text{
+  position:absolute;bottom:0;left:0;right:0;z-index:10;
+  padding:28px 56px 44px;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  background:linear-gradient(to top,rgba(17,17,17,.96) 0%,rgba(17,17,17,0) 100%)
+}
+.hero-left{opacity:0;transform:translateX(-20px)}
+.hero-eyebrow{font-family:'Fredoka',sans-serif;font-size:.72rem;font-weight:600;color:var(--gold);letter-spacing:3.5px;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.hero-eyebrow::before{content:'';width:22px;height:1px;background:var(--gold)}
+.hero-h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.6rem,5.5vw,5rem);line-height:1.08;color:var(--wh)}
+.hero-h1 em{font-style:normal;color:var(--gold)}
+.hero-right{opacity:0;transform:translateX(20px);text-align:right}
+.hero-sub{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;color:rgba(245,245,245,.5);max-width:260px;line-height:1.7;margin-bottom:18px;text-align:left}
+.hbtns{display:flex;gap:11px;flex-wrap:wrap;justify-content:flex-end}
+.scroll-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;text-align:center;opacity:0}
+.scroll-hint span{font-size:.58rem;letter-spacing:3px;color:rgba(255,193,7,.4);text-transform:uppercase;display:block;margin-bottom:5px}
+.sbar{width:1px;height:38px;background:linear-gradient(to bottom,var(--gold),transparent);margin:0 auto;animation:sbar 2.2s ease-in-out infinite}
+@keyframes sbar{0%,100%{opacity:.25;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
+
+/* BUTTONS */
+.btn{font-family:'Fredoka',sans-serif;font-size:.95rem;font-weight:600;padding:12px 26px;border-radius:50px;border:2.5px solid;cursor:none;text-decoration:none;display:inline-block;transition:all .18s;white-space:nowrap}
+.btn-g{background:var(--gold);color:var(--bk);border-color:var(--gold)}
+.btn-g:hover{background:var(--gold2);border-color:var(--gold2);transform:translateY(-3px);box-shadow:0 10px 26px rgba(255,193,7,.45)}
+.btn-o{background:transparent;color:var(--wh);border-color:rgba(245,245,245,.22)}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:500;height:66px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.sc{background:rgba(17,17,17,.96);border-color:rgba(255,193,7,.14);backdrop-filter:blur(18px)}
+.nlogo img{height:38px;border-radius:8px}
+.nlinks{display:flex;gap:3px;list-style:none}
+.nlinks a{font-family:'Fredoka',sans-serif;font-size:.92rem;font-weight:600;color:rgba(245,245,245,.65);text-decoration:none;padding:7px 14px;border-radius:50px;transition:all .2s}
+.nlinks a:hover{background:rgba(255,193,7,.14);color:var(--gold)}
+.ncta{background:var(--gold)!important;color:var(--bk)!important}
+.ncta:hover{background:var(--gold2)!important;transform:translateY(-2px)!important;box-shadow:0 8px 20px rgba(255,193,7,.4)!important}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+.hbg span{display:block;width:22px;height:2px;background:var(--wh);border-radius:2px;transition:all .3s}
+
+/* TICKER */
+.ticker{position:relative;z-index:2;background:var(--gold);border-top:3px solid var(--bk);border-bottom:3px solid var(--bk);padding:13px 0;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-block;animation:tick 28s linear infinite}
+.ti{display:inline-block;font-family:'Fredoka',sans-serif;font-size:.95rem;font-weight:600;color:var(--bk);margin:0 22px}
+.ts{display:inline-block;opacity:.4;color:var(--bk);margin:0 3px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.about-sec{background:var(--gold);border-top:4px solid var(--bk);position:relative;z-index:2;padding:96px 80px;overflow:hidden}
+.about-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.1) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:1}
+.about-img-col{position:relative}
+.about-img-col img{width:100%;border-radius:22px;border:4px solid var(--bk);box-shadow:var(--sh2);display:block}
+/* fallback if mascot not found */
+.about-img-col img[alt]:after{content:attr(alt);display:block;padding:40px;text-align:center;background:var(--bk);color:var(--gold);font-family:'Fredoka',sans-serif;font-size:1.5rem;border-radius:18px}
+.about-badge{position:absolute;bottom:-14px;right:-14px;background:var(--bk);color:var(--gold);font-family:'Fredoka',sans-serif;font-size:.8rem;font-weight:600;padding:9px 16px;border-radius:50px;border:2.5px solid var(--bk);box-shadow:var(--sh)}
+.stag{font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;color:var(--bk);letter-spacing:3px;text-transform:uppercase;display:inline-flex;align-items:center;gap:9px;margin-bottom:12px}
+.stag::before{content:'';width:20px;height:2px;background:var(--bk)}
+.sh{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.5vw,3rem);color:var(--bk);line-height:1.1;margin-bottom:14px}
+.sh em{font-style:normal;background:var(--bk);color:var(--gold);padding:2px 10px;border-radius:8px}
+.ss{font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:700;color:rgba(17,17,17,.68);line-height:1.72;margin-bottom:12px}
+.expr-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 22px}
+.expr-chip{font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;color:var(--gold);background:var(--bk);padding:6px 14px;border-radius:50px;letter-spacing:.8px;cursor:none;border:2px solid var(--bk);transition:all .2s}
+.expr-chip:hover{background:transparent;color:var(--bk)}
+.vals2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:26px}
+.val2{padding:15px;border:2px solid rgba(17,17,17,.18);border-radius:13px;background:rgba(0,0,0,.06);cursor:none;transition:all .3s}
+.val2:hover{border-color:var(--bk);transform:translate(-3px,-3px);box-shadow:4px 4px 0 var(--bk)}
+.vi2{font-size:1.1rem;margin-bottom:5px}
+.vn2{font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;color:var(--bk);letter-spacing:1.5px;text-transform:uppercase}
+
+.prod-sec{background:var(--wh);border-top:4px solid var(--bk);border-bottom:4px solid var(--bk);padding:96px 80px;position:relative;z-index:2}
+.sec-tag{display:inline-block;font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;background:var(--bk);color:var(--gold);padding:5px 15px;border-radius:50px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+.sh2{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.5vw,3rem);color:var(--bk);line-height:1.1;margin-bottom:10px}
+.ss2{font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;color:rgba(17,17,17,.58);line-height:1.7;max-width:440px;margin-bottom:50px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pc{position:relative;border-radius:var(--rad);overflow:hidden;border:3px solid var(--bk);background:var(--bk);cursor:none;box-shadow:var(--sh);transition:transform .18s,box-shadow .18s}
+.pc:hover{transform:translate(-5px,-5px);box-shadow:var(--sh2)}
+.pc:first-child{grid-column:span 2}
+.pimw{position:relative;overflow:hidden}
+.pc:first-child .pimw{aspect-ratio:16/8}.pc:not(:first-child) .pimw{aspect-ratio:1}
+.pimw img{width:100%;height:100%;object-fit:cover;transition:transform .7s,filter .5s;filter:saturate(.88) brightness(.8)}
+.pc:hover .pimw img{transform:scale(1.07);filter:saturate(1.05) brightness(.92)}
+.pgrad{position:absolute;inset:0;background:linear-gradient(to top,rgba(17,17,17,.95) 0%,transparent 55%)}
+.pspec{position:absolute;inset:0;pointer-events:none;z-index:2}
+.pinfo{position:absolute;bottom:0;left:0;right:0;padding:20px;transform:translateY(6px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);z-index:3}
+.pc:hover .pinfo{transform:translateY(0)}
+.pcat{font-family:'Fredoka',sans-serif;font-size:.6rem;font-weight:600;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:4px}
+.pname{font-family:'Fredoka',sans-serif;font-size:1rem;font-weight:600;color:var(--wh);margin-bottom:5px;line-height:1.22}
+.pprice{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;color:var(--gold)}
+.pcta{margin-top:11px;display:inline-flex;align-items:center;gap:5px;font-family:'Fredoka',sans-serif;font-size:.72rem;font-weight:600;color:var(--bk);background:var(--gold);padding:7px 15px;border-radius:50px;text-decoration:none;opacity:0;transform:translateY(7px);transition:all .3s}
+.pc:hover .pcta{opacity:1;transform:translateY(0)}
+.pcta:hover{background:var(--gold2)}
+
+.proc-sec{background:var(--gold);border-bottom:4px solid var(--bk);padding:96px 80px;position:relative;z-index:2}
+.proc-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.1) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}
+.psteps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px;position:relative;z-index:1}
+.psteps::before{content:'';position:absolute;top:27px;left:12%;right:12%;height:2px;background:repeating-linear-gradient(90deg,var(--bk) 0,var(--bk) 10px,transparent 10px,transparent 20px)}
+.step{text-align:center;cursor:none}
+.sn{width:54px;height:54px;border-radius:50%;border:3px solid var(--bk);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:700;background:var(--bk);color:var(--gold);transition:all .3s;box-shadow:4px 5px 0 rgba(0,0,0,.28)}
+.step:hover .sn{transform:translate(-3px,-3px);box-shadow:7px 8px 0 rgba(0,0,0,.28)}
+.stit{font-family:'Fredoka',sans-serif;font-size:1.02rem;font-weight:700;color:var(--bk);margin-bottom:7px}
+.sdesc{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:rgba(17,17,17,.65);line-height:1.62}
+
+.svc-sec{background:var(--bk);border-bottom:4px solid var(--gold);padding:72px 80px;position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.svc-sec h3{font-family:'Fredoka',sans-serif;font-size:1.55rem;font-weight:700;color:var(--wh);margin-bottom:7px}
+.svc-sec p{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;color:rgba(245,245,245,.48);max-width:420px;line-height:1.65}
+.stags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.stag2{font-family:'Fredoka',sans-serif;font-size:.68rem;font-weight:600;color:var(--gold);background:rgba(255,193,7,.1);border:1.5px solid rgba(255,193,7,.22);padding:5px 12px;border-radius:50px;letter-spacing:.8px}
+
+.cta-sec{background:var(--gold);border-top:4px solid var(--bk);padding:130px 80px;text-align:center;position:relative;z-index:2;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.1) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}
+.cta-inner{position:relative;z-index:1;max-width:660px;margin:0 auto}
+.cta-sec h2{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.6rem,5.5vw,4.8rem);color:var(--bk);line-height:1.08;margin-bottom:14px}
+.cta-sec h2 em{font-style:normal;background:var(--bk);color:var(--gold);padding:0 10px;border-radius:8px}
+.cta-sec p{font-family:'Nunito',sans-serif;font-size:.96rem;font-weight:700;color:rgba(17,17,17,.66);margin-bottom:40px;line-height:1.72;max-width:480px;margin-left:auto;margin-right:auto}
+.cbtns{display:flex;gap:13px;justify-content:center;flex-wrap:wrap}
+
+/* COMPANION */
+#companion{position:fixed;right:24px;bottom:24px;z-index:800;width:88px;pointer-events:none;opacity:0;transform:translateX(120px);transition:opacity .5s,transform .6s cubic-bezier(.34,1.56,.64,1)}
+#companion img{width:100%;display:block}
+#companion.show{opacity:1;transform:translateX(0)}
+.cspeech{position:absolute;top:-48px;right:96%;width:155px;background:var(--bk);color:var(--gold);font-family:'Fredoka',sans-serif;font-size:.74rem;font-weight:600;padding:7px 12px;border-radius:11px;border-bottom-right-radius:3px;opacity:0;transform:scale(.8) translateY(6px);transition:all .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
+#companion.talking .cspeech{opacity:1;transform:scale(1) translateY(0)}
+
+footer{position:relative;z-index:2;background:var(--bk);border-top:3px solid var(--gold);padding:38px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+.flogo img{height:34px;border-radius:6px}
+.fc{font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;color:rgba(245,245,245,.26)}
+.flinks{display:flex;gap:18px}
+.flinks a{font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;color:rgba(245,245,245,.26);text-decoration:none;transition:color .2s}
+.flinks a:hover{color:var(--gold)}
+
+.sr{opacity:0;transform:translateY(26px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1)}
+.sr.on{opacity:1;transform:translateY(0)}
+.srl{opacity:0;transform:translateX(-30px);transition:opacity .78s cubic-bezier(.16,1,.3,1),transform .78s cubic-bezier(.16,1,.3,1)}
+.srl.on{opacity:1;transform:translateX(0)}
+.srr{opacity:0;transform:translateX(30px);transition:opacity .78s cubic-bezier(.16,1,.3,1),transform .78s cubic-bezier(.16,1,.3,1)}
+.srr.on{opacity:1;transform:translateX(0)}
+
+@media(max-width:1100px){
+  nav{padding:0 24px}.nlinks{display:none}.hbg{display:flex}
+  .hero-text{padding:22px 28px 36px}
+  .about-inner{grid-template-columns:1fr;gap:44px}
+  .pgrid{grid-template-columns:1fr 1fr}.pc:first-child{grid-column:span 1}
+  .psteps{grid-template-columns:1fr 1fr;gap:24px}.psteps::before{display:none}
+  .about-sec,.prod-sec,.proc-sec,.cta-sec{padding:78px 44px}
+  .svc-sec{padding:52px 44px}footer{padding:34px 44px}
+}
+@media(max-width:768px){
+  .hero-text{flex-direction:column;padding:16px 20px 32px}
+  .hero-right{text-align:left}.hbtns{justify-content:flex-start}
+  .about-sec,.prod-sec,.proc-sec,.cta-sec{padding:68px 22px}
+  .pgrid{grid-template-columns:1fr}.psteps{grid-template-columns:1fr}.vals2{grid-template-columns:1fr}
+  .svc-sec{padding:40px 22px;flex-direction:column}
+  footer{padding:26px 22px;flex-direction:column;align-items:flex-start}
+  #companion{width:66px;right:12px;bottom:14px}
+  #speech{margin-left:20px;margin-top:-100px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"><div class="cd" id="cd"></div><div class="cr" id="cr"></div></div>
+
+<nav id="nav">
+  <div class="nlogo"><a href="#"><img src="assets/logo.png" alt="Nald Studio" onerror="this.style.display='none'"/></a></div>
+  <ul class="nlinks">
+    <li><a href="#about">About NALD</a></li>
+    <li><a href="#products">Collection</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="products.html" class="ncta">Shop ✨</a></li>
+  </ul>
+  <div class="hbg" id="hbg"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO: THREE.JS CANVAS — NALD as 3D textured sprite -->
+<section class="hero-scene" id="home">
+  <canvas id="heroCanvas"></canvas>
+  <div id="speech"></div>
+  <div class="hero-text">
+    <div class="hero-left" id="heroL">
+      <div class="hero-eyebrow">Nald Studio — Indonesia</div>
+      <div class="hero-h1">Imagination<br><em>Into Reality</em></div>
+    </div>
+    <div class="hero-right" id="heroR">
+      <div class="hero-sub">Premium handmade pixel art dioramas & creative digital content services.</div>
+      <div class="hbtns">
+        <a href="#products" class="btn btn-g">Explore Collection 🚀</a>
+        <a href="products.html" class="btn btn-o">Shop Now →</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint" id="scrollHint"><span>Scroll</span><div class="sbar"></div></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ti">🎨 Custom Diorama</span><span class="ts">◆</span>
+    <span class="ti">✨ Pixel Art Collectibles</span><span class="ts">◆</span>
+    <span class="ti">🏠 Handcrafted Miniatures</span><span class="ts">◆</span>
+    <span class="ti">⭐ Limited Edition</span><span class="ts">◆</span>
+    <span class="ti">🎬 Acrylic Display Case</span><span class="ts">◆</span>
+    <span class="ti">🌟 Creative Studio Indonesia</span><span class="ts">◆</span>
+    <span class="ti">🎨 Custom Diorama</span><span class="ts">◆</span>
+    <span class="ti">✨ Pixel Art Collectibles</span><span class="ts">◆</span>
+    <span class="ti">🏠 Handcrafted Miniatures</span><span class="ts">◆</span>
+    <span class="ti">⭐ Limited Edition</span><span class="ts">◆</span>
+    <span class="ti">🎬 Acrylic Display Case</span><span class="ts">◆</span>
+    <span class="ti">🌟 Creative Studio Indonesia</span><span class="ts">◆</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-sec" id="about">
+  <div class="about-inner">
+    <div class="about-img-col srl">
+      <img src="assets/mascot.png" alt="NALD The Dimensional Collector" loading="lazy"
+        onerror="this.onerror=null;this.src='assets/mascot2.png';this.onerror=function(){this.style.minHeight='300px';this.style.background='var(--bk)'}"/>
+      <div class="about-badge">✦ The Dimensional Collector</div>
+    </div>
+    <div class="srr">
+      <div class="stag">Meet NALD</div>
+      <h2 class="sh">"<em>NALD</em> — The World Creator"</h2>
+      <p class="ss">A being who turns imagination into real creations. Every detail is crafted, every story is held — from whichever dimension it came from.</p>
+      <p class="ss">Guardian of creativity, craftsmanship, and fandom culture. From imagination into reality. ✦</p>
+      <div class="expr-row">
+        <div class="expr-chip">😐 NEUTRAL</div><div class="expr-chip">😊 HAPPY</div>
+        <div class="expr-chip">🎯 FOCUSED</div><div class="expr-chip">⚡ EXCITED</div>
+        <div class="expr-chip">🤔 CURIOUS</div><div class="expr-chip">❤️ LOVE</div>
+      </div>
+      <div class="vals2">
+        <div class="val2"><div class="vi2">✦</div><div class="vn2">Create</div></div>
+        <div class="val2"><div class="vi2">⚙</div><div class="vn2">Build</div></div>
+        <div class="val2"><div class="vi2">◈</div><div class="vn2">Imagine</div></div>
+        <div class="val2"><div class="vi2">◉</div><div class="vn2">Connect</div></div>
+      </div>
+      <a href="products.html" class="btn btn-g" style="border-color:var(--bk)">View Collection →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="prod-sec" id="products">
+  <div class="sec-tag sr">🛍️ Diorama Collection</div>
+  <h2 class="sh2 sr">The Dimensional Collection</h2>
+  <p class="ss2 sr">Each diorama is a world captured in acrylic — pixel-perfect, layered, and utterly irresistible.</p>
+  <div class="pgrid">
+    <div class="pc sr" data-tilt>
+      <div class="pimw"><img src="assets/prod-full-set.jpg" alt="Full Set" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Pixel Diorama · Full Set</div><div class="pname">Stardew Valley — Collector Edition</div><div class="pprice">Rp 450,000</div><a href="products.html" class="pcta">View Details →</a></div>
+    </div>
+    <div class="pc sr" style="transition-delay:.08s" data-tilt>
+      <div class="pimw"><img src="assets/prod-front-orange.jpg" alt="Summer" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Limited Edition</div><div class="pname">Summer Farm</div><div class="pprice">Rp 285,000</div><a href="products.html" class="pcta">View →</a></div>
+    </div>
+    <div class="pc sr" style="transition-delay:.16s" data-tilt>
+      <div class="pimw"><img src="assets/prod-front-purple.jpg" alt="Autumn" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Limited Edition</div><div class="pname">Autumn Harvest</div><div class="pprice">Rp 285,000</div><a href="products.html" class="pcta">View →</a></div>
+    </div>
+    <div class="pc sr" style="transition-delay:.24s" data-tilt>
+      <div class="pimw"><img src="assets/prod-spread.jpg" alt="Characters" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Character Pack</div><div class="pname">All Characters Expansion</div><div class="pprice">Rp 185,000</div><a href="products.html" class="pcta">View →</a></div>
+    </div>
+    <div class="pc sr" style="transition-delay:.32s" data-tilt>
+      <div class="pimw"><img src="assets/prod-clean.jpg" alt="Custom" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Custom Order ⭐</div><div class="pname">Build Your Own World</div><div class="pprice">Starting from Rp 300,000</div><a href="products.html" class="pcta">Order →</a></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:48px" class="sr">
+    <a href="products.html" class="btn btn-g" style="font-size:1rem;padding:13px 38px;border:2.5px solid var(--bk)">View All Products ✨</a>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="proc-sec" id="process">
+  <div class="sec-tag sr" style="background:var(--bk)">⚙️ How It Works</div>
+  <h2 class="sh sr" style="color:var(--bk)">From Imagination Into Reality</h2>
+  <div class="psteps">
+    <div class="step sr"><div class="sn">01</div><div class="stit">Brief & Discussion</div><p class="sdesc">Tell us your world — favorite game, dream scene.</p></div>
+    <div class="step sr" style="transition-delay:.1s"><div class="sn">02</div><div class="stit">Design & Pixel Art</div><p class="sdesc">Every character is crafted pixel by pixel, obsessively.</p></div>
+    <div class="step sr" style="transition-delay:.2s"><div class="sn">03</div><div class="stit">Print & Assemble</div><p class="sdesc">Precision cutting, meticulous hand assembly.</p></div>
+    <div class="step sr" style="transition-delay:.3s"><div class="sn">04</div><div class="stit">Pack & Ship</div><p class="sdesc">Premium packaging, shipped safely worldwide.</p></div>
+  </div>
+</section>
+
+<div class="svc-sec sr">
+  <div>
+    <h3>Also a Full Creative Studio 🎬</h3>
+    <p>Instagram content, video reels, brand identity, promo strategy — for businesses ready to compete globally.</p>
+    <div class="stags"><span class="stag2">Instagram Reels</span><span class="stag2">Video Content</span><span class="stag2">Brand Identity</span><span class="stag2">Promo Strategy</span></div>
+  </div>
+  <a href="services.html" class="btn btn-g" style="flex-shrink:0;white-space:nowrap;border-color:var(--gold)">View Services →</a>
+</div>
+
+<section class="cta-sec" id="contact">
+  <div class="cta-inner">
+    <div class="sec-tag sr" style="background:var(--bk);margin-bottom:14px">💌 Let's Collaborate!</div>
+    <h2 class="sr">Ready to Build Something <em>Amazing</em>?</h2>
+    <p class="sr">Custom dioramas or creative services — tell us your idea, we'll bring it to life!</p>
+    <div class="cbtns sr">
+      <a href="products.html" class="btn btn-g" style="padding:13px 34px;border:2.5px solid var(--bk)">Shop Collection 🛒</a>
+      <a href="https://wa.me/6285190050010" class="btn" style="background:var(--bk);color:var(--gold);border-color:var(--bk);padding:13px 34px" target="_blank">💬 Custom Order via WA</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo"><img src="assets/logo.png" alt="Nald Studio" onerror="this.style.display='none'"/></div>
+  <span class="fc">© 2025 Nald Studio — Crafted with obsession in Indonesia ✦</span>
+  <div class="flinks"><a href="#">Instagram</a><a href="#">TikTok</a><a href="products.html">Shop</a><a href="services.html">Services</a></div>
+</footer>
+
+<!-- COMPANION -->
+<div id="companion">
+  <div class="cspeech" id="cspeech"></div>
+  <img src="assets/mascot.png" alt="NALD"
+    onerror="this.onerror=null;this.src='assets/mascot2.png';this.onerror=function(){this.style.display='none'}"/>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ═══════════════════════════════════════════════
+   THREE.JS — NALD AS 3D TEXTURED SPRITE
+   mascot.png loaded as WebGL texture on a plane
+   → genuine 3D rotation, tilt, bounce, particles
+═══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  let W = window.innerWidth, H = window.innerHeight;
+
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+  renderer.setSize(W, H);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x060612);
+  scene.fog = new THREE.FogExp2(0x111111, 0.018);
+
+  const camera = new THREE.PerspectiveCamera(60, W/H, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  /* LIGHTS for depth */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const glow1 = new THREE.PointLight(0xFFC107, 3, 12);
+  glow1.position.set(2, 3, 4);
+  scene.add(glow1);
+  const glow2 = new THREE.PointLight(0xFFD54F, 1.5, 10);
+  glow2.position.set(-3, -1, 3);
+  scene.add(glow2);
+
+  /* MAIN GROUP */
+  const group = new THREE.Group();
+  group.position.y = -12; // start offscreen above (will animate down)
+  scene.add(group);
+
+  /* GOLD GLOW PLANE behind mascot */
+  const glowMat = new THREE.MeshBasicMaterial({
+    color:0xFFC107, transparent:true, opacity:.0,
+    depthWrite:false, blending:THREE.AdditiveBlending
+  });
+  const glowPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 3.8), glowMat);
+  glowPlane.position.z = -0.05;
+  group.add(glowPlane);
+
+  /* MASCOT TEXTURE PLANE */
+  const loader = new THREE.TextureLoader();
+  const mascotMat = new THREE.MeshBasicMaterial({
+    transparent:true, alphaTest:0.01, opacity:0
+  });
+  const mascotPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.2, 3.2), mascotMat
+  );
+  mascotPlane.position.z = 0.01;
+  group.add(mascotPlane);
+
+  // Load texture — try mascot.png first, fallback to mascot2.png
+  function loadTexture(path, fallback){
+    loader.load(
+      path,
+      (tex)=>{
+        tex.encoding = THREE.sRGBEncoding;
+        mascotMat.map = tex;
+        mascotMat.needsUpdate = true;
+        // Fade in mascot
+        gsap.to(mascotMat, {opacity:1, duration:.8, ease:'power2.out'});
+        gsap.to(glowMat, {opacity:.18, duration:1.2, ease:'power2.out'});
+        startEntry();
+      },
+      undefined,
+      ()=>{ if(fallback) loadTexture(fallback, null); else startEntry(); }
+    );
+  }
+  loadTexture('assets/mascot.png', 'assets/mascot2.png');
+
+  /* ORBIT RINGS */
+  const ring1Mat = new THREE.MeshBasicMaterial({color:0xFFC107, transparent:true, opacity:.22, side:THREE.DoubleSide});
+  const ring2Mat = new THREE.MeshBasicMaterial({color:0xFFC107, transparent:true, opacity:.10, side:THREE.DoubleSide});
+  const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.1, .018, 8, 80), ring1Mat);
+  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.9, .012, 8, 80), ring2Mat);
+  ring1.rotation.x = 0.3;
+  ring2.rotation.x = -0.2;
+  ring2.rotation.y = 0.5;
+  group.add(ring1, ring2);
+
+  /* GOLD PARTICLES */
+  const pN = W < 768 ? 220 : 600;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(pN * 3);
+  const pVel = new Float32Array(pN);
+  for(let i=0;i<pN;i++){
+    pPos[i*3]   = (Math.random()-.5)*12;
+    pPos[i*3+1] = (Math.random()-.5)*10;
+    pPos[i*3+2] = (Math.random()-.5)*6 - 1;
+    pVel[i] = .003 + Math.random()*.006;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  const pMat = new THREE.PointsMaterial({color:0xFFC107, size:.022, transparent:true, opacity:.5, sizeAttenuation:true, depthWrite:false});
+  scene.add(new THREE.Points(pGeo, pMat));
+
+  /* SHADOW CIRCLE BELOW */
+  const shadowMat = new THREE.MeshBasicMaterial({color:0xFFC107, transparent:true, opacity:0, depthWrite:false, side:THREE.DoubleSide});
+  const shadowCircle = new THREE.Mesh(new THREE.CircleGeometry(1, 32), shadowMat);
+  shadowCircle.rotation.x = -Math.PI/2;
+  shadowCircle.position.y = -1.8;
+  group.add(shadowCircle);
+
+  /* MOUSE */
+  let mxT=0, myT=0, mxC=0, myC=0;
+  const onMove = (cx, cy) => {
+    mxT = (cx/W - .5) * 2;
+    myT = -(cy/H - .5) * 2;
+  };
+  document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    onMove(t.clientX, t.clientY);
+  }, {passive:true});
+
+  /* ENTRY ANIMATION */
+  const speech = document.getElementById('speech');
+  const phrases = [
+    "Hi! I'm NALD! 👋",
+    "Imagination Into Reality! ✨",
+    "The Dimensional Collector 🌍",
+    "Let's create! 🎨"
+  ];
+  let pi = 0, exprTimer, entryDone = false;
+
+  function showPhrase(txt){
+    speech.textContent = txt;
+    speech.classList.add('show');
+    clearTimeout(window._spt);
+    window._spt = setTimeout(()=>speech.classList.remove('show'), 2200);
+  }
+
+  function startEntry(){
+    if(entryDone) return;
+    entryDone = true;
+
+    const tl = gsap.timeline({delay:.2});
+
+    // Drop from above + bounce
+    tl.to(group.position, {
+      y:0, duration:1.1,
+      ease:'bounce.out',
+      onUpdate(){
+        // shadow grows
+        const p = Math.max(0, 1 - Math.abs(group.position.y)/12);
+        shadowMat.opacity = p * .14;
+        shadowCircle.scale.setScalar(.3 + p * .7);
+      }
+    })
+    // Squash on landing
+    .to(group.scale, {y:.84, x:1.12, z:1.12, duration:.1, ease:'power2.in'}, 1.0)
+    .to(group.scale, {y:1.06, x:.94, z:.94, duration:.2, ease:'power2.out'})
+    .to(group.scale, {y:1, x:1, z:1, duration:.4, ease:'elastic.out(1.2,.5)'})
+    // First speech
+    .add(()=>showPhrase(phrases[0]), '+=.1')
+    // Text fade in
+    .to('#heroL', {opacity:1, x:0, duration:.75, ease:'power3.out'}, '+=.3')
+    .to('#heroR', {opacity:1, x:0, duration:.75, ease:'power3.out'}, '-=.55')
+    .to('#scrollHint', {opacity:1, duration:.6}, '+=.3')
+    // Phrase cycle
+    .add(()=>{
+      exprTimer = setInterval(()=>{
+        pi = (pi+1) % phrases.length;
+        showPhrase(phrases[pi]);
+        // Head shake via group tilt
+        gsap.timeline()
+          .to(group.rotation, {y:-.18, duration:.1})
+          .to(group.rotation, {y: .18, duration:.1})
+          .to(group.rotation, {y:0, duration:.22, ease:'elastic.out(1.2,.5)'});
+      }, 2800);
+      setTimeout(()=>clearInterval(exprTimer), 14000);
+    });
+  }
+
+  /* ANIMATION LOOP */
+  const clock = new THREE.Clock();
+  let elapsed = 0;
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const dt = clock.getDelta();
+    elapsed += dt;
+
+    // Mouse lerp
+    mxC += (mxT - mxC) * .055;
+    myC += (myT - myC) * .055;
+
+    // 3D rotation follows mouse — THIS IS THE KEY 3D EFFECT
+    group.rotation.y = mxC * .38;
+    group.rotation.x = myC * .22;
+
+    // Floating bob
+    group.position.y += entryDone ? Math.sin(elapsed * 1.1) * .003 : 0;
+
+    // Camera subtle parallax
+    camera.position.x += (mxC * .25 - camera.position.x) * .04;
+    camera.position.y += (myC * .15 + 0 - camera.position.y) * .04;
+    camera.lookAt(0, 0, 0);
+
+    // Orbit rings spin
+    ring1.rotation.z += .005;
+    ring2.rotation.z -= .003;
+
+    // Glow breathe
+    glowMat.opacity = .14 + Math.sin(elapsed * 1.2) * .06;
+    if(glow1){
+      glow1.intensity = 3 + Math.sin(elapsed * .9) * .8;
+      glow1.position.x = 2 + mxC * 1.5;
+      glow1.position.y = 3 + myC * 1;
+    }
+
+    // Particles drift up
+    const pa = pGeo.attributes.position.array;
+    for(let i=0;i<pN;i++){
+      pa[i*3+1] += pVel[i];
+      if(pa[i*3+1] > 5) pa[i*3+1] = -5;
+    }
+    pGeo.attributes.position.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Scroll haptic — mascot tilts + squash
+  let lastSY=0, scrollSt;
+  window.addEventListener('scroll', ()=>{
+    if(!entryDone) return;
+    const vel = window.scrollY - lastSY;
+    lastSY = window.scrollY;
+    const tilt = Math.min(Math.max(vel * .018, -.35), .35);
+    group.rotation.x += tilt;
+    const sq = Math.max(.88, 1 - Math.abs(vel) * .003);
+    group.scale.y = sq;
+    clearTimeout(scrollSt);
+    scrollSt = setTimeout(()=>{
+      gsap.to(group.rotation, {x:0, duration:.9, ease:'elastic.out(1,.5)'});
+      gsap.to(group.scale, {y:1, duration:.5, ease:'back.out(1.5)'});
+    }, 80);
+    document.getElementById('scrollHint').style.opacity = window.scrollY>80?'0':'1';
+  });
+
+  window.addEventListener('resize', ()=>{
+    W=window.innerWidth; H=window.innerHeight;
+    camera.aspect=W/H; camera.updateProjectionMatrix();
+    renderer.setSize(W,H);
+  });
+})();
+
+/* CURSOR */
+(function(){
+  const cw=document.getElementById('cur'),ring=document.getElementById('cr');
+  let tx=0,ty=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+  (function loop(){
+    rx+=(tx-rx)*.1;ry+=(ty-ry)*.1;
+    cw.style.left=tx+'px';cw.style.top=ty+'px';
+    ring.style.left=(rx-tx)+'px';ring.style.top=(ry-ty)+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.val2,.step,.pc,.expr-chip').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cw.classList.add('cur-big'));
+    el.addEventListener('mouseleave',()=>cw.classList.remove('cur-big'));
+  });
+})();
+
+/* MAGNETIC BUTTONS */
+document.querySelectorAll('.btn,.ncta').forEach(el=>{
+  el.addEventListener('mousemove',function(e){
+    const r=this.getBoundingClientRect();
+    const dx=(e.clientX-r.left-r.width/2)*.26;
+    const dy=(e.clientY-r.top-r.height/2)*.26;
+    this.style.transform=`translate(${dx}px,${dy}px) translateY(-2px)`;
+    this.style.transition='transform .1s ease';
+  });
+  el.addEventListener('mouseleave',function(){
+    this.style.transform='';this.style.transition='transform .7s cubic-bezier(.23,1,.32,1)';
+  });
+});
+
+/* 3D CARD TILT */
+document.querySelectorAll('[data-tilt]').forEach(card=>{
+  const spec=card.querySelector('.pspec');
+  card.addEventListener('mousemove',function(e){
+    const r=this.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)/r.width;
+    const y=(e.clientY-r.top-r.height/2)/r.height;
+    this.style.transform=`translate(-5px,-5px) perspective(700px) rotateY(${x*14}deg) rotateX(${-y*14}deg) translateZ(12px)`;
+    this.style.transition='transform .08s ease';
+    this.style.boxShadow=`${8+x*4}px ${8+y*4}px 0 var(--bk)`;
+    if(spec){const sx=((e.clientX-r.left)/r.width)*100,sy=((e.clientY-r.top)/r.height)*100;spec.style.background=`radial-gradient(circle at ${sx}% ${sy}%,rgba(255,193,7,.14),transparent 50%)`;}
+  });
+  card.addEventListener('mouseleave',function(){
+    this.style.transform='';this.style.transition='transform .7s cubic-bezier(.23,1,.32,1)';this.style.boxShadow='var(--sh)';
+    const s=this.querySelector('.pspec');if(s)s.style.background='';
+  });
+});
+
+/* COMPANION */
+(function(){
+  const comp=document.getElementById('companion'),sp=document.getElementById('cspeech');
+  const cImg=comp.querySelector('img');
+  let vis=false,lastY2=0,vel2=0,st2,talkT;
+  const msgs={
+    about:["Hi, I'm NALD! 👋","Nice to meet you! 😊"],
+    products:["My dioramas are awesome! 🏠","Pick your favorite! ⭐"],
+    process:["Detail matters! ⚙️","Made with love! 💛"],
+    contact:["Let's collaborate! 🤝","Let's create! 🎨"]
+  };
+  function showMsg(m){clearTimeout(talkT);sp.textContent=m;comp.classList.add('talking');talkT=setTimeout(()=>comp.classList.remove('talking'),2600);}
+  ScrollTrigger.create({trigger:'#about',start:'top 80%',
+    onEnter:()=>{vis=true;comp.classList.add('show');setTimeout(()=>showMsg(msgs.about[0]),700);},
+    onLeaveBack:()=>{vis=false;comp.classList.remove('show','talking')}
+  });
+  ['products','process','contact'].forEach(id=>{
+    ScrollTrigger.create({trigger:`#${id}`,start:'top 60%',onEnter:()=>{
+      if(!vis)return;const m=msgs[id]||[];setTimeout(()=>showMsg(m[Math.floor(Math.random()*m.length)]),350);
+    }});
+  });
+  window.addEventListener('scroll',()=>{
+    if(!vis||!cImg)return;vel2=window.scrollY-lastY2;lastY2=window.scrollY;
+    const t=Math.min(Math.max(vel2*.8,-16),16);
+    cImg.style.transition='transform .08s ease';cImg.style.transform=`rotate(${t}deg)`;
+    clearTimeout(st2);st2=setTimeout(()=>{cImg.style.transition='transform .6s cubic-bezier(.34,1.56,.64,1)';cImg.style.transform='';},80);
+  });
+  gsap.to(cImg,{y:-7,duration:1.9,ease:'sine.inOut',yoyo:true,repeat:-1});
+})();
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.sr,.srl,.srr').forEach(el=>obs.observe(el));
+
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',window.scrollY>55));
+
+document.getElementById('hbg').addEventListener('click',function(){
+  const nl=document.querySelector('.nlinks');
+  if(nl.style.display==='flex'){nl.style.display='none';}
+  else{nl.style.cssText='display:flex;flex-direction:column;position:fixed;top:66px;left:0;width:100%;background:rgba(17,17,17,.97);padding:18px 22px;gap:4px;border-bottom:2px solid rgba(255,193,7,.25);z-index:499;backdrop-filter:blur(16px)';nl.querySelectorAll('a').forEach(a=>{a.style.padding='13px 15px';a.style.borderRadius='11px'});}
+});
+</script>
+</body>
+</html>
