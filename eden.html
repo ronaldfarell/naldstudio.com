@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nama Projekmu — Dasbor Denyut Bumi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%231EAE5C'/%3E%3Cpath d='M20 4C10 4 4 10 4 20c10 0 16-6 16-16Z' fill='%23ffffff' fill-opacity='0.55'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --ink:#14181A;
+    --ink-soft:#5B6B62;
+    --green:#1EAE5C;
+    --green-soft:rgba(30,174,92,0.10);
+    --green-soft-2:rgba(30,174,92,0.18);
+    --glass-bg:rgba(255,255,255,0.5);
+    --glass-border:rgba(255,255,255,0.9);
+    --shadow:0 20px 50px rgba(20,24,26,0.10);
+    --shadow-sm:0 8px 22px rgba(20,24,26,0.08);
+    --amber:#E8A33D;
+    --red:#D9503F;
+    --radius-lg:26px;
+    --radius-md:20px;
+    --radius-sm:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',system-ui,sans-serif;letter-spacing:-0.01em;margin:0;color:var(--ink);}
+  a{color:var(--green);text-decoration:none;}
+  .icon{width:20px;height:20px;color:inherit;flex-shrink:0;display:inline-flex;}
+  .icon svg{display:block;width:100%;height:100%;}
+
+  /* flat decorative texture — one color (green), flat fills only, no blended gradients */
+  .bg-texture{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .bg-dots{
+    position:absolute;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Ccircle cx='3' cy='3' r='1.6' fill='%231EAE5C' fill-opacity='0.14'/%3E%3C/svg%3E");
+    background-repeat:repeat;
+  }
+  .bg-leaf{position:absolute;color:var(--green);opacity:0.05;}
+  .bg-leaf--a{width:340px;height:340px;top:-60px;right:-70px;}
+  .bg-leaf--b{width:260px;height:260px;bottom:-40px;left:-60px;transform:rotate(160deg);}
+
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:18px 18px 60px;}
+
+  /* topbar */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 18px;margin-bottom:14px;
+    background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+    border:1px solid var(--glass-border);border-radius:999px;
+    box-shadow:var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+  .brand-mark{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .brand-mark .icon{width:19px;height:19px;}
+  .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .brand-tag{font-size:0.72rem;color:var(--ink-soft);white-space:nowrap;}
+  .status{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+  .status-text{font-size:0.76rem;color:var(--ink-soft);white-space:nowrap;}
+  .refresh-btn{
+    width:32px;height:32px;border-radius:50%;border:1px solid var(--glass-border);background:#fff;
+    color:var(--green);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .refresh-btn.spin .icon{animation:spin .7s linear;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* country selector — drives gempa/cuaca/berita */
+  .country-bar{
+    display:flex;align-items:center;gap:10px;margin-bottom:14px;
+    background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+    border:1px solid var(--glass-border);border-radius:999px;padding:8px 8px 8px 16px;
+    box-shadow:var(--shadow-sm);
+  }
+  .country-bar .icon{color:var(--green);}
+  .country-bar label{font-size:0.8rem;color:var(--ink-soft);white-space:nowrap;}
+  .country-select{
+    flex:1;border:none;background:transparent;font-family:'Manrope',sans-serif;font-weight:600;
+    font-size:0.92rem;color:var(--ink);padding:8px 6px;cursor:pointer;
+  }
+  .country-select:focus{outline:none;}
+
+  /* tab bar */
+  .tab-bar{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .tab-pill{
+    display:flex;align-items:center;gap:7px;flex-shrink:0;
+    padding:9px 16px;border-radius:999px;font-size:0.85rem;font-weight:600;color:var(--ink-soft);
+    background:rgba(255,255,255,0.6);border:1px solid var(--glass-border);cursor:pointer;
+    transition:background .15s ease,color .15s ease;
+  }
+  .tab-pill .icon{width:17px;height:17px;}
+  .tab-pill.is-active{background:var(--green);color:#fff;border-color:var(--green);}
+
+  .tab-panel{display:none;animation:fade-in .25s ease;}
+  .tab-panel.is-active{display:block;}
+  @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
+
+  /* glass surfaces */
+  .glass{
+    background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+    border:1px solid var(--glass-border);border-radius:var(--radius-lg);
+    box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .panel{padding:24px 24px 20px;margin-bottom:18px;}
+  .panel-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+  .panel-header h2{font-size:1.2rem;font-weight:600;}
+  .source-tag{font-size:0.72rem;color:var(--green);background:var(--green-soft);padding:4px 12px;border-radius:999px;white-space:nowrap;}
+
+  .loading,.error-state,.empty-state{display:flex;align-items:center;gap:10px;color:var(--ink-soft);font-size:0.9rem;padding:14px 4px;}
+  .loading .icon{color:var(--green);animation:pulse-fade 1.4s ease-in-out infinite;}
+  @keyframes pulse-fade{0%,100%{opacity:.4;}50%{opacity:1;}}
+  .error-state{color:var(--red);}
+  .notice{
+    display:flex;gap:10px;align-items:flex-start;font-size:0.82rem;color:var(--ink-soft);
+    background:var(--green-soft);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;
+  }
+  .notice .icon{color:var(--green);margin-top:1px;}
+
+  /* widget grid — ringkasan, ala iOS Health today view */
+  .widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media (min-width:720px){.widget-grid{grid-template-columns:repeat(4,1fr);}}
+  .widget{
+    background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);
+    padding:16px;display:flex;flex-direction:column;gap:10px;min-height:118px;
+  }
+  .widget__icon{width:36px;height:36px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
+  .widget__icon .icon{width:18px;height:18px;}
+  .widget__value{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;line-height:1.15;}
+  .widget__label{font-size:0.74rem;color:var(--ink-soft);}
+
+  /* gempa list */
+  .gempa-row{display:flex;align-items:center;gap:14px;padding:12px 6px;border-radius:var(--radius-sm);}
+  .gempa-row + .gempa-row{border-top:1px solid rgba(20,24,26,0.06);}
+  .mag-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.92rem;color:#fff;background:var(--green);}
+  .mag-dot--warn{background:var(--amber);}
+  .mag-dot--alert{background:var(--red);}
+  .gempa-info{min-width:0;flex:1;}
+  .gempa-place{font-weight:600;font-size:0.92rem;}
+  .gempa-meta{font-size:0.76rem;color:var(--ink-soft);margin-top:2px;}
+  .gempa-tag{font-size:0.68rem;background:var(--green-soft);color:var(--green);padding:2px 9px;border-radius:999px;margin-left:8px;white-space:nowrap;}
+
+  /* cuaca */
+  .weather-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
+  .weather-card{background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:16px;}
+  .weather-card__icon{width:32px;height:32px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+  .weather-card__icon .icon{width:16px;height:16px;}
+  .weather-card__value{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;}
+  .weather-card__label{font-size:0.74rem;color:var(--ink-soft);margin-top:2px;}
+  .aqi-pill{display:inline-block;font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:999px;margin-top:6px;}
+
+  /* chips + strips */
+  .filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .chip{font-size:0.78rem;color:var(--green);background:var(--green-soft);padding:6px 14px;border-radius:999px;cursor:pointer;}
+  .chip.is-active{background:var(--green);color:#fff;}
+  .card-strip{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;}
+  .mini-card{
+    flex:0 0 210px;background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);
+    padding:16px;display:flex;flex-direction:column;gap:8px;
+  }
+  .mini-card__icon{width:36px;height:36px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
+  .mini-card__cat{font-size:0.7rem;color:var(--green);font-weight:600;}
+  .mini-card__title{font-size:0.86rem;font-weight:600;line-height:1.35;}
+  .mini-card__meta{font-size:0.72rem;color:var(--ink-soft);}
+  .mini-card a{font-size:0.78rem;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+
+  /* news list */
+  .news-item{padding:13px 4px;display:flex;flex-direction:column;gap:4px;}
+  .news-item + .news-item{border-top:1px solid rgba(20,24,26,0.06);}
+  .news-title{font-weight:600;font-size:0.92rem;color:var(--ink);}
+  .news-title:hover{color:var(--green);}
+  .news-meta{font-size:0.75rem;color:var(--ink-soft);display:flex;gap:8px;flex-wrap:wrap;}
+
+  footer{font-size:0.78rem;color:var(--ink-soft);padding:16px 22px 4px;}
+  footer .sources{margin-top:6px;line-height:1.7;}
+  footer strong{color:var(--ink);}
+
+  @media (max-width:640px){
+    .panel{padding:18px 16px;}
+    .brand-tag{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .refresh-btn.spin .icon{animation:none;}
+    .loading .icon{animation:none;}
+    .tab-panel{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-texture">
+  <div class="bg-dots"></div>
+  <div class="bg-leaf bg-leaf--a icon"></div>
+  <div class="bg-leaf bg-leaf--b icon"></div>
+</div>
+
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" id="brandMark"></div>
+      <div>
+        <div class="brand-name" id="brandName">Nama Projekmu</div>
+        <div class="brand-tag" id="brandTag">Pantau denyut bumi, real-time</div>
+      </div>
+    </div>
+    <div class="status">
+      <span class="status-dot"></span>
+      <span class="status-text" id="statusText">memuat…</span>
+      <button class="refresh-btn" id="refreshBtn" title="Segarkan data" aria-label="Segarkan data"></button>
+    </div>
+  </header>
+
+  <div class="country-bar">
+    <span class="icon" id="countryIcon"></span>
+    <label for="countrySelect">Negara</label>
+    <select class="country-select" id="countrySelect"></select>
+  </div>
+
+  <nav class="tab-bar" id="tabBar"></nav>
+
+  <section class="tab-panel is-active" id="tab-ringkasan">
+    <div class="panel glass">
+      <div class="panel-header"><h2>Ringkasan hari ini</h2></div>
+      <div class="widget-grid" id="widgetGrid"></div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-gempa">
+    <div class="panel glass">
+      <div class="panel-header">
+        <h2>Gempa bumi</h2>
+        <span class="source-tag" id="gempaSourceTag">Sumber: BMKG</span>
+      </div>
+      <div id="gempaList"></div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-cuaca">
+    <div class="panel glass">
+      <div class="panel-header">
+        <h2>Cuaca &amp; kualitas udara</h2>
+        <span class="source-tag">Sumber: Open-Meteo</span>
+      </div>
+      <div id="weatherContent"></div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-bencana">
+    <div class="panel glass">
+      <div class="panel-header">
+        <h2>Peristiwa bencana aktif dunia</h2>
+        <span class="source-tag">Sumber: NASA EONET</span>
+      </div>
+      <div class="filter-chips" id="eonetChips"></div>
+      <div class="card-strip" id="eonetStrip"></div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-antariksa">
+    <div class="panel glass">
+      <div class="panel-header">
+        <h2>Antariksa &amp; cuaca luar angkasa</h2>
+        <span class="source-tag">Sumber: NASA NeoWs · DONKI</span>
+      </div>
+      <div class="notice"><span class="icon"></span><span>Masih pakai DEMO_KEY NASA (kuota publik ~30 request/jam, dipakai bersama pengguna lain). Kalau sering gagal, buat API key gratis di api.nasa.gov lalu ganti nilai NASA_API_KEY di kode.</span></div>
+      <h3 style="font-size:0.95rem;margin-bottom:8px;">Objek dekat Bumi terdekat</h3>
+      <div id="neoList" style="margin-bottom:18px;"></div>
+      <h3 style="font-size:0.95rem;margin-bottom:8px;">Aktivitas cuaca luar angkasa terbaru</h3>
+      <div id="donkiList"></div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-berita">
+    <div class="panel glass">
+      <div class="panel-header">
+        <h2>Laporan &amp; berita bumi</h2>
+        <span class="source-tag">Sumber: ReliefWeb</span>
+      </div>
+      <div id="newsList"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Cuaca, gempa, dan berita mengikuti negara yang dipilih. Bencana aktif &amp; antariksa selalu global karena sifatnya lintas negara.</div>
+    <div class="sources">
+      <strong>Sumber terbuka:</strong> BMKG (prioritas gempa Indonesia) · USGS &amp; EMSC (gempa global, saling melengkapi) ·
+      Open-Meteo (cuaca &amp; kualitas udara, menggabungkan model banyak badan meteorologi nasional) ·
+      NASA EONET (bencana aktif global) · NASA NeoWs &amp; DONKI (objek dekat Bumi &amp; cuaca antariksa) ·
+      ReliefWeb/OCHA (laporan kemanusiaan &amp; bencana per negara).
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ====================== KONFIGURASI ====================== */
+const CONFIG = {
+  projectName: "Nama Projekmu",
+  tagline: "Pantau denyut bumi, real-time",
+  nasaApiKey: "DEMO_KEY",
+};
+const COUNTRIES = [
+  {name:"Indonesia", en:"Indonesia", lat:-6.2088, lon:106.8456},
+  {name:"Malaysia", en:"Malaysia", lat:3.1390, lon:101.6869},
+  {name:"Singapura", en:"Singapore", lat:1.3521, lon:103.8198},
+  {name:"Thailand", en:"Thailand", lat:13.7563, lon:100.5018},
+  {name:"Vietnam", en:"Viet Nam", lat:21.0278, lon:105.8342},
+  {name:"Filipina", en:"Philippines", lat:14.5995, lon:120.9842},
+  {name:"Jepang", en:"Japan", lat:35.6762, lon:139.6503},
+  {name:"Korea Selatan", en:"Korea", lat:37.5665, lon:126.9780},
+  {name:"Tiongkok", en:"China", lat:39.9042, lon:116.4074},
+  {name:"India", en:"India", lat:28.6139, lon:77.2090},
+  {name:"Australia", en:"Australia", lat:-35.2809, lon:149.1300},
+  {name:"Selandia Baru", en:"New Zealand", lat:-41.2866, lon:174.7756},
+  {name:"Amerika Serikat", en:"United States", lat:38.9072, lon:-77.0369},
+  {name:"Kanada", en:"Canada", lat:45.4215, lon:-75.6972},
+  {name:"Meksiko", en:"Mexico", lat:19.4326, lon:-99.1332},
+  {name:"Brasil", en:"Brazil", lat:-15.8267, lon:-47.9218},
+  {name:"Argentina", en:"Argentina", lat:-34.6037, lon:-58.3816},
+  {name:"Inggris", en:"United Kingdom", lat:51.5072, lon:-0.1276},
+  {name:"Prancis", en:"France", lat:48.8566, lon:2.3522},
+  {name:"Jerman", en:"Germany", lat:52.5200, lon:13.4050},
+  {name:"Belanda", en:"Netherlands", lat:52.3676, lon:4.9041},
+  {name:"Spanyol", en:"Spain", lat:40.4168, lon:-3.7038},
+  {name:"Italia", en:"Italy", lat:41.9028, lon:12.4964},
+  {name:"Turki", en:"Turkey", lat:39.9334, lon:32.8597},
+  {name:"Rusia", en:"Russia", lat:55.7558, lon:37.6173},
+  {name:"Mesir", en:"Egypt", lat:30.0444, lon:31.2357},
+  {name:"Nigeria", en:"Nigeria", lat:9.0765, lon:7.3986},
+  {name:"Afrika Selatan", en:"South Africa", lat:-25.7479, lon:28.2293},
+  {name:"Kenya", en:"Kenya", lat:-1.2921, lon:36.8219},
+  {name:"Arab Saudi", en:"Saudi Arabia", lat:24.7136, lon:46.6753},
+  {name:"Uni Emirat Arab", en:"United Arab Emirates", lat:24.4539, lon:54.3773},
+];
+const TABS = [
+  {id:"ringkasan", label:"Ringkasan", icon:"globeLeaf"},
+  {id:"gempa", label:"Gempa", icon:"pulse"},
+  {id:"cuaca", label:"Cuaca", icon:"droplet"},
+  {id:"bencana", label:"Bencana", icon:"flame"},
+  {id:"antariksa", label:"Antariksa", icon:"orbit"},
+  {id:"berita", label:"Berita", icon:"newspaper"},
+];
+/* ============================================================ */
+
+const STATE = { country: COUNTRIES[0], activeTab:"ringkasan" };
+const SUMMARY = { gempa:null, cuaca:null, bencana:null, antariksa:null, berita:null };
+
+const ICONS = {
+  leaf:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16Z"/><path d="M4 20c4-6 9-11 16-16"/></svg>`,
+  pulse:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-7 4 15 3-11 2 3h5"/></svg>`,
+  droplet:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8.2 7 13a7 7 0 1 1-14 0c0-4.8 7-13 7-13Z"/></svg>`,
+  wind:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h10a2.7 2.7 0 1 0-2.7-2.7"/><path d="M2.5 12.5h14a2.7 2.7 0 1 1-2.7 2.7"/><path d="M2.5 17h8a2 2 0 1 1-2 2"/></svg>`,
+  flame:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5 0 7.5-2.7 7.5-6.5 0-3.6-2.5-5.6-3.6-8.2-.9 1.8-1.8 2.7-2.7 2.7-1.8 0-1.9-2.7-.9-5.5-3.7 1.9-6.3 5.7-6.3 10.5 0 3.8 2.5 7 6 7Z"/></svg>`,
+  mountain:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 19.5 9 8l4 6.2 2.7-3.6 5.8 8.9Z"/><path d="M13.6 10.8 15 8.6"/></svg>`,
+  wave:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14.5c2-2 4-2 6 0s4 2 6 0 4-2 6 0 4 2 4 0"/><path d="M2 19c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>`,
+  sun:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.2 5.2l2.1 2.1M16.7 16.7l2.1 2.1M5.2 18.8l2.1-2.1M16.7 7.3l2.1-2.1"/></svg>`,
+  newspaper:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5" width="14.5" height="15" rx="2"/><path d="M17.3 8.2h3.9v9.4a2.4 2.4 0 0 1-2.4 2.4H8.5"/><path d="M6.4 9h7M6.4 12h7M6.4 15h4.5"/></svg>`,
+  globeLeaf:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M17 5C10 5.5 5.5 10 5 17"/></svg>`,
+  refresh:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/></svg>`,
+  chevron:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`,
+  orbit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="9.4" ry="4"/><ellipse cx="12" cy="12" rx="4" ry="9.4" transform="rotate(35 12 12)"/></svg>`,
+  info:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg>`,
+};
+function icon(name){ return `<span class="icon">${ICONS[name] || ICONS.leaf}</span>`; }
+
+const CATEGORY_ICON = {
+  wildfires:"flame", volcanoes:"mountain", severeStorms:"wind", floods:"wave",
+  drought:"sun", landslides:"mountain", earthquakes:"pulse", seaLakeIce:"droplet",
+  snow:"droplet", dustHaze:"wind", waterColor:"wave", tempExtremes:"sun", manmade:"leaf",
+};
+
+/* ---------- util ---------- */
+async function fetchJSON(url){
+  const res = await fetch(url, { headers:{ "Accept":"application/json" } });
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  return res.json();
+}
+function loadingHTML(label){ return `<div class="loading">${icon("pulse")}<span>Memuat ${label}…</span></div>`; }
+function errorHTML(msg){ return `<div class="error-state">${icon("leaf")}<span>${msg}</span></div>`; }
+function emptyHTML(msg){ return `<div class="empty-state">${icon("leaf")}<span>${msg}</span></div>`; }
+function timeAgo(date){
+  const s = Math.floor((Date.now()-date.getTime())/1000);
+  if(s<60) return "baru saja";
+  if(s<3600) return Math.floor(s/60)+" menit lalu";
+  if(s<86400) return Math.floor(s/3600)+" jam lalu";
+  return Math.floor(s/86400)+" hari lalu";
+}
+function todayISO(offsetDays){
+  const d = new Date(); d.setDate(d.getDate()+(offsetDays||0));
+  return d.toISOString().slice(0,10);
+}
+
+/* ---------- brand / shell ---------- */
+function renderBrand(){
+  document.title = CONFIG.projectName + " — Dasbor Denyut Bumi";
+  document.getElementById("brandMark").innerHTML = icon("globeLeaf");
+  document.getElementById("brandName").textContent = CONFIG.projectName;
+  document.getElementById("brandTag").textContent = CONFIG.tagline;
+  document.getElementById("refreshBtn").innerHTML = icon("refresh");
+  document.getElementById("countryIcon").innerHTML = icon("globeLeaf");
+  document.querySelector('#tab-antariksa .notice .icon').innerHTML = ICONS.info;
+}
+function renderCountrySelect(){
+  const sel = document.getElementById("countrySelect");
+  sel.innerHTML = COUNTRIES.map(c=>`<option value="${c.name}">${c.name}</option>`).join("");
+  sel.value = STATE.country.name;
+  sel.addEventListener("change", ()=>{
+    STATE.country = COUNTRIES.find(c=>c.name===sel.value) || COUNTRIES[0];
+    loadCountryScoped();
+  });
+}
+function renderTabBar(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = TABS.map(t=>`<div class="tab-pill ${t.id===STATE.activeTab?"is-active":""}" data-tab="${t.id}">${icon(t.icon)}<span>${t.label}</span></div>`).join("");
+  bar.querySelectorAll(".tab-pill").forEach(pill=>{
+    pill.addEventListener("click", ()=>switchTab(pill.dataset.tab));
+  });
+}
+function switchTab(tabId){
+  STATE.activeTab = tabId;
+  document.querySelectorAll(".tab-pill").forEach(p=>p.classList.toggle("is-active", p.dataset.tab===tabId));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("is-active", p.id==="tab-"+tabId));
+}
+
+/* ---------- ringkasan (widget grid) ---------- */
+function renderRingkasan(){
+  const items = [
+    {icon:"pulse", value: SUMMARY.gempa?.value ?? "–", label: SUMMARY.gempa?.label ?? "Gempa"},
+    {icon:"droplet", value: SUMMARY.cuaca?.value ?? "–", label: SUMMARY.cuaca?.label ?? "Kualitas udara"},
+    {icon:"flame", value: SUMMARY.bencana?.value ?? "–", label: SUMMARY.bencana?.label ?? "Bencana aktif"},
+    {icon:"orbit", value: SUMMARY.antariksa?.value ?? "–", label: SUMMARY.antariksa?.label ?? "Objek dekat Bumi"},
+  ];
+  document.getElementById("widgetGrid").innerHTML = items.map(it=>`
+    <div class="widget">
+      <div class="widget__icon">${icon(it.icon)}</div>
+      <div class="widget__value">${it.value}</div>
+      <div class="widget__label">${it.label}</div>
+    </div>`).join("");
+}
+
+/* ---------- gempa (BMKG -> USGS+EMSC, difilter negara) ---------- */
+function magClass(mag){ if(mag>=6) return "mag-dot--alert"; if(mag>=5) return "mag-dot--warn"; return ""; }
+function renderGempaRows(list){
+  return list.map(g=>`<div class="gempa-row">
+    <div class="mag-dot ${magClass(g.mag)}">${g.mag.toFixed(1)}</div>
+    <div class="gempa-info">
+      <div class="gempa-place">${g.place}</div>
+      <div class="gempa-meta">${g.meta}${g.tag?`<span class="gempa-tag">${g.tag}</span>`:""}</div>
+    </div>
+  </div>`).join("");
+}
+async function loadGempaGlobalFiltered(countryEn){
+  const [usgs, emsc] = await Promise.allSettled([
+    fetchJSON("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson"),
+    fetchJSON("https://www.seismicportal.eu/fdsnws/event/1/query?format=json&limit=100&orderby=time"),
+  ]);
+  let rows = [];
+  if(usgs.status==="fulfilled"){
+    (usgs.value?.features||[]).forEach(f=>{
+      const place = f.properties.place || "";
+      if(!countryEn || place.toLowerCase().includes(countryEn.toLowerCase())){
+        rows.push({mag:f.properties.mag||0, place, meta:timeAgo(new Date(f.properties.time))+" · USGS", time:f.properties.time});
+      }
+    });
+  }
+  if(emsc.status==="fulfilled"){
+    (emsc.value?.features||[]).forEach(f=>{
+      const region = f.properties?.flynn_region || "";
+      if(!countryEn || region.toLowerCase().includes(countryEn.toLowerCase())){
+        const t = new Date(f.properties.time);
+        rows.push({mag:f.properties.mag||0, place:region, meta:timeAgo(t)+" · EMSC", time:t.getTime()});
+      }
+    });
+  }
+  rows.sort((a,b)=>b.time-a.time);
+  return rows.slice(0,10);
+}
+async function loadGempa(){
+  const el = document.getElementById("gempaList");
+  el.innerHTML = loadingHTML("data gempa");
+  const isIndonesia = STATE.country.name==="Indonesia";
+  if(isIndonesia){
+    try{
+      const data = await fetchJSON("https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json");
+      const list = data?.Infogempa?.gempa;
+      if(!Array.isArray(list) || !list.length) throw new Error("BMKG kosong");
+      document.getElementById("gempaSourceTag").textContent = "Sumber: BMKG";
+      const rows = list.slice(0,10).map(g=>({
+        mag: parseFloat(g.Magnitude)||0, place: g.Wilayah||"Wilayah tidak diketahui",
+        meta:`${g.Tanggal||""} · ${g.Jam||""} · kedalaman ${g.Kedalaman||"–"}`, tag:g.Potensi,
+      }));
+      el.innerHTML = renderGempaRows(rows);
+      SUMMARY.gempa = {value:list.length, label:"Gempa 24 jam (BMKG)"};
+      renderRingkasan();
+      return;
+    }catch(err){ console.warn("BMKG tak terjangkau, pakai USGS+EMSC:", err); }
+  }
+  document.getElementById("gempaSourceTag").textContent = "Sumber: USGS + EMSC";
+  try{
+    const rows = await loadGempaGlobalFiltered(STATE.country.en);
+    if(!rows.length){ el.innerHTML = emptyHTML(`Tidak ada gempa tercatat untuk ${STATE.country.name} pekan ini.`); }
+    else el.innerHTML = renderGempaRows(rows);
+    SUMMARY.gempa = {value:rows.length, label:`Gempa (${STATE.country.name})`};
+  }catch(err){
+    el.innerHTML = errorHTML("Data gempa global sedang tidak terjangkau.");
+    SUMMARY.gempa = {value:"–", label:"Gempa tidak tersedia"};
+  }
+  renderRingkasan();
+}
+
+/* ---------- cuaca & kualitas udara ---------- */
+const WEATHER_CODE = {
+  0:"Cerah",1:"Cerah berawan",2:"Berawan sebagian",3:"Mendung",45:"Berkabut",48:"Kabut es",
+  51:"Gerimis ringan",53:"Gerimis sedang",55:"Gerimis lebat",61:"Hujan ringan",63:"Hujan sedang",
+  65:"Hujan lebat",71:"Salju ringan",80:"Hujan lokal",81:"Hujan lokal sedang",82:"Hujan lokal lebat",
+  95:"Badai petir",96:"Badai petir + hujan es",
+};
+function aqiInfo(aqi){
+  if(aqi==null) return {label:"–",color:"var(--ink-soft)",bg:"var(--green-soft)"};
+  if(aqi<=50) return {label:"Baik",color:"var(--green)",bg:"var(--green-soft)"};
+  if(aqi<=100) return {label:"Sedang",color:"var(--ink)",bg:"var(--green-soft)"};
+  if(aqi<=150) return {label:"Tak sehat (sensitif)",color:"#8a5a0f",bg:"rgba(232,163,61,0.2)"};
+  if(aqi<=200) return {label:"Tidak sehat",color:"var(--red)",bg:"rgba(217,80,63,0.14)"};
+  return {label:"Berbahaya",color:"var(--red)",bg:"rgba(217,80,63,0.26)"};
+}
+async function loadCuaca(){
+  const el = document.getElementById("weatherContent");
+  const city = STATE.country;
+  el.innerHTML = loadingHTML("cuaca "+city.name);
+  try{
+    const [wx, aq] = await Promise.all([
+      fetchJSON(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`),
+      fetchJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${city.lat}&longitude=${city.lon}&current=pm2_5,pm10,us_aqi`),
+    ]);
+    const c = wx.current || {}; const a = aq.current || {};
+    const info = aqiInfo(a.us_aqi);
+    el.innerHTML = `<div class="weather-grid">
+      <div class="weather-card"><div class="weather-card__icon">${icon("sun")}</div>
+        <div class="weather-card__value">${c.temperature_2m ?? "–"}°C</div>
+        <div class="weather-card__label">${WEATHER_CODE[c.weather_code] || "Kondisi tidak diketahui"}</div></div>
+      <div class="weather-card"><div class="weather-card__icon">${icon("droplet")}</div>
+        <div class="weather-card__value">${c.relative_humidity_2m ?? "–"}%</div>
+        <div class="weather-card__label">Kelembapan</div></div>
+      <div class="weather-card"><div class="weather-card__icon">${icon("wind")}</div>
+        <div class="weather-card__value">${c.wind_speed_10m ?? "–"} km/j</div>
+        <div class="weather-card__label">Kecepatan angin</div></div>
+      <div class="weather-card"><div class="weather-card__icon">${icon("leaf")}</div>
+        <div class="weather-card__value">${a.us_aqi ?? "–"}</div>
+        <div class="weather-card__label">Indeks kualitas udara</div>
+        <span class="aqi-pill" style="color:${info.color};background:${info.bg}">${info.label}</span></div>
+    </div>`;
+    SUMMARY.cuaca = {value:(a.us_aqi ?? "–"), label:`AQI ${city.name} · ${info.label}`};
+  }catch(err){
+    el.innerHTML = errorHTML("Data cuaca/kualitas udara sedang tidak terjangkau.");
+    SUMMARY.cuaca = {value:"–", label:"Cuaca tidak tersedia"};
+  }
+  renderRingkasan();
+}
+
+/* ---------- bencana aktif (NASA EONET, global) ---------- */
+let eonetEvents = []; let eonetFilter = "all";
+function renderEonet(){
+  const strip = document.getElementById("eonetStrip");
+  const events = eonetFilter==="all" ? eonetEvents : eonetEvents.filter(e=>e._catId===eonetFilter);
+  if(!events.length){ strip.innerHTML = emptyHTML("Tidak ada peristiwa pada kategori ini."); return; }
+  strip.innerHTML = events.map(e=>`<div class="mini-card">
+    <div class="mini-card__icon">${icon(CATEGORY_ICON[e._catId]||"leaf")}</div>
+    <div class="mini-card__cat">${e._catTitle}</div>
+    <div class="mini-card__title">${e.title}</div>
+    <div class="mini-card__meta">${e._when}</div>
+    <a href="${e.link||"#"}" target="_blank" rel="noopener">Lihat detail ${icon("chevron")}</a>
+  </div>`).join("");
+}
+async function loadBencana(){
+  const strip = document.getElementById("eonetStrip"); const chips = document.getElementById("eonetChips");
+  strip.innerHTML = loadingHTML("peristiwa bencana"); chips.innerHTML = "";
+  try{
+    const data = await fetchJSON("https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=20");
+    const events = data?.events || [];
+    eonetEvents = events.map(e=>{
+      const cat = e.categories?.[0] || {id:"other", title:"Lainnya"};
+      const geom = e.geometry?.[e.geometry.length-1];
+      return {title:e.title, link:e.sources?.[0]?.url || e.link, _catId:cat.id, _catTitle:cat.title,
+        _when: geom?.date ? timeAgo(new Date(geom.date)) : ""};
+    });
+    const cats = ["all", ...new Set(eonetEvents.map(e=>e._catId))];
+    chips.innerHTML = cats.map(c=>{
+      const label = c==="all" ? "Semua" : (eonetEvents.find(e=>e._catId===c)?._catTitle || c);
+      return `<span class="chip ${c===eonetFilter?"is-active":""}" data-cat="${c}">${label}</span>`;
+    }).join("");
+    chips.querySelectorAll(".chip").forEach(chip=>chip.addEventListener("click", ()=>{
+      eonetFilter = chip.dataset.cat;
+      chips.querySelectorAll(".chip").forEach(c=>c.classList.remove("is-active"));
+      chip.classList.add("is-active"); renderEonet();
+    }));
+    renderEonet();
+    SUMMARY.bencana = {value:eonetEvents.length, label:"Bencana aktif (dunia)"};
+  }catch(err){
+    strip.innerHTML = errorHTML("Data peristiwa bencana global sedang tidak terjangkau.");
+    SUMMARY.bencana = {value:"–", label:"Bencana tidak tersedia"};
+  }
+  renderRingkasan();
+}
+
+/* ---------- antariksa (NASA NeoWs + DONKI, global) ---------- */
+async function loadAntariksa(){
+  const neoEl = document.getElementById("neoList"); const donkiEl = document.getElementById("donkiList");
+  neoEl.innerHTML = loadingHTML("objek dekat Bumi"); donkiEl.innerHTML = loadingHTML("cuaca antariksa");
+  try{
+    const start = todayISO(0), end = todayISO(1);
+    const data = await fetchJSON(`https://api.nasa.gov/neo/rest/v1/feed?start_date=${start}&end_date=${end}&api_key=${CONFIG.nasaApiKey}`);
+    const all = Object.values(data.near_earth_objects||{}).flat();
+    all.sort((a,b)=>parseFloat(a.close_approach_data[0].miss_distance.kilometers)-parseFloat(b.close_approach_data[0].miss_distance.kilometers));
+    const top = all.slice(0,5);
+    if(!top.length){ neoEl.innerHTML = emptyHTML("Tidak ada objek tercatat hari ini."); }
+    else neoEl.innerHTML = top.map(n=>{
+      const ca = n.close_approach_data[0];
+      const dist = Math.round(parseFloat(ca.miss_distance.kilometers)).toLocaleString("id-ID");
+      const dia = Math.round(n.estimated_diameter.meters.estimated_diameter_max);
+      return `<div class="gempa-row">
+        <div class="mag-dot ${n.is_potentially_hazardous_asteroid?"mag-dot--warn":""}">${icon("orbit")}</div>
+        <div class="gempa-info">
+          <div class="gempa-place">${n.name}</div>
+          <div class="gempa-meta">Ø ~${dia} m · jarak ${dist} km · ${ca.close_approach_date}${n.is_potentially_hazardous_asteroid?'<span class="gempa-tag">berpotensi bahaya</span>':""}</div>
+        </div>
+      </div>`;
+    }).join("");
+    SUMMARY.antariksa = {value: top[0] ? Math.round(parseFloat(top[0].close_approach_data[0].miss_distance.kilometers)/1000).toLocaleString("id-ID")+" rb km" : "–", label:"Objek terdekat hari ini"};
+  }catch(err){
+    neoEl.innerHTML = errorHTML("Data NeoWs sedang tidak terjangkau (mungkin kuota DEMO_KEY habis).");
+    SUMMARY.antariksa = {value:"–", label:"Antariksa tidak tersedia"};
+  }
+  try{
+    const start = todayISO(-7), end = todayISO(0);
+    const data = await fetchJSON(`https://api.nasa.gov/DONKI/notifications?startDate=${start}&endDate=${end}&type=all&api_key=${CONFIG.nasaApiKey}`);
+    if(!Array.isArray(data) || !data.length){ donkiEl.innerHTML = emptyHTML("Tidak ada aktivitas signifikan 7 hari terakhir."); }
+    else donkiEl.innerHTML = data.slice(0,6).map(n=>`<div class="news-item">
+        <div class="news-title">${n.messageType||"Notifikasi"}</div>
+        <div class="news-meta"><span>${n.messageIssueTime ? new Date(n.messageIssueTime).toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"}) : ""}</span></div>
+      </div>`).join("");
+  }catch(err){
+    donkiEl.innerHTML = errorHTML("Data DONKI sedang tidak terjangkau (mungkin kuota DEMO_KEY habis).");
+  }
+  renderRingkasan();
+}
+
+/* ---------- berita (ReliefWeb, difilter negara) ---------- */
+async function loadBerita(){
+  const el = document.getElementById("newsList");
+  el.innerHTML = loadingHTML("laporan terbaru");
+  try{
+    const q = encodeURIComponent(STATE.country.en);
+    const url = `https://api.reliefweb.int/v1/reports?appname=earthpulse-dashboard&limit=7&sort[]=date.created:desc&query[value]=${q}&query[fields][]=country.name&fields[include][]=title&fields[include][]=date&fields[include][]=source&fields[include][]=url_alias`;
+    const data = await fetchJSON(url);
+    const items = data?.data || [];
+    if(!items.length){ el.innerHTML = emptyHTML(`Belum ada laporan baru untuk ${STATE.country.name}.`); }
+    else el.innerHTML = items.map(it=>{
+      const f = it.fields || {};
+      const date = f.date?.created ? new Date(f.date.created) : null;
+      const src = f.source?.[0]?.name || "ReliefWeb";
+      const link = f.url_alias || `https://reliefweb.int/node/${it.id}`;
+      return `<div class="news-item">
+        <a class="news-title" href="${link}" target="_blank" rel="noopener">${f.title||"Tanpa judul"}</a>
+        <div class="news-meta"><span>${src}</span>${date?`<span>· ${date.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}</span>`:""}</div>
+      </div>`;
+    }).join("");
+    SUMMARY.berita = {value:items.length, label:`Laporan (${STATE.country.name})`};
+  }catch(err){
+    el.innerHTML = errorHTML("Laporan bencana sedang tidak terjangkau.");
+    SUMMARY.berita = {value:"–", label:"Laporan tidak tersedia"};
+  }
+  renderRingkasan();
+}
+
+/* ---------- orkestrasi ---------- */
+function loadCountryScoped(){ loadGempa(); loadCuaca(); loadBerita(); }
+function loadGlobalScoped(){ loadBencana(); loadAntariksa(); }
+async function refreshAll(spin){
+  const btn = document.getElementById("refreshBtn");
+  if(spin) btn.classList.add("spin");
+  document.getElementById("statusText").textContent = "memuat…";
+  await Promise.allSettled([loadGempa(), loadCuaca(), loadBencana(), loadAntariksa(), loadBerita()]);
+  document.getElementById("statusText").textContent = "diperbarui " + timeAgo(new Date());
+  if(spin) setTimeout(()=>btn.classList.remove("spin"), 700);
+}
+function init(){
+  renderBrand(); renderCountrySelect(); renderTabBar(); renderRingkasan();
+  document.getElementById("refreshBtn").addEventListener("click", ()=>refreshAll(true));
+  refreshAll(false);
+  setInterval(()=>refreshAll(false), 6*60*1000);
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
