@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nama Projekmu — Pemantauan Satelit &amp; GPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root{
+    --bg:#FFFFFF;--ink:#14181A;--ink-soft:#5B6B62;--green:#1EAE5C;
+    --green-soft:rgba(30,174,92,0.10);--glass-bg:rgba(255,255,255,0.55);--glass-border:rgba(255,255,255,0.9);
+    --shadow:0 20px 50px rgba(20,24,26,0.12);--shadow-sm:0 8px 22px rgba(20,24,26,0.08);
+    --amber:#E8A33D;--red:#D9503F;--radius-lg:26px;--radius-md:20px;--radius-sm:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,-apple-system,sans-serif;line-height:1.5;}
+  h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;letter-spacing:-0.01em;margin:0;color:var(--ink);}
+  a{color:var(--green);text-decoration:none;}
+  .icon{width:20px;height:20px;color:inherit;flex-shrink:0;display:inline-flex;}
+  .icon svg{display:block;width:100%;height:100%;}
+
+  /* persistent full-viewport map behind everything */
+  #map{position:fixed;inset:0;z-index:0;background:#eef4f0;}
+  .leaflet-control-attribution{font-size:10px !important;background:rgba(255,255,255,0.7) !important;}
+
+  .scrim-top{position:fixed;top:0;left:0;right:0;height:120px;z-index:1;pointer-events:none;
+    background:linear-gradient(rgba(255,255,255,0.9),rgba(255,255,255,0));}
+
+  .topbar{
+    position:fixed;top:14px;left:14px;right:14px;z-index:10;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;
+    background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+    border:1px solid var(--glass-border);border-radius:999px;box-shadow:var(--shadow-sm);
+  }
+  .brand{display:flex;align-items:center;gap:9px;min-width:0;}
+  .brand-mark{width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .brand-mark .icon{width:17px;height:17px;}
+  .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  a.top-link{display:flex;align-items:center;gap:6px;font-size:0.76rem;font-weight:600;color:var(--green);background:var(--green-soft);padding:7px 13px;border-radius:999px;white-space:nowrap;flex-shrink:0;}
+
+  .content{position:relative;z-index:2;max-width:520px;margin:0 0 0 auto;padding:96px 16px 60px;}
+  @media (max-width:760px){.content{margin:0 auto;max-width:600px;}}
+
+  .glass{background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+    border:1px solid var(--glass-border);border-radius:var(--radius-lg);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.7);}
+  .section{padding:22px 22px 20px;margin-bottom:18px;opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+  .section.is-visible{opacity:1;transform:translateY(0);}
+  .section h2{font-size:1.14rem;font-weight:600;margin-bottom:4px;}
+  .section .sub{font-size:0.8rem;color:var(--ink-soft);margin-bottom:14px;}
+  .source-tag{font-size:0.7rem;color:var(--green);background:var(--green-soft);padding:3px 11px;border-radius:999px;white-space:nowrap;}
+
+  .hero .widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:6px;}
+  .widget{background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:8px;}
+  .widget__icon{width:32px;height:32px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
+  .widget__icon .icon{width:16px;height:16px;}
+  .widget__value{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.22rem;}
+  .widget__label{font-size:0.72rem;color:var(--ink-soft);}
+
+  .loading,.error-state,.empty-state{display:flex;align-items:center;gap:9px;color:var(--ink-soft);font-size:0.86rem;padding:10px 2px;}
+  .loading .icon{color:var(--green);animation:pulse-fade 1.4s ease-in-out infinite;}
+  @keyframes pulse-fade{0%,100%{opacity:.4;}50%{opacity:1;}}
+  .error-state{color:var(--red);}
+  .notice{display:flex;gap:9px;align-items:flex-start;font-size:0.78rem;color:var(--ink-soft);background:var(--green-soft);border-radius:var(--radius-sm);padding:11px 13px;margin-bottom:12px;}
+  .notice .icon{color:var(--green);margin-top:1px;}
+  .notice a{font-weight:700;}
+
+  .list-item{display:flex;align-items:center;gap:12px;padding:10px 6px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s ease;}
+  .list-item:hover{background:rgba(255,255,255,0.6);}
+  .list-item + .list-item{border-top:1px solid rgba(20,24,26,0.06);}
+  .list-item__icon{width:38px;height:38px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .list-item__icon .icon{width:18px;height:18px;}
+  .list-item__title{font-weight:600;font-size:0.88rem;}
+  .list-item__meta{font-size:0.75rem;color:var(--ink-soft);margin-top:2px;}
+  .list-item__go{margin-left:auto;color:var(--ink-soft);}
+
+  .layer-btn{
+    display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;font-weight:600;
+    font-size:0.85rem;border:none;border-radius:999px;padding:11px 20px;cursor:pointer;margin-bottom:10px;
+  }
+  .layer-btn.is-off{background:rgba(255,255,255,0.7);color:var(--ink);border:1px solid var(--glass-border);}
+
+  .telemetry-card{background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;cursor:pointer;}
+  .telemetry-card:hover{background:rgba(255,255,255,0.85);}
+  .telemetry-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .telemetry-head .icon-wrap{width:32px;height:32px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
+  .telemetry-head .icon-wrap .icon{width:16px;height:16px;}
+  .telemetry-name{font-weight:700;font-size:0.9rem;}
+  .telemetry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .telemetry-grid div{font-size:0.72rem;color:var(--ink-soft);}
+  .telemetry-grid b{display:block;font-family:'Space Grotesk',sans-serif;font-size:0.92rem;color:var(--ink);font-weight:700;}
+
+  footer{position:relative;z-index:2;max-width:520px;margin:0 0 0 auto;padding:0 22px 30px;font-size:0.76rem;color:var(--ink-soft);}
+  @media (max-width:760px){footer{margin:0 auto;max-width:600px;}}
+  footer .sources{margin-top:6px;line-height:1.7;}
+  footer strong{color:var(--ink);}
+
+  /* plane marker */
+  .plane-marker{color:var(--green);width:18px;height:18px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.25));}
+  .ship-marker{color:#1b6fae;width:16px;height:16px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.25));}
+  .sat-marker{color:var(--red);width:20px;height:20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.3));}
+
+  @media (prefers-reduced-motion:reduce){.section{opacity:1;transform:none;transition:none;}}
+</style>
+</head>
+<body>
+
+<div id="map"><div id="mapFallback" style="display:flex;align-items:center;justify-content:center;height:100%;color:#5B6B62;font-family:Manrope,sans-serif;font-size:0.85rem;text-align:center;padding:20px;">Memuat peta…</div></div>
+<div class="scrim-top"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" id="brandMark"></div>
+    <div class="brand-name" id="brandName">Nama Projekmu</div>
+  </div>
+  <a class="top-link" href="../">← Iklim &amp; Bencana</a>
+</header>
+
+<div class="content">
+
+  <section class="section glass hero" id="sec-hero">
+    <h2>Pemantauan Satelit &amp; GPS Dunia</h2>
+    <div class="sub">Peta di belakang ini hidup — geser &amp; gulir untuk menjelajah tiap lapisan data langsung.</div>
+    <div class="widget-grid">
+      <div class="widget"><div class="widget__icon" id="wIconPlane"></div><div class="widget__value" id="wPlane">–</div><div class="widget__label">Pesawat terlihat</div></div>
+      <div class="widget"><div class="widget__icon" id="wIconShip"></div><div class="widget__value" id="wShip">–</div><div class="widget__label">Kapal terlihat</div></div>
+      <div class="widget"><div class="widget__icon" id="wIconSat"></div><div class="widget__value" id="wSat">3</div><div class="widget__label">Satelit terlacak</div></div>
+      <div class="widget"><div class="widget__icon" id="wIconLayer"></div><div class="widget__value" id="wLayer">Peta</div><div class="widget__label">Lapisan aktif</div></div>
+    </div>
+  </section>
+
+  <section class="section glass" id="sec-pesawat">
+    <div class="panel-header" style="display:flex;justify-content:space-between;align-items:baseline;">
+      <h2>Pesawat terbang</h2><span class="source-tag">Sumber: OpenSky Network</span>
+    </div>
+    <div class="sub">Menampilkan pesawat dalam area peta yang sedang terlihat — geser peta untuk area lain di dunia.</div>
+    <div id="planeList"></div>
+  </section>
+
+  <section class="section glass" id="sec-kapal">
+    <div class="panel-header" style="display:flex;justify-content:space-between;align-items:baseline;">
+      <h2>Kapal laut</h2><span class="source-tag">Sumber: aisstream.io (AIS)</span>
+    </div>
+    <div class="notice" id="shipNotice"><span class="icon"></span><span></span></div>
+    <div id="shipList"></div>
+  </section>
+
+  <section class="section glass" id="sec-citra">
+    <div class="panel-header" style="display:flex;justify-content:space-between;align-items:baseline;">
+      <h2>Citra satelit cuaca</h2><span class="source-tag">Sumber: NASA GIBS</span>
+    </div>
+    <div class="sub" id="citraSub">Citra warna asli dari satelit Terra/Aqua (MODIS), diperbarui harian.</div>
+    <button class="layer-btn is-off" id="layerToggle"></button>
+  </section>
+
+  <section class="section glass" id="sec-antariksa">
+    <div class="panel-header" style="display:flex;justify-content:space-between;align-items:baseline;">
+      <h2>ISS &amp; satelit lain</h2><span class="source-tag">Sumber: wheretheiss.at</span>
+    </div>
+    <div class="sub">Ketuk kartu untuk memusatkan peta ke posisi satelit tersebut.</div>
+    <div id="satCards"></div>
+  </section>
+
+</div>
+
+<footer>
+  <div><strong>Catatan:</strong> pesawat &amp; kapal mengikuti area peta yang sedang dilihat (bukan seluruh dunia sekaligus) demi performa &amp; batas kuota sumber data. Geser/zoom peta untuk memuat area lain.</div>
+  <div class="sources">
+    <strong>Sumber terbuka:</strong> OpenSky Network (posisi pesawat, tanpa key) · aisstream.io (posisi kapal AIS, perlu key gratis) ·
+    NASA GIBS (citra satelit cuaca, tanpa key) · wheretheiss.at (posisi ISS/satelit, tanpa key) · CARTO/OpenStreetMap (peta dasar).
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ====================== KONFIGURASI ====================== */
+const CONFIG = {
+  projectName: "Nama Projekmu",
+  aisStreamApiKey: "",       // isi sendiri dari https://aisstream.io (gratis, ~2 menit)
+  planePollMs: 20000,
+  satPollMs: 6000,
+};
+const SATELLITES = [
+  {id:25544, name:"ISS (Stasiun Luar Angkasa Internasional)"},
+  {id:20580, name:"Hubble Space Telescope"},
+  {id:48274, name:"Tiangong (Stasiun Luar Angkasa Tiongkok)"},
+];
+/* ============================================================ */
+
+const ICONS = {
+  globeLeaf:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M17 5C10 5.5 5.5 10 5 17"/></svg>`,
+  plane:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2Z"/></svg>`,
+  ship:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6"/><circle cx="12" cy="5" r="1.3" fill="currentColor" stroke="none"/><path d="M6 9h12l-2 4H8Z"/><path d="M4 15c1.5 2 3 2 4.5 0s3-2 4.5 0 3 2 4.5 0"/></svg>`,
+  satellite:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" rx="1.2"/><path d="M9 10 5 6M15 10l4-4M9 14l-4 4M15 14l4 4"/></svg>`,
+  cloud:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4 4 0 1 1 .8-7.9A5 5 0 0 1 17 12.5 3.5 3.5 0 0 1 16.5 18Z"/></svg>`,
+  info:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg>`,
+  chevron:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`,
+};
+function icon(name){ return `<span class="icon">${ICONS[name]||ICONS.globeLeaf}</span>`; }
+function haptic(){ if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} } }
+function loadingHTML(l){ return `<div class="loading">${icon("globeLeaf")}<span>Memuat ${l}…</span></div>`; }
+function errorHTML(m){ return `<div class="error-state"><span>${m}</span></div>`; }
+function emptyHTML(m){ return `<div class="empty-state"><span>${m}</span></div>`; }
+async function fetchJSON(url, opts){ const res = await fetch(url, opts||{}); if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); }
+function todayISO(offsetDays){ const d=new Date(); d.setUTCDate(d.getUTCDate()+(offsetDays||0)); return d.toISOString().slice(0,10); }
+
+/* ---------- brand ---------- */
+document.getElementById("brandMark").innerHTML = icon("globeLeaf");
+document.getElementById("brandName").textContent = CONFIG.projectName;
+document.getElementById("wIconPlane").innerHTML = icon("plane");
+document.getElementById("wIconShip").innerHTML = icon("ship");
+document.getElementById("wIconSat").innerHTML = icon("satellite");
+document.getElementById("wIconLayer").innerHTML = icon("cloud");
+
+/* ---------- peta (dibungkus try/catch: kalau Leaflet gagal dimuat, sisa halaman tetap tampil normal) ---------- */
+let map = null;
+function initMap(){
+try{
+  if(typeof L === "undefined") throw new Error("Leaflet tidak termuat (kemungkinan diblokir oleh ad-blocker/pemblokir skrip untuk cdn.jsdelivr.net).");
+  map = L.map("map", { zoomControl:false, attributionControl:true }).setView([-2, 118], 4);
+  L.control.zoom({position:"bottomright"}).addTo(map);
+const baseLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+  attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19,
+}).addTo(map);
+const gibsDate = todayISO(-1);
+const satelliteLayer = L.tileLayer(
+  `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/${gibsDate}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`,
+  { attribution:"NASA GIBS / MODIS Terra", maxZoom:9, opacity:0.95 }
+);
+let citraOn = false;
+document.getElementById("citraSub").textContent = `Citra warna asli dari satelit Terra (MODIS), tanggal ${gibsDate}. Diperbarui otomatis setiap hari.`;
+const layerBtn = document.getElementById("layerToggle");
+function setLayerBtn(){
+  layerBtn.innerHTML = citraOn ? `${icon("cloud")}<span>Sembunyikan citra satelit</span>` : `${icon("cloud")}<span>Tampilkan citra satelit</span>`;
+  layerBtn.classList.toggle("is-off", !citraOn);
+  document.getElementById("wLayer").textContent = citraOn ? "Citra satelit" : "Peta";
+}
+layerBtn.addEventListener("click", ()=>{
+  haptic();
+  citraOn = !citraOn;
+  if(citraOn) satelliteLayer.addTo(map); else map.removeLayer(satelliteLayer);
+  setLayerBtn();
+});
+setLayerBtn();
+
+const planeLayer = L.layerGroup().addTo(map);
+const shipLayer = L.layerGroup().addTo(map);
+const satLayer = L.layerGroup().addTo(map);
+const planeMarkers = new Map();
+const shipMarkers = new Map();
+const satMarkers = new Map();
+
+function divIcon(html, size){ return L.divIcon({ html, className:"", iconSize:[size,size], iconAnchor:[size/2,size/2] }); }
+function planeIconHTML(heading){ return `<div class="plane-marker" style="transform:rotate(${heading||0}deg)">${ICONS.plane}</div>`; }
+
+/* ---------- pesawat (OpenSky, bbox = viewport saat ini) ---------- */
+let planeTimer = null;
+async function loadPlanes(){
+  const list = document.getElementById("planeList");
+  const b = map.getBounds();
+  const url = `https://opensky-network.org/api/states/all?lamin=${b.getSouth()}&lomin=${b.getWest()}&lamax=${b.getNorth()}&lomax=${b.getEast()}`;
+  try{
+    const data = await fetchJSON(url);
+    const states = (data.states||[]).filter(s=>s[5]!=null && s[6]!=null).slice(0,150);
+    const seen = new Set();
+    states.forEach(s=>{
+      const id = s[0];
+      const info = { icao24:id, callsign:(s[1]||"").trim()||"—", country:s[2], lon:s[5], lat:s[6], alt:s[7], speed:s[9], heading:s[10]||0, onGround:s[8] };
+      seen.add(id);
+      if(planeMarkers.has(id)){
+        const m = planeMarkers.get(id);
+        m.setLatLng([info.lat, info.lon]);
+        m.setIcon(divIcon(planeIconHTML(info.heading), 18));
+        m._info = info;
+      }else{
+        const m = L.marker([info.lat, info.lon], {icon: divIcon(planeIconHTML(info.heading), 18)});
+        m._info = info;
+        m.on("click", ()=>{ haptic(); m.bindPopup(planePopup(info)).openPopup(); });
+        m.addTo(planeLayer);
+        planeMarkers.set(id, m);
+      }
+    });
+    Array.from(planeMarkers.keys()).forEach(id=>{ if(!seen.has(id)){ planeLayer.removeLayer(planeMarkers.get(id)); planeMarkers.delete(id); } });
+    document.getElementById("wPlane").textContent = states.length;
+    list.innerHTML = states.length ? states.slice(0,8).map(s=>{
+      const info = { callsign:(s[1]||"").trim()||"—", country:s[2], alt:Math.round(s[7]||0), speed:Math.round((s[9]||0)*3.6) };
+      return `<div class="list-item" data-icao="${s[0]}"><div class="list-item__icon">${icon("plane")}</div>
+        <div><div class="list-item__title">${info.callsign}</div><div class="list-item__meta">${info.country} · ${info.alt} m · ${info.speed} km/j</div></div>
+        <span class="list-item__go icon">${ICONS.chevron}</span></div>`;
+    }).join("") : emptyHTML("Tidak ada pesawat terdeteksi di area peta ini. Coba geser/zoom keluar.");
+    list.querySelectorAll(".list-item").forEach(row=>row.addEventListener("click", ()=>{
+      haptic();
+      const m = planeMarkers.get(row.dataset.icao);
+      if(m){ map.flyTo(m.getLatLng(), 8); m.bindPopup(planePopup(m._info)).openPopup(); }
+    }));
+  }catch(err){
+    list.innerHTML = errorHTML("Data OpenSky sedang tidak terjangkau (mungkin kena limit anonim). Coba lagi sebentar lagi.");
+    document.getElementById("wPlane").textContent = "–";
+  }
+}
+function planePopup(info){
+  return `<b>${info.callsign}</b><br>${info.country}<br>Ketinggian: ${Math.round(info.alt||0)} m<br>Kecepatan: ${Math.round((info.speed||0)*3.6)} km/j`;
+}
+map.on("moveend", ()=>{ clearTimeout(planeTimer); planeTimer = setTimeout(loadPlanes, 1200); });
+
+/* ---------- kapal (aisstream.io, perlu API key gratis) ---------- */
+function setupKapal(){
+  const notice = document.querySelector("#shipNotice span:last-child");
+  document.querySelector("#shipNotice .icon").innerHTML = icon("info");
+  const list = document.getElementById("shipList");
+  if(!CONFIG.aisStreamApiKey){
+    notice.innerHTML = `Belum ada API key. Kapal laut real-time butuh key gratis dari <a href="https://aisstream.io" target="_blank" rel="noopener">aisstream.io</a> (daftar ~2 menit) — tempel di CONFIG.aisStreamApiKey lalu muat ulang halaman.`;
+    list.innerHTML = emptyHTML("Menunggu API key AIS.");
+    document.getElementById("wShip").textContent = "–";
+    return;
+  }
+  notice.innerHTML = `Terhubung ke aisstream.io — menampilkan kapal dalam area peta yang sedang dilihat.`;
+  list.innerHTML = loadingHTML("posisi kapal");
+  try{
+    const ws = new WebSocket("wss://stream.aisstream.io/v0/stream");
+    ws.onopen = ()=>{
+      const b = map.getBounds();
+      ws.send(JSON.stringify({
+        APIKey: CONFIG.aisStreamApiKey,
+        BoundingBoxes: [[[b.getSouth(), b.getWest()], [b.getNorth(), b.getEast()]]],
+        FilterMessageTypes: ["PositionReport"],
+      }));
+    };
+    ws.onmessage = (ev)=>{
+      try{
+        const msg = JSON.parse(ev.data);
+        const pr = msg?.Message?.PositionReport; const meta = msg?.MetaData;
+        if(!pr || !meta) return;
+        const id = meta.MMSI;
+        const info = { name: meta.ShipName?.trim() || ("MMSI "+id), lat: pr.Latitude, lon: pr.Longitude, speed: pr.Sog, heading: pr.TrueHeading||0 };
+        if(shipMarkers.has(id)){ shipMarkers.get(id).setLatLng([info.lat, info.lon]); }
+        else{
+          const m = L.marker([info.lat, info.lon], {icon: divIcon(`<div class="ship-marker">${ICONS.ship}</div>`, 16)});
+          m.bindPopup(`<b>${info.name}</b><br>Kecepatan: ${info.speed||0} knot`);
+          m.addTo(shipLayer);
+          shipMarkers.set(id, m);
+        }
+        document.getElementById("wShip").textContent = shipMarkers.size;
+      }catch(e){}
+    };
+    ws.onerror = ()=>{ notice.innerHTML = "Koneksi AIS gagal — periksa API key kamu."; };
+  }catch(err){
+    notice.innerHTML = "Tidak bisa membuka koneksi AIS di browser ini.";
+  }
+}
+
+/* ---------- ISS & satelit lain (wheretheiss.at, tanpa key) ---------- */
+function satIconHTML(){ return `<div class="sat-marker">${ICONS.satellite}</div>`; }
+async function loadSatellites(){
+  const cards = document.getElementById("satCards");
+  const results = await Promise.allSettled(SATELLITES.map(s=>fetchJSON(`https://api.wheretheiss.at/v1/satellites/${s.id}`)));
+  let html = "";
+  results.forEach((r, i)=>{
+    const s = SATELLITES[i];
+    if(r.status!=="fulfilled"){ html += `<div class="telemetry-card"><div class="telemetry-head"><div class="icon-wrap">${icon("satellite")}</div><div class="telemetry-name">${s.name}</div></div>${errorHTML("Data tidak terjangkau saat ini.")}</div>`; return; }
+    const d = r.value;
+    if(satMarkers.has(s.id)){ satMarkers.get(s.id).setLatLng([d.latitude, d.longitude]); }
+    else{
+      const m = L.marker([d.latitude, d.longitude], {icon: divIcon(satIconHTML(), 20)});
+      m.bindPopup(`<b>${s.name}</b><br>Ketinggian: ${Math.round(d.altitude)} km`);
+      m.addTo(satLayer);
+      satMarkers.set(s.id, m);
+    }
+    html += `<div class="telemetry-card" data-sat="${s.id}">
+      <div class="telemetry-head"><div class="icon-wrap">${icon("satellite")}</div><div class="telemetry-name">${s.name}</div></div>
+      <div class="telemetry-grid">
+        <div>Ketinggian<b>${Math.round(d.altitude)} km</b></div>
+        <div>Kecepatan<b>${Math.round(d.velocity).toLocaleString("id-ID")} km/j</b></div>
+        <div>Visibilitas<b>${d.visibility==="daylight"?"Siang":"Malam"}</b></div>
+      </div>
+    </div>`;
+  });
+  cards.innerHTML = html;
+  cards.querySelectorAll(".telemetry-card[data-sat]").forEach(card=>card.addEventListener("click", ()=>{
+    haptic();
+    const m = satMarkers.get(parseInt(card.dataset.sat,10));
+    if(m && map){ map.flyTo(m.getLatLng(), 4); m.openPopup(); }
+  }));
+}
+
+  loadPlanes();
+  setupKapal();
+  loadSatellites();
+  setInterval(loadPlanes, CONFIG.planePollMs);
+  setInterval(loadSatellites, CONFIG.satPollMs);
+}catch(err){
+  console.error(err);
+  const fb = document.getElementById("mapFallback");
+  if(fb) fb.innerHTML = "Peta tidak dapat dimuat.<br>Periksa koneksi internet, atau nonaktifkan sementara ad-blocker/pemblokir skrip untuk <b>cdn.jsdelivr.net</b>, lalu muat ulang halaman.<br><br>Panel di bawah tetap bisa dibaca walau peta gagal.";
+  document.getElementById("planeList").innerHTML = errorHTML("Butuh peta untuk menampilkan pesawat — perbaiki dulu error peta di atas.");
+  document.querySelector("#shipNotice span:last-child").textContent = "Butuh peta untuk menampilkan kapal — perbaiki dulu error peta di atas.";
+  document.getElementById("satCards").innerHTML = errorHTML("Butuh peta untuk menampilkan satelit — perbaiki dulu error peta di atas.");
+  document.getElementById("wPlane").textContent = "–";
+  document.getElementById("wShip").textContent = "–";
+  document.getElementById("wSat").textContent = "–";
+}
+}
+
+/* ---------- scroll reveal: selalu jalan, tidak tergantung peta ---------- */
+const revealObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("is-visible"); revealObserver.unobserve(en.target); } });
+}, {threshold:0.15});
+document.querySelectorAll(".section").forEach(s=>revealObserver.observe(s));
+
+/* ---------- jalankan peta (terisolasi) ---------- */
+initMap();
+</script>
+</body>
+</html>
