@@ -1,563 +1,720 @@
-<!doctype html>
-<html lang="id">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nama Projekmu — Dasbor Denyut Bumi</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%231EAE5C'/%3E%3Cpath d='M20 4C10 4 4 10 4 20c10 0 16-6 16-16Z' fill='%23ffffff' fill-opacity='0.55'/%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nald Studio — Imagination Into Reality</title>
+<meta name="description" content="Studio kreatif premium — diorama pixel art handmade & layanan konten digital kreatif."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  :root{
-    --bg:#FFFFFF;--ink:#14181A;--ink-soft:#5B6B62;--green:#1EAE5C;
-    --green-soft:rgba(30,174,92,0.10);--green-soft-2:rgba(30,174,92,0.18);
-    --glass-bg:rgba(255,255,255,0.5);--glass-border:rgba(255,255,255,0.9);
-    --shadow:0 20px 50px rgba(20,24,26,0.10);--shadow-sm:0 8px 22px rgba(20,24,26,0.08);
-    --amber:#E8A33D;--red:#D9503F;--radius-lg:26px;--radius-md:20px;--radius-sm:14px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,-apple-system,sans-serif;line-height:1.5;min-height:100vh;position:relative;overflow-x:hidden;}
-  h1,h2,h3,.display{font-family:'Space Grotesk',system-ui,sans-serif;letter-spacing:-0.01em;margin:0;color:var(--ink);}
-  a{color:var(--green);text-decoration:none;}
-  .icon{width:20px;height:20px;color:inherit;flex-shrink:0;display:inline-flex;}
-  .icon svg{display:block;width:100%;height:100%;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --gold:#FFC107;--gold2:#FFD54F;--bk:#111111;--wh:#F5F5F5;
+  --or:#FF6B35;--pk:#FF4D8D;--bl:#2D9CFF;--gr:#3DDC68;
+  --sh:5px 6px 0 var(--bk);--sh2:9px 11px 0 var(--bk);--rad:18px
+}
+body{background:var(--bk);color:var(--wh);font-family:'Nunito',sans-serif;overflow-x:hidden;cursor:none}
 
-  .bg-texture{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-  .bg-dots{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Ccircle cx='3' cy='3' r='1.6' fill='%231EAE5C' fill-opacity='0.14'/%3E%3C/svg%3E");background-repeat:repeat;}
-  .bg-leaf{position:absolute;color:var(--green);opacity:0.05;}
-  .bg-leaf--a{width:340px;height:340px;top:-60px;right:-70px;}
-  .bg-leaf--b{width:260px;height:260px;bottom:-40px;left:-60px;transform:rotate(160deg);}
+/* CURSOR */
+#cur{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;will-change:transform}
+.cd{position:absolute;width:10px;height:10px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+.cr{position:absolute;width:40px;height:40px;border:1.5px solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);opacity:.55;transition:width .35s cubic-bezier(.34,1.56,.64,1),height .35s}
+.cur-big .cd{width:16px;height:16px}
+.cur-big .cr{width:62px;height:62px}
 
-  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:18px 18px 60px;}
+/* HERO */
+.hero-scene{position:relative;width:100%;height:100vh;background:var(--bk);overflow:hidden}
+#heroCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;z-index:1;display:block}
 
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;margin-bottom:14px;
-    background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
-    border:1px solid var(--glass-border);border-radius:999px;box-shadow:var(--shadow-sm),inset 0 1px 0 rgba(255,255,255,0.7);}
-  .brand{display:flex;align-items:center;gap:10px;min-width:0;}
-  .brand-mark{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .brand-mark .icon{width:19px;height:19px;}
-  .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .brand-tag{font-size:0.72rem;color:var(--ink-soft);white-space:nowrap;}
-  .status{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
-  .status-text{font-size:0.76rem;color:var(--ink-soft);white-space:nowrap;}
-  .refresh-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--glass-border);background:#fff;color:var(--green);display:flex;align-items:center;justify-content:center;cursor:pointer;}
-  .refresh-btn.spin .icon{animation:spin .7s linear;}
-  @keyframes spin{to{transform:rotate(360deg);}}
+/* SPEECH BUBBLE */
+#speech{
+  position:absolute;z-index:20;
+  background:var(--gold);color:var(--bk);
+  font-family:'Fredoka',sans-serif;font-size:.9rem;font-weight:600;
+  padding:9px 18px;border-radius:14px;white-space:nowrap;
+  box-shadow:4px 4px 0 rgba(0,0,0,.3);
+  opacity:0;transform:scale(.7) translateY(8px);
+  transition:opacity .4s cubic-bezier(.34,1.56,.64,1),transform .4s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;
+  /* Positioned relative to center — JavaScript will update */
+  top:50%;left:50%;margin-top:-120px;margin-left:80px
+}
+#speech::before{content:'';position:absolute;bottom:-9px;left:16px;border:5px solid transparent;border-top-color:var(--gold)}
+#speech.show{opacity:1;transform:scale(1) translateY(0)}
 
-  a.top-link{display:flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:600;color:var(--green);background:var(--green-soft);padding:8px 14px;border-radius:999px;white-space:nowrap;}
+/* HERO TEXT */
+.hero-text{
+  position:absolute;bottom:0;left:0;right:0;z-index:10;
+  padding:28px 56px 44px;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  background:linear-gradient(to top,rgba(17,17,17,.96) 0%,rgba(17,17,17,0) 100%)
+}
+.hero-left{opacity:0;transform:translateX(-20px)}
+.hero-eyebrow{font-family:'Fredoka',sans-serif;font-size:.72rem;font-weight:600;color:var(--gold);letter-spacing:3.5px;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.hero-eyebrow::before{content:'';width:22px;height:1px;background:var(--gold)}
+.hero-h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.6rem,5.5vw,5rem);line-height:1.08;color:var(--wh)}
+.hero-h1 em{font-style:normal;color:var(--gold)}
+.hero-right{opacity:0;transform:translateX(20px);text-align:right}
+.hero-sub{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;color:rgba(245,245,245,.5);max-width:260px;line-height:1.7;margin-bottom:18px;text-align:left}
+.hbtns{display:flex;gap:11px;flex-wrap:wrap;justify-content:flex-end}
+.scroll-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;text-align:center;opacity:0}
+.scroll-hint span{font-size:.58rem;letter-spacing:3px;color:rgba(255,193,7,.4);text-transform:uppercase;display:block;margin-bottom:5px}
+.sbar{width:1px;height:38px;background:linear-gradient(to bottom,var(--gold),transparent);margin:0 auto;animation:sbar 2.2s ease-in-out infinite}
+@keyframes sbar{0%,100%{opacity:.25;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
 
-  /* custom dropdown — replaces native <select> so styling matches the glass system everywhere */
-  .dd{position:relative;flex:1;min-width:0;}
-  .dd__trigger{display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:transparent;border:none;font:inherit;font-weight:600;font-size:0.92rem;color:var(--ink);cursor:pointer;}
-  .dd__chev{margin-left:auto;transition:transform .2s ease;color:var(--ink-soft);}
-  .dd.is-open .dd__chev{transform:rotate(180deg);}
-  .dd__panel{position:absolute;top:calc(100% + 8px);left:0;right:0;max-height:300px;overflow:auto;z-index:30;padding:10px;
-    background:rgba(255,255,255,0.85);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
-    border:1px solid var(--glass-border);border-radius:var(--radius-md);box-shadow:var(--shadow);display:none;}
-  .dd__panel.is-open{display:block;}
-  .dd__search input{width:100%;border:1px solid var(--glass-border);border-radius:999px;padding:9px 14px;font:inherit;font-size:0.86rem;background:#fff;margin-bottom:8px;}
-  .dd__search input:focus{outline:none;}
-  .dd__item{padding:10px 12px;border-radius:12px;cursor:pointer;font-size:0.88rem;}
-  .dd__item:hover,.dd__item.is-active{background:var(--green-soft);color:var(--green);}
+/* BUTTONS */
+.btn{font-family:'Fredoka',sans-serif;font-size:.95rem;font-weight:600;padding:12px 26px;border-radius:50px;border:2.5px solid;cursor:none;text-decoration:none;display:inline-block;transition:all .18s;white-space:nowrap}
+.btn-g{background:var(--gold);color:var(--bk);border-color:var(--gold)}
+.btn-g:hover{background:var(--gold2);border-color:var(--gold2);transform:translateY(-3px);box-shadow:0 10px 26px rgba(255,193,7,.45)}
+.btn-o{background:transparent;color:var(--wh);border-color:rgba(245,245,245,.22)}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
 
-  .country-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;
-    background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
-    border:1px solid var(--glass-border);border-radius:999px;padding:8px 8px 8px 16px;box-shadow:var(--shadow-sm);}
-  .country-bar .icon{color:var(--green);}
-  .country-bar label{font-size:0.8rem;color:var(--ink-soft);white-space:nowrap;}
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:500;height:66px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.sc{background:rgba(17,17,17,.96);border-color:rgba(255,193,7,.14);backdrop-filter:blur(18px)}
+.nlogo img{height:38px;border-radius:8px}
+.nlinks{display:flex;gap:3px;list-style:none}
+.nlinks a{font-family:'Fredoka',sans-serif;font-size:.92rem;font-weight:600;color:rgba(245,245,245,.65);text-decoration:none;padding:7px 14px;border-radius:50px;transition:all .2s}
+.nlinks a:hover{background:rgba(255,193,7,.14);color:var(--gold)}
+.ncta{background:var(--gold)!important;color:var(--bk)!important}
+.ncta:hover{background:var(--gold2)!important;transform:translateY(-2px)!important;box-shadow:0 8px 20px rgba(255,193,7,.4)!important}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+.hbg span{display:block;width:22px;height:2px;background:var(--wh);border-radius:2px;transition:all .3s}
 
-  .tab-bar{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none;}
-  .tab-bar::-webkit-scrollbar{display:none;}
-  .tab-pill{display:flex;align-items:center;gap:7px;flex-shrink:0;padding:9px 16px;border-radius:999px;font-size:0.85rem;font-weight:600;color:var(--ink-soft);
-    background:rgba(255,255,255,0.6);border:1px solid var(--glass-border);cursor:pointer;transition:background .15s ease,color .15s ease;}
-  .tab-pill .icon{width:17px;height:17px;}
-  .tab-pill.is-active{background:var(--green);color:#fff;border-color:var(--green);}
+/* TICKER */
+.ticker{position:relative;z-index:2;background:var(--gold);border-top:3px solid var(--bk);border-bottom:3px solid var(--bk);padding:13px 0;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-block;animation:tick 28s linear infinite}
+.ti{display:inline-block;font-family:'Fredoka',sans-serif;font-size:.95rem;font-weight:600;color:var(--bk);margin:0 22px}
+.ts{display:inline-block;opacity:.4;color:var(--bk);margin:0 3px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  .tab-panel{display:none;}
-  .tab-panel.is-active{display:block;}
+/* SECTIONS */
+.about-sec{background:var(--gold);border-top:4px solid var(--bk);position:relative;z-index:2;padding:96px 80px;overflow:hidden}
+.about-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.1) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:1}
+.about-img-col{position:relative}
+.about-img-col img{width:100%;border-radius:22px;border:4px solid var(--bk);box-shadow:var(--sh2);display:block}
+/* fallback if mascot not found */
+.about-img-col img[alt]:after{content:attr(alt);display:block;padding:40px;text-align:center;background:var(--bk);color:var(--gold);font-family:'Fredoka',sans-serif;font-size:1.5rem;border-radius:18px}
+.about-badge{position:absolute;bottom:-14px;right:-14px;background:var(--bk);color:var(--gold);font-family:'Fredoka',sans-serif;font-size:.8rem;font-weight:600;padding:9px 16px;border-radius:50px;border:2.5px solid var(--bk);box-shadow:var(--sh)}
+.stag{font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;color:var(--bk);letter-spacing:3px;text-transform:uppercase;display:inline-flex;align-items:center;gap:9px;margin-bottom:12px}
+.stag::before{content:'';width:20px;height:2px;background:var(--bk)}
+.sh{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.5vw,3rem);color:var(--bk);line-height:1.1;margin-bottom:14px}
+.sh em{font-style:normal;background:var(--bk);color:var(--gold);padding:2px 10px;border-radius:8px}
+.ss{font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:700;color:rgba(17,17,17,.68);line-height:1.72;margin-bottom:12px}
+.expr-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 22px}
+.expr-chip{font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;color:var(--gold);background:var(--bk);padding:6px 14px;border-radius:50px;letter-spacing:.8px;cursor:none;border:2px solid var(--bk);transition:all .2s}
+.expr-chip:hover{background:transparent;color:var(--bk)}
+.vals2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:26px}
+.val2{padding:15px;border:2px solid rgba(17,17,17,.18);border-radius:13px;background:rgba(0,0,0,.06);cursor:none;transition:all .3s}
+.val2:hover{border-color:var(--bk);transform:translate(-3px,-3px);box-shadow:4px 4px 0 var(--bk)}
+.vi2{font-size:1.1rem;margin-bottom:5px}
+.vn2{font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;color:var(--bk);letter-spacing:1.5px;text-transform:uppercase}
 
-  .glass{background:var(--glass-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
-    border:1px solid var(--glass-border);border-radius:var(--radius-lg);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.7);}
-  .panel{padding:24px 24px 20px;margin-bottom:18px;}
-  .panel-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-  .panel-header h2{font-size:1.2rem;font-weight:600;}
-  .source-tag{font-size:0.72rem;color:var(--green);background:var(--green-soft);padding:4px 12px;border-radius:999px;white-space:nowrap;}
+.prod-sec{background:var(--wh);border-top:4px solid var(--bk);border-bottom:4px solid var(--bk);padding:96px 80px;position:relative;z-index:2}
+.sec-tag{display:inline-block;font-family:'Fredoka',sans-serif;font-size:.7rem;font-weight:600;background:var(--bk);color:var(--gold);padding:5px 15px;border-radius:50px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+.sh2{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.5vw,3rem);color:var(--bk);line-height:1.1;margin-bottom:10px}
+.ss2{font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;color:rgba(17,17,17,.58);line-height:1.7;max-width:440px;margin-bottom:50px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pc{position:relative;border-radius:var(--rad);overflow:hidden;border:3px solid var(--bk);background:var(--bk);cursor:none;box-shadow:var(--sh);transition:transform .18s,box-shadow .18s}
+.pc:hover{transform:translate(-5px,-5px);box-shadow:var(--sh2)}
+.pc:first-child{grid-column:span 2}
+.pimw{position:relative;overflow:hidden}
+.pc:first-child .pimw{aspect-ratio:16/8}.pc:not(:first-child) .pimw{aspect-ratio:1}
+.pimw img{width:100%;height:100%;object-fit:cover;transition:transform .7s,filter .5s;filter:saturate(.88) brightness(.8)}
+.pc:hover .pimw img{transform:scale(1.07);filter:saturate(1.05) brightness(.92)}
+.pgrad{position:absolute;inset:0;background:linear-gradient(to top,rgba(17,17,17,.95) 0%,transparent 55%)}
+.pspec{position:absolute;inset:0;pointer-events:none;z-index:2}
+.pinfo{position:absolute;bottom:0;left:0;right:0;padding:20px;transform:translateY(6px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);z-index:3}
+.pc:hover .pinfo{transform:translateY(0)}
+.pcat{font-family:'Fredoka',sans-serif;font-size:.6rem;font-weight:600;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:4px}
+.pname{font-family:'Fredoka',sans-serif;font-size:1rem;font-weight:600;color:var(--wh);margin-bottom:5px;line-height:1.22}
+.pprice{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;color:var(--gold)}
+.pcta{margin-top:11px;display:inline-flex;align-items:center;gap:5px;font-family:'Fredoka',sans-serif;font-size:.72rem;font-weight:600;color:var(--bk);background:var(--gold);padding:7px 15px;border-radius:50px;text-decoration:none;opacity:0;transform:translateY(7px);transition:all .3s}
+.pc:hover .pcta{opacity:1;transform:translateY(0)}
+.pcta:hover{background:var(--gold2)}
 
-  .loading,.error-state,.empty-state{display:flex;align-items:center;gap:10px;color:var(--ink-soft);font-size:0.9rem;padding:14px 4px;}
-  .loading .icon{color:var(--green);animation:pulse-fade 1.4s ease-in-out infinite;}
-  @keyframes pulse-fade{0%,100%{opacity:.4;}50%{opacity:1;}}
-  .error-state{color:var(--red);}
-  .notice{display:flex;gap:10px;align-items:flex-start;font-size:0.82rem;color:var(--ink-soft);background:var(--green-soft);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;}
-  .notice .icon{color:var(--green);margin-top:1px;}
+.proc-sec{background:var(--gold);border-bottom:4px solid var(--bk);padding:96px 80px;position:relative;z-index:2}
+.proc-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.1) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}
+.psteps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px;position:relative;z-index:1}
+.psteps::before{content:'';position:absolute;top:27px;left:12%;right:12%;height:2px;background:repeating-linear-gradient(90deg,var(--bk) 0,var(--bk) 10px,transparent 10px,transparent 20px)}
+.step{text-align:center;cursor:none}
+.sn{width:54px;height:54px;border-radius:50%;border:3px solid var(--bk);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:700;background:var(--bk);color:var(--gold);transition:all .3s;box-shadow:4px 5px 0 rgba(0,0,0,.28)}
+.step:hover .sn{transform:translate(-3px,-3px);box-shadow:7px 8px 0 rgba(0,0,0,.28)}
+.stit{font-family:'Fredoka',sans-serif;font-size:1.02rem;font-weight:700;color:var(--bk);margin-bottom:7px}
+.sdesc{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:rgba(17,17,17,.65);line-height:1.62}
 
-  /* scroll reveal — used across every dynamically rendered list/card */
-  .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;}
-  .reveal.is-visible{opacity:1;transform:translateY(0);}
+.svc-sec{background:var(--bk);border-bottom:4px solid var(--gold);padding:72px 80px;position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.svc-sec h3{font-family:'Fredoka',sans-serif;font-size:1.55rem;font-weight:700;color:var(--wh);margin-bottom:7px}
+.svc-sec p{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;color:rgba(245,245,245,.48);max-width:420px;line-height:1.65}
+.stags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.stag2{font-family:'Fredoka',sans-serif;font-size:.68rem;font-weight:600;color:var(--gold);background:rgba(255,193,7,.1);border:1.5px solid rgba(255,193,7,.22);padding:5px 12px;border-radius:50px;letter-spacing:.8px}
 
-  .widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
-  @media (min-width:720px){.widget-grid{grid-template-columns:repeat(4,1fr);}}
-  .widget{background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:16px;display:flex;flex-direction:column;gap:10px;min-height:118px;}
-  .widget__icon{width:36px;height:36px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
-  .widget__icon .icon{width:18px;height:18px;}
-  .widget__value{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;line-height:1.15;}
-  .widget__label{font-size:0.74rem;color:var(--ink-soft);}
+.cta-sec{background:var(--gold);border-top:4px solid var(--bk);padding:130px 80px;text-align:center;position:relative;z-index:2;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.1) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}
+.cta-inner{position:relative;z-index:1;max-width:660px;margin:0 auto}
+.cta-sec h2{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.6rem,5.5vw,4.8rem);color:var(--bk);line-height:1.08;margin-bottom:14px}
+.cta-sec h2 em{font-style:normal;background:var(--bk);color:var(--gold);padding:0 10px;border-radius:8px}
+.cta-sec p{font-family:'Nunito',sans-serif;font-size:.96rem;font-weight:700;color:rgba(17,17,17,.66);margin-bottom:40px;line-height:1.72;max-width:480px;margin-left:auto;margin-right:auto}
+.cbtns{display:flex;gap:13px;justify-content:center;flex-wrap:wrap}
 
-  .gempa-row{display:flex;align-items:center;gap:14px;padding:12px 6px;border-radius:var(--radius-sm);}
-  .gempa-row + .gempa-row{border-top:1px solid rgba(20,24,26,0.06);}
-  .mag-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.92rem;color:#fff;background:var(--green);}
-  .mag-dot--warn{background:var(--amber);}
-  .mag-dot--alert{background:var(--red);}
-  .gempa-info{min-width:0;flex:1;}
-  .gempa-place{font-weight:600;font-size:0.92rem;}
-  .gempa-meta{font-size:0.76rem;color:var(--ink-soft);margin-top:2px;}
-  .gempa-tag{font-size:0.68rem;background:var(--green-soft);color:var(--green);padding:2px 9px;border-radius:999px;margin-left:8px;white-space:nowrap;}
+/* COMPANION */
+#companion{position:fixed;right:24px;bottom:24px;z-index:800;width:88px;pointer-events:none;opacity:0;transform:translateX(120px);transition:opacity .5s,transform .6s cubic-bezier(.34,1.56,.64,1)}
+#companion img{width:100%;display:block}
+#companion.show{opacity:1;transform:translateX(0)}
+.cspeech{position:absolute;top:-48px;right:96%;width:155px;background:var(--bk);color:var(--gold);font-family:'Fredoka',sans-serif;font-size:.74rem;font-weight:600;padding:7px 12px;border-radius:11px;border-bottom-right-radius:3px;opacity:0;transform:scale(.8) translateY(6px);transition:all .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
+#companion.talking .cspeech{opacity:1;transform:scale(1) translateY(0)}
 
-  .weather-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
-  .weather-card{background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:16px;}
-  .weather-card__icon{width:32px;height:32px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
-  .weather-card__icon .icon{width:16px;height:16px;}
-  .weather-card__value{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;}
-  .weather-card__label{font-size:0.74rem;color:var(--ink-soft);margin-top:2px;}
-  .aqi-pill{display:inline-block;font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:999px;margin-top:6px;}
+footer{position:relative;z-index:2;background:var(--bk);border-top:3px solid var(--gold);padding:38px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+.flogo img{height:34px;border-radius:6px}
+.fc{font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;color:rgba(245,245,245,.26)}
+.flinks{display:flex;gap:18px}
+.flinks a{font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;color:rgba(245,245,245,.26);text-decoration:none;transition:color .2s}
+.flinks a:hover{color:var(--gold)}
 
-  .filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-  .chip{font-size:0.78rem;color:var(--green);background:var(--green-soft);padding:6px 14px;border-radius:999px;cursor:pointer;}
-  .chip.is-active{background:var(--green);color:#fff;}
-  .card-strip{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;}
-  .mini-card{flex:0 0 210px;background:rgba(255,255,255,0.65);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:16px;display:flex;flex-direction:column;gap:8px;}
-  .mini-card__icon{width:36px;height:36px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;}
-  .mini-card__cat{font-size:0.7rem;color:var(--green);font-weight:600;}
-  .mini-card__title{font-size:0.86rem;font-weight:600;line-height:1.35;}
-  .mini-card__meta{font-size:0.72rem;color:var(--ink-soft);}
-  .mini-card a{font-size:0.78rem;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+.sr{opacity:0;transform:translateY(26px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1)}
+.sr.on{opacity:1;transform:translateY(0)}
+.srl{opacity:0;transform:translateX(-30px);transition:opacity .78s cubic-bezier(.16,1,.3,1),transform .78s cubic-bezier(.16,1,.3,1)}
+.srl.on{opacity:1;transform:translateX(0)}
+.srr{opacity:0;transform:translateX(30px);transition:opacity .78s cubic-bezier(.16,1,.3,1),transform .78s cubic-bezier(.16,1,.3,1)}
+.srr.on{opacity:1;transform:translateX(0)}
 
-  .news-item{padding:13px 4px;display:flex;flex-direction:column;gap:4px;}
-  .news-item + .news-item{border-top:1px solid rgba(20,24,26,0.06);}
-  .news-title{font-weight:600;font-size:0.92rem;color:var(--ink);}
-  .news-title:hover{color:var(--green);}
-  .news-meta{font-size:0.75rem;color:var(--ink-soft);display:flex;gap:8px;flex-wrap:wrap;}
-
-  footer{font-size:0.78rem;color:var(--ink-soft);padding:16px 22px 4px;}
-  footer .sources{margin-top:6px;line-height:1.7;}
-  footer strong{color:var(--ink);}
-
-  @media (max-width:640px){.panel{padding:18px 16px;}.brand-tag{display:none;}}
-  @media (prefers-reduced-motion:reduce){.refresh-btn.spin .icon{animation:none;}.loading .icon{animation:none;}.reveal{opacity:1;transform:none;transition:none;}}
+@media(max-width:1100px){
+  nav{padding:0 24px}.nlinks{display:none}.hbg{display:flex}
+  .hero-text{padding:22px 28px 36px}
+  .about-inner{grid-template-columns:1fr;gap:44px}
+  .pgrid{grid-template-columns:1fr 1fr}.pc:first-child{grid-column:span 1}
+  .psteps{grid-template-columns:1fr 1fr;gap:24px}.psteps::before{display:none}
+  .about-sec,.prod-sec,.proc-sec,.cta-sec{padding:78px 44px}
+  .svc-sec{padding:52px 44px}footer{padding:34px 44px}
+}
+@media(max-width:768px){
+  .hero-text{flex-direction:column;padding:16px 20px 32px}
+  .hero-right{text-align:left}.hbtns{justify-content:flex-start}
+  .about-sec,.prod-sec,.proc-sec,.cta-sec{padding:68px 22px}
+  .pgrid{grid-template-columns:1fr}.psteps{grid-template-columns:1fr}.vals2{grid-template-columns:1fr}
+  .svc-sec{padding:40px 22px;flex-direction:column}
+  footer{padding:26px 22px;flex-direction:column;align-items:flex-start}
+  #companion{width:66px;right:12px;bottom:14px}
+  #speech{margin-left:20px;margin-top:-100px}
+}
 </style>
 </head>
 <body>
 
-<div class="bg-texture">
-  <div class="bg-dots"></div>
-  <div class="bg-leaf bg-leaf--a icon"></div>
-  <div class="bg-leaf bg-leaf--b icon"></div>
-</div>
+<div id="cur"><div class="cd" id="cd"></div><div class="cr" id="cr"></div></div>
 
-<div class="wrap">
+<nav id="nav">
+  <div class="nlogo"><a href="#"><img src="assets/logo.png" alt="Nald Studio" onerror="this.style.display='none'"/></a></div>
+  <ul class="nlinks">
+    <li><a href="#about">About NALD</a></li>
+    <li><a href="#products">Collection</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="products.html" class="ncta">Shop ✨</a></li>
+  </ul>
+  <div class="hbg" id="hbg"><span></span><span></span><span></span></div>
+</nav>
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark" id="brandMark"></div>
-      <div>
-        <div class="brand-name" id="brandName">Nama Projekmu</div>
-        <div class="brand-tag" id="brandTag">Pantau denyut bumi, real-time</div>
+<!-- HERO: THREE.JS CANVAS — NALD as 3D textured sprite -->
+<section class="hero-scene" id="home">
+  <canvas id="heroCanvas"></canvas>
+  <div id="speech"></div>
+  <div class="hero-text">
+    <div class="hero-left" id="heroL">
+      <div class="hero-eyebrow">Nald Studio — Indonesia</div>
+      <div class="hero-h1">Imagination<br><em>Into Reality</em></div>
+    </div>
+    <div class="hero-right" id="heroR">
+      <div class="hero-sub">Premium handmade pixel art dioramas & creative digital content services.</div>
+      <div class="hbtns">
+        <a href="#products" class="btn btn-g">Explore Collection 🚀</a>
+        <a href="products.html" class="btn btn-o">Shop Now →</a>
       </div>
     </div>
-    <div class="status">
-      <span class="status-dot"></span>
-      <span class="status-text" id="statusText">memuat…</span>
-      <button class="refresh-btn" id="refreshBtn" title="Segarkan data" aria-label="Segarkan data"></button>
-    </div>
-  </header>
-
-  <div class="country-bar">
-    <span class="icon" id="countryIcon"></span>
-    <label for="countryTrigger">Negara</label>
-    <div class="dd" id="countryDD">
-      <button class="dd__trigger" id="countryTrigger" type="button">
-        <span id="countryTriggerValue">Indonesia</span>
-        <span class="icon dd__chev" id="countryChev"></span>
-      </button>
-      <div class="dd__panel" id="countryPanel" role="listbox">
-        <div class="dd__search"><input type="text" id="countrySearch" placeholder="Cari negara…" /></div>
-        <div class="dd__list" id="countryListEl"></div>
-      </div>
-    </div>
-    <a class="top-link" href="satelit/">Satelit &amp; GPS →</a>
   </div>
+  <div class="scroll-hint" id="scrollHint"><span>Scroll</span><div class="sbar"></div></div>
+</section>
 
-  <nav class="tab-bar" id="tabBar"></nav>
-
-  <section class="tab-panel is-active" id="tab-ringkasan">
-    <div class="panel glass">
-      <div class="panel-header"><h2>Ringkasan hari ini</h2></div>
-      <div class="widget-grid" id="widgetGrid"></div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-gempa">
-    <div class="panel glass">
-      <div class="panel-header"><h2>Gempa bumi</h2><span class="source-tag" id="gempaSourceTag">Sumber: BMKG</span></div>
-      <div id="gempaList"></div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-cuaca">
-    <div class="panel glass">
-      <div class="panel-header"><h2>Cuaca &amp; kualitas udara</h2><span class="source-tag">Sumber: Open-Meteo</span></div>
-      <div id="weatherContent"></div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-bencana">
-    <div class="panel glass">
-      <div class="panel-header"><h2>Peristiwa bencana aktif dunia</h2><span class="source-tag">Sumber: NASA EONET</span></div>
-      <div class="filter-chips" id="eonetChips"></div>
-      <div class="card-strip" id="eonetStrip"></div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-antariksa">
-    <div class="panel glass">
-      <div class="panel-header"><h2>Antariksa &amp; cuaca luar angkasa</h2><span class="source-tag">Sumber: JPL SBDB · NOAA SWPC</span></div>
-      <div class="notice"><span class="icon" id="antariksaNoticeIcon"></span><span>Kedua sumber ini publik &amp; gratis tanpa API key, jadi tidak ada batas kuota harian — permanen.</span></div>
-      <h3 style="font-size:0.95rem;margin-bottom:8px;">Objek dekat Bumi (30 hari ke depan)</h3>
-      <div id="neoList" style="margin-bottom:18px;"></div>
-      <h3 style="font-size:0.95rem;margin-bottom:8px;">Peringatan cuaca luar angkasa terbaru</h3>
-      <div id="swpcList"></div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-berita">
-    <div class="panel glass">
-      <div class="panel-header"><h2>Laporan &amp; berita bumi</h2><span class="source-tag">Sumber: ReliefWeb</span></div>
-      <div id="newsList"></div>
-    </div>
-  </section>
-
-  <footer>
-    <div>Cuaca, gempa, dan berita mengikuti negara yang dipilih. Bencana aktif &amp; antariksa selalu global karena sifatnya lintas negara.</div>
-    <div class="sources">
-      <strong>Sumber terbuka:</strong> BMKG (prioritas gempa Indonesia) · USGS &amp; EMSC (gempa global) ·
-      Open-Meteo (cuaca &amp; kualitas udara) · NASA EONET (bencana aktif global) ·
-      JPL Small-Body Database &amp; NOAA SWPC (antariksa, tanpa key/kuota) · ReliefWeb/OCHA (laporan bencana per negara).
-    </div>
-  </footer>
-
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ti">🎨 Custom Diorama</span><span class="ts">◆</span>
+    <span class="ti">✨ Pixel Art Collectibles</span><span class="ts">◆</span>
+    <span class="ti">🏠 Handcrafted Miniatures</span><span class="ts">◆</span>
+    <span class="ti">⭐ Limited Edition</span><span class="ts">◆</span>
+    <span class="ti">🎬 Acrylic Display Case</span><span class="ts">◆</span>
+    <span class="ti">🌟 Creative Studio Indonesia</span><span class="ts">◆</span>
+    <span class="ti">🎨 Custom Diorama</span><span class="ts">◆</span>
+    <span class="ti">✨ Pixel Art Collectibles</span><span class="ts">◆</span>
+    <span class="ti">🏠 Handcrafted Miniatures</span><span class="ts">◆</span>
+    <span class="ti">⭐ Limited Edition</span><span class="ts">◆</span>
+    <span class="ti">🎬 Acrylic Display Case</span><span class="ts">◆</span>
+    <span class="ti">🌟 Creative Studio Indonesia</span><span class="ts">◆</span>
+  </div>
 </div>
 
+<!-- ABOUT -->
+<section class="about-sec" id="about">
+  <div class="about-inner">
+    <div class="about-img-col srl">
+      <img src="assets/mascot.png" alt="NALD The Dimensional Collector" loading="lazy"
+        onerror="this.onerror=null;this.src='assets/mascot2.png';this.onerror=function(){this.style.minHeight='300px';this.style.background='var(--bk)'}"/>
+      <div class="about-badge">✦ The Dimensional Collector</div>
+    </div>
+    <div class="srr">
+      <div class="stag">Meet NALD</div>
+      <h2 class="sh">"<em>NALD</em> — The World Creator"</h2>
+      <p class="ss">A being who turns imagination into real creations. Every detail is crafted, every story is held — from whichever dimension it came from.</p>
+      <p class="ss">Guardian of creativity, craftsmanship, and fandom culture. From imagination into reality. ✦</p>
+      <div class="expr-row">
+        <div class="expr-chip">😐 NEUTRAL</div><div class="expr-chip">😊 HAPPY</div>
+        <div class="expr-chip">🎯 FOCUSED</div><div class="expr-chip">⚡ EXCITED</div>
+        <div class="expr-chip">🤔 CURIOUS</div><div class="expr-chip">❤️ LOVE</div>
+      </div>
+      <div class="vals2">
+        <div class="val2"><div class="vi2">✦</div><div class="vn2">Create</div></div>
+        <div class="val2"><div class="vi2">⚙</div><div class="vn2">Build</div></div>
+        <div class="val2"><div class="vi2">◈</div><div class="vn2">Imagine</div></div>
+        <div class="val2"><div class="vi2">◉</div><div class="vn2">Connect</div></div>
+      </div>
+      <a href="products.html" class="btn btn-g" style="border-color:var(--bk)">View Collection →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="prod-sec" id="products">
+  <div class="sec-tag sr">🛍️ Diorama Collection</div>
+  <h2 class="sh2 sr">The Dimensional Collection</h2>
+  <p class="ss2 sr">Each diorama is a world captured in acrylic — pixel-perfect, layered, and utterly irresistible.</p>
+  <div class="pgrid" style="grid-template-columns:1fr 1fr;grid-template-rows:auto auto">
+    <!-- Card 1: Standard Theme -->
+    <div class="pc sr" data-tilt>
+      <div class="pimw" style="aspect-ratio:4/3"><img src="assets/prod-full-set.jpg" alt="Standard Theme" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Standard Theme</div><div class="pname">Standard Diorama</div><div class="pprice">$15.00<span style="font-size:.72rem;color:rgba(255,193,7,.6);display:block;margin-top:2px">Free worldwide shipping</span></div><a href="products.html" class="pcta">Order Now →</a></div>
+    </div>
+    <!-- Card 2: Marriage Event -->
+    <div class="pc sr" style="transition-delay:.1s" data-tilt>
+      <div class="pimw" style="aspect-ratio:4/3"><img src="assets/prod-front-purple.jpg" alt="Marriage Event" loading="lazy"/><div class="pgrad"></div><div class="pspec"></div></div>
+      <div class="pinfo"><div class="pcat">Marriage Event 💍</div><div class="pname">Marriage Event Diorama</div><div class="pprice">$22.50<span style="font-size:.72rem;color:rgba(255,193,7,.6);display:block;margin-top:2px">Free worldwide shipping</span></div><a href="products.html" class="pcta">Order Now →</a></div>
+    </div>
+    <!-- Card 3: Custom Order — wide horizontal -->
+    <div class="pc sr" style="transition-delay:.2s;grid-column:1/-1;display:flex;flex-direction:row;max-height:190px" data-tilt>
+      <div class="pimw" style="width:200px;flex-shrink:0;aspect-ratio:unset"><img src="assets/prod-clean.jpg" alt="Custom Order" loading="lazy" style="width:100%;height:100%;object-fit:cover"/><div class="pgrad"></div></div>
+      <div class="pinfo" style="position:relative;padding:22px 24px;display:flex;flex-direction:column;justify-content:center;gap:6px">
+        <div class="pcat">Custom Order ⭐</div>
+        <div class="pname" style="font-size:1.05rem">Build Your Own World</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:rgba(245,245,245,.58);line-height:1.55">Any theme, any scene, any memory — fully bespoke, one-of-a-kind.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+          <div class="pprice" style="font-size:1rem">Price upon request<span style="font-size:.7rem;color:rgba(255,193,7,.55);display:block">Contact us for a quote</span></div>
+          <a href="products.html" class="pcta" style="opacity:1;transform:none">Inquire Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:48px" class="sr">
+    <a href="products.html" class="btn btn-g" style="font-size:1rem;padding:13px 38px;border:2.5px solid var(--bk)">View All Products ✨</a>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="proc-sec" id="process">
+  <div class="sec-tag sr" style="background:var(--bk)">⚙️ How It Works</div>
+  <h2 class="sh sr" style="color:var(--bk)">From Imagination Into Reality</h2>
+  <div class="psteps">
+    <div class="step sr"><div class="sn">01</div><div class="stit">Brief & Discussion</div><p class="sdesc">Tell us your world — favorite game, dream scene.</p></div>
+    <div class="step sr" style="transition-delay:.1s"><div class="sn">02</div><div class="stit">Design & Pixel Art</div><p class="sdesc">Every character is crafted pixel by pixel, obsessively.</p></div>
+    <div class="step sr" style="transition-delay:.2s"><div class="sn">03</div><div class="stit">Print & Assemble</div><p class="sdesc">Precision cutting, meticulous hand assembly.</p></div>
+    <div class="step sr" style="transition-delay:.3s"><div class="sn">04</div><div class="stit">Pack & Ship</div><p class="sdesc">Premium packaging, shipped safely worldwide.</p></div>
+  </div>
+</section>
+
+<div class="svc-sec sr">
+  <div>
+    <h3>Also a Full Creative Studio 🎬</h3>
+    <p>Instagram content, video reels, brand identity, promo strategy — for businesses ready to compete globally.</p>
+    <div class="stags"><span class="stag2">Instagram Reels</span><span class="stag2">Video Content</span><span class="stag2">Brand Identity</span><span class="stag2">Promo Strategy</span></div>
+  </div>
+  <a href="services.html" class="btn btn-g" style="flex-shrink:0;white-space:nowrap;border-color:var(--gold)">View Services →</a>
+</div>
+
+<section class="cta-sec" id="contact">
+  <div class="cta-inner">
+    <div class="sec-tag sr" style="background:var(--bk);margin-bottom:14px">💌 Let's Collaborate!</div>
+    <h2 class="sr">Ready to Build Something <em>Amazing</em>?</h2>
+    <p class="sr">Custom dioramas or creative services — tell us your idea, we'll bring it to life!</p>
+    <div class="cbtns sr">
+      <a href="products.html" class="btn btn-g" style="padding:13px 34px;border:2.5px solid var(--bk)">Shop Collection 🛒</a>
+      <a href="https://wa.me/6285190050010" class="btn" style="background:var(--bk);color:var(--gold);border-color:var(--bk);padding:13px 34px" target="_blank">💬 Custom Order via WA</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo"><img src="assets/logo.png" alt="Nald Studio" onerror="this.style.display='none'"/></div>
+  <span class="fc">© 2025 Nald Studio — Crafted with obsession in Indonesia ✦</span>
+  <div class="flinks"><a href="#">Instagram</a><a href="#">TikTok</a><a href="products.html">Shop</a><a href="services.html">Services</a></div>
+</footer>
+
+<!-- COMPANION -->
+<div id="companion">
+  <div class="cspeech" id="cspeech"></div>
+  <img src="assets/mascot.png" alt="NALD"
+    onerror="this.onerror=null;this.src='assets/mascot2.png';this.onerror=function(){this.style.display='none'}"/>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <script>
-const CONFIG = { projectName:"Nama Projekmu", tagline:"Pantau denyut bumi, real-time" };
-const COUNTRIES = [
-  {name:"Indonesia", en:"Indonesia", lat:-6.2088, lon:106.8456},
-  {name:"Malaysia", en:"Malaysia", lat:3.1390, lon:101.6869},
-  {name:"Singapura", en:"Singapore", lat:1.3521, lon:103.8198},
-  {name:"Thailand", en:"Thailand", lat:13.7563, lon:100.5018},
-  {name:"Vietnam", en:"Viet Nam", lat:21.0278, lon:105.8342},
-  {name:"Filipina", en:"Philippines", lat:14.5995, lon:120.9842},
-  {name:"Jepang", en:"Japan", lat:35.6762, lon:139.6503},
-  {name:"Korea Selatan", en:"Korea", lat:37.5665, lon:126.9780},
-  {name:"Tiongkok", en:"China", lat:39.9042, lon:116.4074},
-  {name:"India", en:"India", lat:28.6139, lon:77.2090},
-  {name:"Australia", en:"Australia", lat:-35.2809, lon:149.1300},
-  {name:"Selandia Baru", en:"New Zealand", lat:-41.2866, lon:174.7756},
-  {name:"Amerika Serikat", en:"United States", lat:38.9072, lon:-77.0369},
-  {name:"Kanada", en:"Canada", lat:45.4215, lon:-75.6972},
-  {name:"Meksiko", en:"Mexico", lat:19.4326, lon:-99.1332},
-  {name:"Brasil", en:"Brazil", lat:-15.8267, lon:-47.9218},
-  {name:"Argentina", en:"Argentina", lat:-34.6037, lon:-58.3816},
-  {name:"Inggris", en:"United Kingdom", lat:51.5072, lon:-0.1276},
-  {name:"Prancis", en:"France", lat:48.8566, lon:2.3522},
-  {name:"Jerman", en:"Germany", lat:52.5200, lon:13.4050},
-  {name:"Belanda", en:"Netherlands", lat:52.3676, lon:4.9041},
-  {name:"Spanyol", en:"Spain", lat:40.4168, lon:-3.7038},
-  {name:"Italia", en:"Italy", lat:41.9028, lon:12.4964},
-  {name:"Turki", en:"Turkey", lat:39.9334, lon:32.8597},
-  {name:"Rusia", en:"Russia", lat:55.7558, lon:37.6173},
-  {name:"Mesir", en:"Egypt", lat:30.0444, lon:31.2357},
-  {name:"Nigeria", en:"Nigeria", lat:9.0765, lon:7.3986},
-  {name:"Afrika Selatan", en:"South Africa", lat:-25.7479, lon:28.2293},
-  {name:"Kenya", en:"Kenya", lat:-1.2921, lon:36.8219},
-  {name:"Arab Saudi", en:"Saudi Arabia", lat:24.7136, lon:46.6753},
-  {name:"Uni Emirat Arab", en:"United Arab Emirates", lat:24.4539, lon:54.3773},
-];
-const TABS = [
-  {id:"ringkasan", label:"Ringkasan", icon:"globeLeaf"},
-  {id:"gempa", label:"Gempa", icon:"pulse"},
-  {id:"cuaca", label:"Cuaca", icon:"droplet"},
-  {id:"bencana", label:"Bencana", icon:"flame"},
-  {id:"antariksa", label:"Antariksa", icon:"orbit"},
-  {id:"berita", label:"Berita", icon:"newspaper"},
-];
+gsap.registerPlugin(ScrollTrigger);
 
-const STATE = { country: COUNTRIES[0], activeTab:"ringkasan" };
-const SUMMARY = { gempa:null, cuaca:null, bencana:null, antariksa:null, berita:null };
+/* ═══════════════════════════════════════════════
+   THREE.JS — NALD AS 3D TEXTURED SPRITE
+   mascot.png loaded as WebGL texture on a plane
+   → genuine 3D rotation, tilt, bounce, particles
+═══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  let W = window.innerWidth, H = window.innerHeight;
 
-const ICONS = {
-  leaf:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16Z"/><path d="M4 20c4-6 9-11 16-16"/></svg>`,
-  pulse:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-7 4 15 3-11 2 3h5"/></svg>`,
-  droplet:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8.2 7 13a7 7 0 1 1-14 0c0-4.8 7-13 7-13Z"/></svg>`,
-  wind:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h10a2.7 2.7 0 1 0-2.7-2.7"/><path d="M2.5 12.5h14a2.7 2.7 0 1 1-2.7 2.7"/><path d="M2.5 17h8a2 2 0 1 1-2 2"/></svg>`,
-  flame:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.5 0 7.5-2.7 7.5-6.5 0-3.6-2.5-5.6-3.6-8.2-.9 1.8-1.8 2.7-2.7 2.7-1.8 0-1.9-2.7-.9-5.5-3.7 1.9-6.3 5.7-6.3 10.5 0 3.8 2.5 7 6 7Z"/></svg>`,
-  mountain:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 19.5 9 8l4 6.2 2.7-3.6 5.8 8.9Z"/><path d="M13.6 10.8 15 8.6"/></svg>`,
-  wave:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14.5c2-2 4-2 6 0s4 2 6 0 4-2 6 0 4 2 4 0"/><path d="M2 19c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>`,
-  sun:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.2 5.2l2.1 2.1M16.7 16.7l2.1 2.1M5.2 18.8l2.1-2.1M16.7 7.3l2.1-2.1"/></svg>`,
-  newspaper:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5" width="14.5" height="15" rx="2"/><path d="M17.3 8.2h3.9v9.4a2.4 2.4 0 0 1-2.4 2.4H8.5"/><path d="M6.4 9h7M6.4 12h7M6.4 15h4.5"/></svg>`,
-  globeLeaf:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M17 5C10 5.5 5.5 10 5 17"/></svg>`,
-  refresh:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/></svg>`,
-  chevron:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`,
-  chevronDown:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`,
-  orbit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="9.4" ry="4"/><ellipse cx="12" cy="12" rx="4" ry="9.4" transform="rotate(35 12 12)"/></svg>`,
-  info:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg>`,
-};
-function icon(name){ return `<span class="icon">${ICONS[name] || ICONS.leaf}</span>`; }
-const CATEGORY_ICON = { wildfires:"flame", volcanoes:"mountain", severeStorms:"wind", floods:"wave", drought:"sun", landslides:"mountain", earthquakes:"pulse", seaLakeIce:"droplet", snow:"droplet", dustHaze:"wind", waterColor:"wave", tempExtremes:"sun", manmade:"leaf" };
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+  renderer.setSize(W, H);
+  renderer.outputEncoding = THREE.sRGBEncoding;
 
-/* ---------- util ---------- */
-function haptic(){ if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} } }
-const revealObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("is-visible"); revealObserver.unobserve(en.target); } });
-}, {threshold:0.12});
-function revealIn(container){ if(!container) return; container.querySelectorAll(".reveal").forEach(el=>revealObserver.observe(el)); }
-async function fetchJSON(url){ const res = await fetch(url, { headers:{ "Accept":"application/json" } }); if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); }
-async function fetchText(url){ const res = await fetch(url); if(!res.ok) throw new Error("HTTP "+res.status); return res.text(); }
-function loadingHTML(label){ return `<div class="loading">${icon("pulse")}<span>Memuat ${label}…</span></div>`; }
-function errorHTML(msg){ return `<div class="error-state">${icon("leaf")}<span>${msg}</span></div>`; }
-function emptyHTML(msg){ return `<div class="empty-state">${icon("leaf")}<span>${msg}</span></div>`; }
-function timeAgo(date){ const s = Math.floor((Date.now()-date.getTime())/1000); if(s<60) return "baru saja"; if(s<3600) return Math.floor(s/60)+" menit lalu"; if(s<86400) return Math.floor(s/3600)+" jam lalu"; return Math.floor(s/86400)+" hari lalu"; }
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x060612);
+  scene.fog = new THREE.FogExp2(0x111111, 0.018);
 
-/* ---------- shell ---------- */
-function renderBrand(){
-  document.title = CONFIG.projectName + " — Dasbor Denyut Bumi";
-  document.getElementById("brandMark").innerHTML = icon("globeLeaf");
-  document.getElementById("brandName").textContent = CONFIG.projectName;
-  document.getElementById("brandTag").textContent = CONFIG.tagline;
-  document.getElementById("refreshBtn").innerHTML = icon("refresh");
-  document.getElementById("countryIcon").innerHTML = icon("globeLeaf");
-  document.getElementById("countryChev").innerHTML = ICONS.chevronDown;
-  document.getElementById("antariksaNoticeIcon").innerHTML = ICONS.info;
-}
-function renderCountryDropdown(){
-  const dd = document.getElementById("countryDD");
-  const trigger = document.getElementById("countryTrigger");
-  const valueEl = document.getElementById("countryTriggerValue");
-  const panel = document.getElementById("countryPanel");
-  const listEl = document.getElementById("countryListEl");
-  const search = document.getElementById("countrySearch");
-  function renderList(filter){
-    const f = (filter||"").toLowerCase();
-    const filtered = COUNTRIES.filter(c=>c.name.toLowerCase().includes(f));
-    listEl.innerHTML = filtered.length ? filtered.map(c=>`<div class="dd__item ${c.name===STATE.country.name?"is-active":""}" data-name="${c.name}">${c.name}</div>`).join("")
-      : `<div class="dd__item" style="opacity:.5;">Tidak ditemukan</div>`;
-    listEl.querySelectorAll(".dd__item[data-name]").forEach(item=>{
-      item.addEventListener("click", ()=>{
-        STATE.country = COUNTRIES.find(c=>c.name===item.dataset.name) || STATE.country;
-        valueEl.textContent = STATE.country.name;
-        closeDD(); haptic(); loadCountryScoped();
-      });
+  const camera = new THREE.PerspectiveCamera(60, W/H, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  /* LIGHTS for depth */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const glow1 = new THREE.PointLight(0xFFC107, 3, 12);
+  glow1.position.set(2, 3, 4);
+  scene.add(glow1);
+  const glow2 = new THREE.PointLight(0xFFD54F, 1.5, 10);
+  glow2.position.set(-3, -1, 3);
+  scene.add(glow2);
+
+  /* MAIN GROUP */
+  const group = new THREE.Group();
+  group.position.y = -12; // start offscreen above (will animate down)
+  scene.add(group);
+
+  /* GOLD GLOW PLANE behind mascot */
+  const glowMat = new THREE.MeshBasicMaterial({
+    color:0xFFC107, transparent:true, opacity:.0,
+    depthWrite:false, blending:THREE.AdditiveBlending
+  });
+  const glowPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 3.8), glowMat);
+  glowPlane.position.z = -0.05;
+  group.add(glowPlane);
+
+  /* MASCOT TEXTURE PLANE */
+  const loader = new THREE.TextureLoader();
+  const mascotMat = new THREE.MeshBasicMaterial({
+    transparent:true, alphaTest:0.01, opacity:0
+  });
+  const mascotPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.2, 3.2), mascotMat
+  );
+  mascotPlane.position.z = 0.01;
+  group.add(mascotPlane);
+
+  // Load texture — try mascot.png first, fallback to mascot2.png
+  function loadTexture(path, fallback){
+    loader.load(
+      path,
+      (tex)=>{
+        tex.encoding = THREE.sRGBEncoding;
+        mascotMat.map = tex;
+        mascotMat.needsUpdate = true;
+        // Fade in mascot
+        gsap.to(mascotMat, {opacity:1, duration:.8, ease:'power2.out'});
+        gsap.to(glowMat, {opacity:.18, duration:1.2, ease:'power2.out'});
+        startEntry();
+      },
+      undefined,
+      ()=>{ if(fallback) loadTexture(fallback, null); else startEntry(); }
+    );
+  }
+  loadTexture('assets/mascot.png', 'assets/mascot2.png');
+
+  /* ORBIT RINGS */
+  const ring1Mat = new THREE.MeshBasicMaterial({color:0xFFC107, transparent:true, opacity:.22, side:THREE.DoubleSide});
+  const ring2Mat = new THREE.MeshBasicMaterial({color:0xFFC107, transparent:true, opacity:.10, side:THREE.DoubleSide});
+  const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.1, .018, 8, 80), ring1Mat);
+  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.9, .012, 8, 80), ring2Mat);
+  ring1.rotation.x = 0.3;
+  ring2.rotation.x = -0.2;
+  ring2.rotation.y = 0.5;
+  group.add(ring1, ring2);
+
+  /* GOLD PARTICLES */
+  const pN = W < 768 ? 220 : 600;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(pN * 3);
+  const pVel = new Float32Array(pN);
+  for(let i=0;i<pN;i++){
+    pPos[i*3]   = (Math.random()-.5)*12;
+    pPos[i*3+1] = (Math.random()-.5)*10;
+    pPos[i*3+2] = (Math.random()-.5)*6 - 1;
+    pVel[i] = .003 + Math.random()*.006;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  const pMat = new THREE.PointsMaterial({color:0xFFC107, size:.022, transparent:true, opacity:.5, sizeAttenuation:true, depthWrite:false});
+  scene.add(new THREE.Points(pGeo, pMat));
+
+  /* SHADOW CIRCLE BELOW */
+  const shadowMat = new THREE.MeshBasicMaterial({color:0xFFC107, transparent:true, opacity:0, depthWrite:false, side:THREE.DoubleSide});
+  const shadowCircle = new THREE.Mesh(new THREE.CircleGeometry(1, 32), shadowMat);
+  shadowCircle.rotation.x = -Math.PI/2;
+  shadowCircle.position.y = -1.8;
+  group.add(shadowCircle);
+
+  /* MOUSE */
+  let mxT=0, myT=0, mxC=0, myC=0;
+  const onMove = (cx, cy) => {
+    mxT = (cx/W - .5) * 2;
+    myT = -(cy/H - .5) * 2;
+  };
+  document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    onMove(t.clientX, t.clientY);
+  }, {passive:true});
+
+  /* ENTRY ANIMATION */
+  const speech = document.getElementById('speech');
+  const phrases = [
+    "Hi! I'm NALD! 👋",
+    "Imagination Into Reality! ✨",
+    "The Dimensional Collector 🌍",
+    "Let's create! 🎨"
+  ];
+  let pi = 0, exprTimer, entryDone = false;
+
+  function showPhrase(txt){
+    speech.textContent = txt;
+    speech.classList.add('show');
+    clearTimeout(window._spt);
+    window._spt = setTimeout(()=>speech.classList.remove('show'), 2200);
+  }
+
+  function startEntry(){
+    if(entryDone) return;
+    entryDone = true;
+
+    const tl = gsap.timeline({delay:.2});
+
+    // Drop from above + bounce
+    tl.to(group.position, {
+      y:0, duration:1.1,
+      ease:'bounce.out',
+      onUpdate(){
+        // shadow grows
+        const p = Math.max(0, 1 - Math.abs(group.position.y)/12);
+        shadowMat.opacity = p * .14;
+        shadowCircle.scale.setScalar(.3 + p * .7);
+      }
+    })
+    // Squash on landing
+    .to(group.scale, {y:.84, x:1.12, z:1.12, duration:.1, ease:'power2.in'}, 1.0)
+    .to(group.scale, {y:1.06, x:.94, z:.94, duration:.2, ease:'power2.out'})
+    .to(group.scale, {y:1, x:1, z:1, duration:.4, ease:'elastic.out(1.2,.5)'})
+    // First speech
+    .add(()=>showPhrase(phrases[0]), '+=.1')
+    // Text fade in
+    .to('#heroL', {opacity:1, x:0, duration:.75, ease:'power3.out'}, '+=.3')
+    .to('#heroR', {opacity:1, x:0, duration:.75, ease:'power3.out'}, '-=.55')
+    .to('#scrollHint', {opacity:1, duration:.6}, '+=.3')
+    // Phrase cycle
+    .add(()=>{
+      exprTimer = setInterval(()=>{
+        pi = (pi+1) % phrases.length;
+        showPhrase(phrases[pi]);
+        // Head shake via group tilt
+        gsap.timeline()
+          .to(group.rotation, {y:-.18, duration:.1})
+          .to(group.rotation, {y: .18, duration:.1})
+          .to(group.rotation, {y:0, duration:.22, ease:'elastic.out(1.2,.5)'});
+      }, 2800);
+      setTimeout(()=>clearInterval(exprTimer), 14000);
     });
   }
-  function openDD(){ dd.classList.add("is-open"); panel.classList.add("is-open"); search.value=""; renderList(""); search.focus(); }
-  function closeDD(){ dd.classList.remove("is-open"); panel.classList.remove("is-open"); }
-  trigger.addEventListener("click", (e)=>{ e.stopPropagation(); dd.classList.contains("is-open") ? closeDD() : openDD(); });
-  search.addEventListener("input", ()=>renderList(search.value));
-  document.addEventListener("click", (e)=>{ if(!dd.contains(e.target)) closeDD(); });
-  valueEl.textContent = STATE.country.name;
-}
-function renderTabBar(){
-  const bar = document.getElementById("tabBar");
-  bar.innerHTML = TABS.map(t=>`<div class="tab-pill ${t.id===STATE.activeTab?"is-active":""}" data-tab="${t.id}">${icon(t.icon)}<span>${t.label}</span></div>`).join("");
-  bar.querySelectorAll(".tab-pill").forEach(pill=>pill.addEventListener("click", ()=>{ haptic(); switchTab(pill.dataset.tab); }));
-}
-function switchTab(tabId){
-  STATE.activeTab = tabId;
-  document.querySelectorAll(".tab-pill").forEach(p=>p.classList.toggle("is-active", p.dataset.tab===tabId));
-  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("is-active", p.id==="tab-"+tabId));
-}
 
-function renderRingkasan(){
-  const items = [
-    {icon:"pulse", value: SUMMARY.gempa?.value ?? "–", label: SUMMARY.gempa?.label ?? "Gempa"},
-    {icon:"droplet", value: SUMMARY.cuaca?.value ?? "–", label: SUMMARY.cuaca?.label ?? "Kualitas udara"},
-    {icon:"flame", value: SUMMARY.bencana?.value ?? "–", label: SUMMARY.bencana?.label ?? "Bencana aktif"},
-    {icon:"orbit", value: SUMMARY.antariksa?.value ?? "–", label: SUMMARY.antariksa?.label ?? "Objek dekat Bumi"},
-  ];
-  const el = document.getElementById("widgetGrid");
-  el.innerHTML = items.map((it,i)=>`<div class="widget reveal" style="transition-delay:${i*50}ms">
-    <div class="widget__icon">${icon(it.icon)}</div><div class="widget__value">${it.value}</div><div class="widget__label">${it.label}</div>
-  </div>`).join("");
-  revealIn(el);
-}
+  /* ANIMATION LOOP */
+  const clock = new THREE.Clock();
+  let elapsed = 0;
 
-function magClass(mag){ if(mag>=6) return "mag-dot--alert"; if(mag>=5) return "mag-dot--warn"; return ""; }
-function renderGempaRows(list){
-  return list.map((g,i)=>`<div class="gempa-row reveal" style="transition-delay:${i*40}ms">
-    <div class="mag-dot ${magClass(g.mag)}">${g.mag.toFixed(1)}</div>
-    <div class="gempa-info"><div class="gempa-place">${g.place}</div><div class="gempa-meta">${g.meta}${g.tag?`<span class="gempa-tag">${g.tag}</span>`:""}</div></div>
-  </div>`).join("");
-}
-async function loadGempaGlobalFiltered(countryEn){
-  const [usgs, emsc] = await Promise.allSettled([
-    fetchJSON("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson"),
-    fetchJSON("https://www.seismicportal.eu/fdsnws/event/1/query?format=json&limit=100&orderby=time"),
-  ]);
-  let rows = [];
-  if(usgs.status==="fulfilled"){ (usgs.value?.features||[]).forEach(f=>{ const place=f.properties.place||""; if(!countryEn||place.toLowerCase().includes(countryEn.toLowerCase())) rows.push({mag:f.properties.mag||0, place, meta:timeAgo(new Date(f.properties.time))+" · USGS", time:f.properties.time}); }); }
-  if(emsc.status==="fulfilled"){ (emsc.value?.features||[]).forEach(f=>{ const region=f.properties?.flynn_region||""; if(!countryEn||region.toLowerCase().includes(countryEn.toLowerCase())){ const t=new Date(f.properties.time); rows.push({mag:f.properties.mag||0, place:region, meta:timeAgo(t)+" · EMSC", time:t.getTime()}); } }); }
-  rows.sort((a,b)=>b.time-a.time);
-  return rows.slice(0,10);
-}
-async function loadGempa(){
-  const el = document.getElementById("gempaList");
-  el.innerHTML = loadingHTML("data gempa");
-  const isIndonesia = STATE.country.name==="Indonesia";
-  if(isIndonesia){
-    try{
-      const data = await fetchJSON("https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json");
-      const list = data?.Infogempa?.gempa;
-      if(!Array.isArray(list) || !list.length) throw new Error("BMKG kosong");
-      document.getElementById("gempaSourceTag").textContent = "Sumber: BMKG";
-      const rows = list.slice(0,10).map(g=>({ mag: parseFloat(g.Magnitude)||0, place: g.Wilayah||"Wilayah tidak diketahui", meta:`${g.Tanggal||""} · ${g.Jam||""} · kedalaman ${g.Kedalaman||"–"}`, tag:g.Potensi }));
-      el.innerHTML = renderGempaRows(rows); revealIn(el);
-      SUMMARY.gempa = {value:list.length, label:"Gempa 24 jam (BMKG)"}; renderRingkasan(); return;
-    }catch(err){ console.warn("BMKG tak terjangkau, pakai USGS+EMSC:", err); }
+  function animate(){
+    requestAnimationFrame(animate);
+    const dt = clock.getDelta();
+    elapsed += dt;
+
+    // Mouse lerp
+    mxC += (mxT - mxC) * .055;
+    myC += (myT - myC) * .055;
+
+    // 3D rotation follows mouse — THIS IS THE KEY 3D EFFECT
+    group.rotation.y = mxC * .38;
+    group.rotation.x = myC * .22;
+
+    // Floating bob
+    group.position.y += entryDone ? Math.sin(elapsed * 1.1) * .003 : 0;
+
+    // Camera subtle parallax
+    camera.position.x += (mxC * .25 - camera.position.x) * .04;
+    camera.position.y += (myC * .15 + 0 - camera.position.y) * .04;
+    camera.lookAt(0, 0, 0);
+
+    // Orbit rings spin
+    ring1.rotation.z += .005;
+    ring2.rotation.z -= .003;
+
+    // Glow breathe
+    glowMat.opacity = .14 + Math.sin(elapsed * 1.2) * .06;
+    if(glow1){
+      glow1.intensity = 3 + Math.sin(elapsed * .9) * .8;
+      glow1.position.x = 2 + mxC * 1.5;
+      glow1.position.y = 3 + myC * 1;
+    }
+
+    // Particles drift up
+    const pa = pGeo.attributes.position.array;
+    for(let i=0;i<pN;i++){
+      pa[i*3+1] += pVel[i];
+      if(pa[i*3+1] > 5) pa[i*3+1] = -5;
+    }
+    pGeo.attributes.position.needsUpdate = true;
+
+    renderer.render(scene, camera);
   }
-  document.getElementById("gempaSourceTag").textContent = "Sumber: USGS + EMSC";
-  try{
-    const rows = await loadGempaGlobalFiltered(STATE.country.en);
-    el.innerHTML = rows.length ? renderGempaRows(rows) : emptyHTML(`Tidak ada gempa tercatat untuk ${STATE.country.name} pekan ini.`);
-    revealIn(el);
-    SUMMARY.gempa = {value:rows.length, label:`Gempa (${STATE.country.name})`};
-  }catch(err){ el.innerHTML = errorHTML("Data gempa global sedang tidak terjangkau."); SUMMARY.gempa = {value:"–", label:"Gempa tidak tersedia"}; }
-  renderRingkasan();
-}
+  animate();
 
-const WEATHER_CODE = {0:"Cerah",1:"Cerah berawan",2:"Berawan sebagian",3:"Mendung",45:"Berkabut",48:"Kabut es",51:"Gerimis ringan",53:"Gerimis sedang",55:"Gerimis lebat",61:"Hujan ringan",63:"Hujan sedang",65:"Hujan lebat",71:"Salju ringan",80:"Hujan lokal",81:"Hujan lokal sedang",82:"Hujan lokal lebat",95:"Badai petir",96:"Badai petir + hujan es"};
-function aqiInfo(aqi){ if(aqi==null) return {label:"–",color:"var(--ink-soft)",bg:"var(--green-soft)"}; if(aqi<=50) return {label:"Baik",color:"var(--green)",bg:"var(--green-soft)"}; if(aqi<=100) return {label:"Sedang",color:"var(--ink)",bg:"var(--green-soft)"}; if(aqi<=150) return {label:"Tak sehat (sensitif)",color:"#8a5a0f",bg:"rgba(232,163,61,0.2)"}; if(aqi<=200) return {label:"Tidak sehat",color:"var(--red)",bg:"rgba(217,80,63,0.14)"}; return {label:"Berbahaya",color:"var(--red)",bg:"rgba(217,80,63,0.26)"}; }
-async function loadCuaca(){
-  const el = document.getElementById("weatherContent"); const city = STATE.country;
-  el.innerHTML = loadingHTML("cuaca "+city.name);
-  try{
-    const [wx, aq] = await Promise.all([
-      fetchJSON(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`),
-      fetchJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${city.lat}&longitude=${city.lon}&current=pm2_5,pm10,us_aqi`),
-    ]);
-    const c = wx.current || {}; const a = aq.current || {}; const info = aqiInfo(a.us_aqi);
-    el.innerHTML = `<div class="weather-grid">
-      <div class="weather-card reveal"><div class="weather-card__icon">${icon("sun")}</div><div class="weather-card__value">${c.temperature_2m ?? "–"}°C</div><div class="weather-card__label">${WEATHER_CODE[c.weather_code] || "Kondisi tidak diketahui"}</div></div>
-      <div class="weather-card reveal" style="transition-delay:60ms"><div class="weather-card__icon">${icon("droplet")}</div><div class="weather-card__value">${c.relative_humidity_2m ?? "–"}%</div><div class="weather-card__label">Kelembapan</div></div>
-      <div class="weather-card reveal" style="transition-delay:120ms"><div class="weather-card__icon">${icon("wind")}</div><div class="weather-card__value">${c.wind_speed_10m ?? "–"} km/j</div><div class="weather-card__label">Kecepatan angin</div></div>
-      <div class="weather-card reveal" style="transition-delay:180ms"><div class="weather-card__icon">${icon("leaf")}</div><div class="weather-card__value">${a.us_aqi ?? "–"}</div><div class="weather-card__label">Indeks kualitas udara</div><span class="aqi-pill" style="color:${info.color};background:${info.bg}">${info.label}</span></div>
-    </div>`;
-    revealIn(el);
-    SUMMARY.cuaca = {value:(a.us_aqi ?? "–"), label:`AQI ${city.name} · ${info.label}`};
-  }catch(err){ el.innerHTML = errorHTML("Data cuaca/kualitas udara sedang tidak terjangkau."); SUMMARY.cuaca = {value:"–", label:"Cuaca tidak tersedia"}; }
-  renderRingkasan();
-}
+  // Scroll haptic — mascot tilts + squash
+  let lastSY=0, scrollSt;
+  window.addEventListener('scroll', ()=>{
+    if(!entryDone) return;
+    const vel = window.scrollY - lastSY;
+    lastSY = window.scrollY;
+    const tilt = Math.min(Math.max(vel * .018, -.35), .35);
+    group.rotation.x += tilt;
+    const sq = Math.max(.88, 1 - Math.abs(vel) * .003);
+    group.scale.y = sq;
+    clearTimeout(scrollSt);
+    scrollSt = setTimeout(()=>{
+      gsap.to(group.rotation, {x:0, duration:.9, ease:'elastic.out(1,.5)'});
+      gsap.to(group.scale, {y:1, duration:.5, ease:'back.out(1.5)'});
+    }, 80);
+    document.getElementById('scrollHint').style.opacity = window.scrollY>80?'0':'1';
+  });
 
-let eonetEvents = []; let eonetFilter = "all";
-function renderEonet(){
-  const strip = document.getElementById("eonetStrip");
-  const events = eonetFilter==="all" ? eonetEvents : eonetEvents.filter(e=>e._catId===eonetFilter);
-  strip.innerHTML = events.length ? events.map((e,i)=>`<div class="mini-card reveal" style="transition-delay:${i*40}ms">
-    <div class="mini-card__icon">${icon(CATEGORY_ICON[e._catId]||"leaf")}</div><div class="mini-card__cat">${e._catTitle}</div>
-    <div class="mini-card__title">${e.title}</div><div class="mini-card__meta">${e._when}</div>
-    <a href="${e.link||"#"}" target="_blank" rel="noopener">Lihat detail ${icon("chevron")}</a>
-  </div>`).join("") : emptyHTML("Tidak ada peristiwa pada kategori ini.");
-  revealIn(strip);
-}
-async function loadBencana(){
-  const strip = document.getElementById("eonetStrip"); const chips = document.getElementById("eonetChips");
-  strip.innerHTML = loadingHTML("peristiwa bencana"); chips.innerHTML = "";
-  try{
-    const data = await fetchJSON("https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=20");
-    const events = data?.events || [];
-    eonetEvents = events.map(e=>{ const cat=e.categories?.[0]||{id:"other",title:"Lainnya"}; const geom=e.geometry?.[e.geometry.length-1]; return {title:e.title, link:e.sources?.[0]?.url||e.link, _catId:cat.id, _catTitle:cat.title, _when: geom?.date ? timeAgo(new Date(geom.date)) : ""}; });
-    const cats = ["all", ...new Set(eonetEvents.map(e=>e._catId))];
-    chips.innerHTML = cats.map(c=>{ const label = c==="all" ? "Semua" : (eonetEvents.find(e=>e._catId===c)?._catTitle || c); return `<span class="chip ${c===eonetFilter?"is-active":""}" data-cat="${c}">${label}</span>`; }).join("");
-    chips.querySelectorAll(".chip").forEach(chip=>chip.addEventListener("click", ()=>{ haptic(); eonetFilter=chip.dataset.cat; chips.querySelectorAll(".chip").forEach(c=>c.classList.remove("is-active")); chip.classList.add("is-active"); renderEonet(); }));
-    renderEonet();
-    SUMMARY.bencana = {value:eonetEvents.length, label:"Bencana aktif (dunia)"};
-  }catch(err){ strip.innerHTML = errorHTML("Data peristiwa bencana global sedang tidak terjangkau."); SUMMARY.bencana = {value:"–", label:"Bencana tidak tersedia"}; }
-  renderRingkasan();
-}
+  window.addEventListener('resize', ()=>{
+    W=window.innerWidth; H=window.innerHeight;
+    camera.aspect=W/H; camera.updateProjectionMatrix();
+    renderer.setSize(W,H);
+  });
+})();
 
-/* ---------- antariksa: JPL SBDB CAD (asteroid, no key) + NOAA SWPC (space weather, no key) ---------- */
-async function loadAntariksa(){
-  const neoEl = document.getElementById("neoList"); const swpcEl = document.getElementById("swpcList");
-  neoEl.innerHTML = loadingHTML("objek dekat Bumi"); swpcEl.innerHTML = loadingHTML("cuaca antariksa");
-  try{
-    const data = await fetchJSON("https://ssd-api.jpl.nasa.gov/cad.api?dist-max=0.2&date-min=now&date-max=%2B30&sort=dist");
-    const fields = data.fields || []; const idx = (k)=>fields.indexOf(k);
-    const rows = (data.data||[]).slice(0,6).map(r=>({
-      name: r[idx("fullname")]?.trim() || r[idx("des")],
-      date: r[idx("cd")],
-      distKm: Math.round(parseFloat(r[idx("dist")]) * 149597870.7).toLocaleString("id-ID"),
-      vel: parseFloat(r[idx("v_rel")]).toFixed(1),
-    }));
-    neoEl.innerHTML = rows.length ? rows.map((n,i)=>`<div class="gempa-row reveal" style="transition-delay:${i*40}ms">
-      <div class="mag-dot">${icon("orbit")}</div>
-      <div class="gempa-info"><div class="gempa-place">${n.name}</div><div class="gempa-meta">jarak ${n.distKm} km · kecepatan ${n.vel} km/s · ${n.date}</div></div>
-    </div>`).join("") : emptyHTML("Tidak ada objek dekat Bumi tercatat dalam 30 hari ke depan.");
-    revealIn(neoEl);
-    SUMMARY.antariksa = { value: rows[0] ? Math.round(parseFloat(rows[0].distKm.replace(/\./g,""))/1000).toLocaleString("id-ID")+" rb km" : "–", label:"Objek terdekat" };
-  }catch(err){ neoEl.innerHTML = errorHTML("Data JPL SBDB sedang tidak terjangkau."); SUMMARY.antariksa = {value:"–", label:"Antariksa tidak tersedia"}; }
-  try{
-    const data = await fetchJSON("https://services.swpc.noaa.gov/products/alerts.json");
-    const items = Array.isArray(data) ? data.slice(0,6) : [];
-    swpcEl.innerHTML = items.length ? items.map((n,i)=>{
-      const firstLine = (n.message||"").split("\n").find(l=>l.trim().length>4) || "Peringatan cuaca antariksa";
-      return `<div class="news-item reveal" style="transition-delay:${i*40}ms">
-        <div class="news-title">${firstLine.slice(0,110)}</div>
-        <div class="news-meta"><span>${n.product_id||""}</span>${n.issue_datetime?`<span>· ${new Date(n.issue_datetime).toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}</span>`:""}</div>
-      </div>`;
-    }).join("") : emptyHTML("Tidak ada peringatan cuaca antariksa aktif saat ini.");
-    revealIn(swpcEl);
-  }catch(err){ swpcEl.innerHTML = errorHTML("Data NOAA SWPC sedang tidak terjangkau."); }
-  renderRingkasan();
-}
+/* CURSOR */
+(function(){
+  const cw=document.getElementById('cur'),ring=document.getElementById('cr');
+  let tx=0,ty=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+  (function loop(){
+    rx+=(tx-rx)*.1;ry+=(ty-ry)*.1;
+    cw.style.left=tx+'px';cw.style.top=ty+'px';
+    ring.style.left=(rx-tx)+'px';ring.style.top=(ry-ty)+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.val2,.step,.pc,.expr-chip').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cw.classList.add('cur-big'));
+    el.addEventListener('mouseleave',()=>cw.classList.remove('cur-big'));
+  });
+})();
 
-async function loadBerita(){
-  const el = document.getElementById("newsList");
-  el.innerHTML = loadingHTML("laporan terbaru");
-  try{
-    const q = encodeURIComponent(STATE.country.en);
-    const url = `https://api.reliefweb.int/v1/reports?appname=earthpulse-dashboard&limit=7&sort[]=date.created:desc&query[value]=${q}&query[fields][]=country.name&fields[include][]=title&fields[include][]=date&fields[include][]=source&fields[include][]=url_alias`;
-    const data = await fetchJSON(url);
-    const items = data?.data || [];
-    el.innerHTML = items.length ? items.map((it,i)=>{
-      const f = it.fields || {}; const date = f.date?.created ? new Date(f.date.created) : null;
-      const src = f.source?.[0]?.name || "ReliefWeb"; const link = f.url_alias || `https://reliefweb.int/node/${it.id}`;
-      return `<div class="news-item reveal" style="transition-delay:${i*40}ms">
-        <a class="news-title" href="${link}" target="_blank" rel="noopener">${f.title||"Tanpa judul"}</a>
-        <div class="news-meta"><span>${src}</span>${date?`<span>· ${date.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}</span>`:""}</div>
-      </div>`;
-    }).join("") : emptyHTML(`Belum ada laporan baru untuk ${STATE.country.name}.`);
-    revealIn(el);
-    SUMMARY.berita = {value:items.length, label:`Laporan (${STATE.country.name})`};
-  }catch(err){ el.innerHTML = errorHTML("Laporan bencana sedang tidak terjangkau."); SUMMARY.berita = {value:"–", label:"Laporan tidak tersedia"}; }
-  renderRingkasan();
-}
+/* MAGNETIC BUTTONS */
+document.querySelectorAll('.btn,.ncta').forEach(el=>{
+  el.addEventListener('mousemove',function(e){
+    const r=this.getBoundingClientRect();
+    const dx=(e.clientX-r.left-r.width/2)*.26;
+    const dy=(e.clientY-r.top-r.height/2)*.26;
+    this.style.transform=`translate(${dx}px,${dy}px) translateY(-2px)`;
+    this.style.transition='transform .1s ease';
+  });
+  el.addEventListener('mouseleave',function(){
+    this.style.transform='';this.style.transition='transform .7s cubic-bezier(.23,1,.32,1)';
+  });
+});
 
-function loadCountryScoped(){ loadGempa(); loadCuaca(); loadBerita(); }
-function loadGlobalScoped(){ loadBencana(); loadAntariksa(); }
-async function refreshAll(spin){
-  const btn = document.getElementById("refreshBtn"); if(spin){ btn.classList.add("spin"); haptic(); }
-  document.getElementById("statusText").textContent = "memuat…";
-  await Promise.allSettled([loadGempa(), loadCuaca(), loadBencana(), loadAntariksa(), loadBerita()]);
-  document.getElementById("statusText").textContent = "diperbarui " + timeAgo(new Date());
-  if(spin) setTimeout(()=>btn.classList.remove("spin"), 700);
-}
-function init(){
-  renderBrand(); renderCountryDropdown(); renderTabBar(); renderRingkasan();
-  document.getElementById("refreshBtn").addEventListener("click", ()=>refreshAll(true));
-  refreshAll(false);
-  setInterval(()=>refreshAll(false), 6*60*1000);
-}
-document.addEventListener("DOMContentLoaded", init);
+/* 3D CARD TILT */
+document.querySelectorAll('[data-tilt]').forEach(card=>{
+  const spec=card.querySelector('.pspec');
+  card.addEventListener('mousemove',function(e){
+    const r=this.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)/r.width;
+    const y=(e.clientY-r.top-r.height/2)/r.height;
+    this.style.transform=`translate(-5px,-5px) perspective(700px) rotateY(${x*14}deg) rotateX(${-y*14}deg) translateZ(12px)`;
+    this.style.transition='transform .08s ease';
+    this.style.boxShadow=`${8+x*4}px ${8+y*4}px 0 var(--bk)`;
+    if(spec){const sx=((e.clientX-r.left)/r.width)*100,sy=((e.clientY-r.top)/r.height)*100;spec.style.background=`radial-gradient(circle at ${sx}% ${sy}%,rgba(255,193,7,.14),transparent 50%)`;}
+  });
+  card.addEventListener('mouseleave',function(){
+    this.style.transform='';this.style.transition='transform .7s cubic-bezier(.23,1,.32,1)';this.style.boxShadow='var(--sh)';
+    const s=this.querySelector('.pspec');if(s)s.style.background='';
+  });
+});
+
+/* COMPANION */
+(function(){
+  const comp=document.getElementById('companion'),sp=document.getElementById('cspeech');
+  const cImg=comp.querySelector('img');
+  let vis=false,lastY2=0,vel2=0,st2,talkT;
+  const msgs={
+    about:["Hi, I'm NALD! 👋","Nice to meet you! 😊"],
+    products:["My dioramas are awesome! 🏠","Pick your favorite! ⭐"],
+    process:["Detail matters! ⚙️","Made with love! 💛"],
+    contact:["Let's collaborate! 🤝","Let's create! 🎨"]
+  };
+  function showMsg(m){clearTimeout(talkT);sp.textContent=m;comp.classList.add('talking');talkT=setTimeout(()=>comp.classList.remove('talking'),2600);}
+  ScrollTrigger.create({trigger:'#about',start:'top 80%',
+    onEnter:()=>{vis=true;comp.classList.add('show');setTimeout(()=>showMsg(msgs.about[0]),700);},
+    onLeaveBack:()=>{vis=false;comp.classList.remove('show','talking')}
+  });
+  ['products','process','contact'].forEach(id=>{
+    ScrollTrigger.create({trigger:`#${id}`,start:'top 60%',onEnter:()=>{
+      if(!vis)return;const m=msgs[id]||[];setTimeout(()=>showMsg(m[Math.floor(Math.random()*m.length)]),350);
+    }});
+  });
+  window.addEventListener('scroll',()=>{
+    if(!vis||!cImg)return;vel2=window.scrollY-lastY2;lastY2=window.scrollY;
+    const t=Math.min(Math.max(vel2*.8,-16),16);
+    cImg.style.transition='transform .08s ease';cImg.style.transform=`rotate(${t}deg)`;
+    clearTimeout(st2);st2=setTimeout(()=>{cImg.style.transition='transform .6s cubic-bezier(.34,1.56,.64,1)';cImg.style.transform='';},80);
+  });
+  gsap.to(cImg,{y:-7,duration:1.9,ease:'sine.inOut',yoyo:true,repeat:-1});
+})();
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.sr,.srl,.srr').forEach(el=>obs.observe(el));
+
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',window.scrollY>55));
+
+document.getElementById('hbg').addEventListener('click',function(){
+  const nl=document.querySelector('.nlinks');
+  if(nl.style.display==='flex'){nl.style.display='none';}
+  else{nl.style.cssText='display:flex;flex-direction:column;position:fixed;top:66px;left:0;width:100%;background:rgba(17,17,17,.97);padding:18px 22px;gap:4px;border-bottom:2px solid rgba(255,193,7,.25);z-index:499;backdrop-filter:blur(16px)';nl.querySelectorAll('a').forEach(a=>{a.style.padding='13px 15px';a.style.borderRadius='11px'});}
+});
 </script>
 </body>
 </html>
