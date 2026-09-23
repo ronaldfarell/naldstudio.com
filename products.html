@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diorama Shop — Nald Studio</title>
+  <title>Diorama Shop Nald Studio</title>
   <meta name="description" content="Koleksi miniatur diorama handmade dari Nald Studio. Detail halus, berkualitas tinggi, cocok untuk display dan koleksi." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -446,7 +446,7 @@
         <span class="cart-total-val" id="cartTotal">$0.00</span>
       </div>
       <div class="cart-note">
-        💡 Checkout via WhatsApp — we'll confirm availability & shipping before payment.
+        💡 Checkout via WhatsApp we'll confirm availability & shipping before payment.
       </div>
       <button class="btn-checkout" id="checkoutBtn" onclick="checkout()" disabled>
         <span>💬</span> Order via WhatsApp
@@ -517,7 +517,7 @@
       <div class="info-card rv" style="transition-delay:.5s">
         <div class="info-icon">💛</div>
         <div class="info-h">Made with Love</div>
-        <p class="info-p">Each diorama is handmade, one at a time. No two pieces are exactly alike — unique and full of character.</p>
+        <p class="info-p">Each diorama is handmade, one at a time. No two pieces are exactly alike unique and full of character.</p>
       </div>
     </div>
   </section>
@@ -525,7 +525,7 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo"><img src="assets/logo.png" alt="Nald Studio" /></div>
-    <span class="footer-copy">© 2025 Nald Studio — Diorama Shop 🏠</span>
+    <span class="footer-copy">© 2025 Nald Studio Diorama Shop 🏠</span>
     <a href="index.html" class="footer-back">← Back to Services</a>
   </footer>
 
@@ -555,7 +555,7 @@
         emoji: "⭐", badge: "new", badgeLabel: "Custom",
         price: 0,
         priceLabel: "Price upon request",
-        desc: "Have something unique in mind? We'll bring any concept to life — your favorite game, anime scene, personal memory, or brand mascot. Fully bespoke, one-of-a-kind.",
+        desc: "Have something unique in mind? We'll bring any concept to life your favorite game, anime scene, personal memory, or brand mascot. Fully bespoke, one-of-a-kind.",
         stock: true
       },
     ];
@@ -651,7 +651,7 @@
     function checkout() {
       if (cart.length === 0) return;
       const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-      const lines = cart.map(i => `• ${i.name} x${i.qty}${i.price > 0 ? ' = ' + formatUSD(i.price * i.qty) : ' (Custom — contact for pricing)'}`).join('\n');
+      const lines = cart.map(i => `• ${i.name} x${i.qty}${i.price > 0 ? ' = ' + formatUSD(i.price * i.qty) : ' (Custom contact for pricing)'}`).join('\n');
       const msg = encodeURIComponent(
         `Hello Nald Studio! I'd like to order a diorama (payment in USD):\n\n${lines}\n\n` +
         (total > 0 ? `Total: ${formatUSD(total)}\n\n` : '') +
