@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nama Projekmu — Pemantauan Satelit &amp; GPS</title>
+<title>Edential Pemantauan Satelit &amp; GPS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -114,7 +114,7 @@
 <header class="topbar">
   <div class="brand">
     <div class="brand-mark" id="brandMark"></div>
-    <div class="brand-name" id="brandName">Nama Projekmu</div>
+    <div class="brand-name" id="brandName">Edential</div>
   </div>
   <a class="top-link" href="../">← Iklim &amp; Bencana</a>
 </header>
@@ -123,7 +123,7 @@
 
   <section class="section glass hero" id="sec-hero">
     <h2>Pemantauan Satelit &amp; GPS Dunia</h2>
-    <div class="sub">Peta di belakang ini hidup — geser &amp; gulir untuk menjelajah tiap lapisan data langsung.</div>
+    <div class="sub">Peta di belakang ini hidup geser &amp; gulir untuk menjelajah tiap lapisan data langsung.</div>
     <div class="widget-grid">
       <div class="widget"><div class="widget__icon" id="wIconPlane"></div><div class="widget__value" id="wPlane">–</div><div class="widget__label">Pesawat terlihat</div></div>
       <div class="widget"><div class="widget__icon" id="wIconShip"></div><div class="widget__value" id="wShip">–</div><div class="widget__label">Kapal terlihat</div></div>
@@ -136,7 +136,7 @@
     <div class="panel-header" style="display:flex;justify-content:space-between;align-items:baseline;">
       <h2>Pesawat terbang</h2><span class="source-tag">Sumber: OpenSky Network</span>
     </div>
-    <div class="sub">Menampilkan pesawat dalam area peta yang sedang terlihat — geser peta untuk area lain di dunia.</div>
+    <div class="sub">Menampilkan pesawat dalam area peta yang sedang terlihat geser peta untuk area lain di dunia.</div>
     <div id="planeList"></div>
   </section>
 
@@ -317,7 +317,7 @@ function setupKapal(){
     document.getElementById("wShip").textContent = "–";
     return;
   }
-  notice.innerHTML = `Terhubung ke aisstream.io — menampilkan kapal dalam area peta yang sedang dilihat.`;
+  notice.innerHTML = `Terhubung ke aisstream.io menampilkan kapal dalam area peta yang sedang dilihat.`;
   list.innerHTML = loadingHTML("posisi kapal");
   try{
     const ws = new WebSocket("wss://stream.aisstream.io/v0/stream");
@@ -346,7 +346,7 @@ function setupKapal(){
         document.getElementById("wShip").textContent = shipMarkers.size;
       }catch(e){}
     };
-    ws.onerror = ()=>{ notice.innerHTML = "Koneksi AIS gagal — periksa API key kamu."; };
+    ws.onerror = ()=>{ notice.innerHTML = "Koneksi AIS gagal periksa API key kamu."; };
   }catch(err){
     notice.innerHTML = "Tidak bisa membuka koneksi AIS di browser ini.";
   }
@@ -395,9 +395,9 @@ async function loadSatellites(){
   console.error(err);
   const fb = document.getElementById("mapFallback");
   if(fb) fb.innerHTML = "Peta tidak dapat dimuat.<br>Periksa koneksi internet, atau nonaktifkan sementara ad-blocker/pemblokir skrip untuk <b>cdn.jsdelivr.net</b>, lalu muat ulang halaman.<br><br>Panel di bawah tetap bisa dibaca walau peta gagal.";
-  document.getElementById("planeList").innerHTML = errorHTML("Butuh peta untuk menampilkan pesawat — perbaiki dulu error peta di atas.");
+  document.getElementById("planeList").innerHTML = errorHTML("Butuh peta untuk menampilkan pesawat perbaiki dulu error peta di atas.");
   document.querySelector("#shipNotice span:last-child").textContent = "Butuh peta untuk menampilkan kapal — perbaiki dulu error peta di atas.";
-  document.getElementById("satCards").innerHTML = errorHTML("Butuh peta untuk menampilkan satelit — perbaiki dulu error peta di atas.");
+  document.getElementById("satCards").innerHTML = errorHTML("Butuh peta untuk menampilkan satelit perbaiki dulu error peta di atas.");
   document.getElementById("wPlane").textContent = "–";
   document.getElementById("wShip").textContent = "–";
   document.getElementById("wSat").textContent = "–";
