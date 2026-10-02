@@ -1854,23 +1854,23 @@ function initEcoFlow(){
 var BMC_BLOCKS = {
   partners:{ idx:'01', label:'KEY PARTNERS', title:'Who builds this with us',
     desc:'Pihak-pihak yang membantu Narasio menjangkau lebih luas dan menjaga kualitas layanan.',
-    items:['Universitas dan institusi akademik','Program **MagangHub Kemnaker**','Lembaga sertifikasi internasional','Penyedia cloud dan teknologi AI','Mitra industri dan mitra pendidikan'] },
+    items:['Universitas dan institusi akademik','Lembaga sertifikasi internasional','Penyedia cloud dan teknologi AI','Mitra industri dan mitra pendidikan'] },
   activities:{ idx:'02', label:'KEY ACTIVITIES', title:'What we actually do',
     desc:'Aktivitas utama yang menghasilkan nilai bagi klien dari mengukur kesiapan sampai membangun kapabilitas.',
     items:['Asesmen kesiapan **NORI**','Konsultasi dan implementasi proyek data/AI','Pelatihan dan sertifikasi data','Pengembangan kurikulum industri'] },
   value:{ idx:'03', label:'VALUE PROPOSITIONS', title:'Value Propositions', core:true,
     desc:'Inti dari seluruh model: membantu organisasi bergerak dari data menuju transformasi diukur kesiapannya lebih dulu lewat NORI, lalu dikerjakan bersama praktisi.',
-    items:['Dari data menuju transformasi organisasi','Ukur kesiapan sebelum investasi besar (**NORI**)','Dikerjakan praktisi, bukan hanya saran','Talenta data siap industri','Ekosistem kolaborasi dan riset'],
+    items:['Dari data menuju transformasi organisasi dan mengukur kesiapan sebelum investasi besar melalui **NORI** dan dikerjakan oleh praktisi expert, bukan hanya saran'],
     nori:['Strategy','Data','Infrastructure','Governance','Talent','Culture'] },
   relationships:{ idx:'04', label:'CUSTOMER RELATIONSHIPS', title:'How we stay close',
-    desc:'Hubungan dimulai dari sesi bersama pimpinan, dilanjutkan pendampingan, lalu komunitas jangka panjang.',
-    items:['Executive discovery session','Pendampingan proyek','Komunitas alumni dan mitra'] },
+    desc:'Hubungan dimulai dari sesi bersama pimpinan, dilanjutkan pendampingan, lalu kolaborasi jangka panjang.',
+    items:['Executive discovery session','Pendampingan proyek'] },
   segments:{ idx:'05', label:'CUSTOMER SEGMENTS', title:'Who we work with',
     desc:'Empat kelompok yang dilayani dari organisasi besar sampai individu yang memulai karier di bidang data.',
     items:['Perusahaan enterprise','Instansi pemerintah','Kampus dan lembaga pendidikan','Profesional dan calon data analyst'] },
   resources:{ idx:'06', label:'KEY RESOURCES', title:'What makes it possible',
     desc:'Aset yang membuat model ini berjalan: framework, orang, talenta, dan jejaring.',
-    items:['Framework **NORI** dan **RM4Es**','Praktisi dan data scientist','Talent pipeline intern','Jejaring kampus dan klien'] },
+    items:['Professional Advisor','Praktisi dan data scientist','Tim Sales','Tim Produk'] },
   channels:{ idx:'07', label:'CHANNELS', title:"Where we're reached",
     desc:'Titik awal percakapan dari kanal digital sampai pertemuan langsung dan kemitraan kampus.',
     items:['Website dan situs **NORI**','WhatsApp, email, LinkedIn','Presentasi BD langsung','Kemitraan kampus'] },
@@ -1879,7 +1879,7 @@ var BMC_BLOCKS = {
     items:['Gaji tim praktisi, pengajar, dan BD','Pengembangan produk dan platform **NORI**','Operasional kelas, sertifikasi, dan riset','Pemasaran, event, dan lisensi cloud'] },
   revenue:{ idx:'09', label:'REVENUE STREAMS', title:'How it sustains itself',
     desc:'Empat sumber pendapatan yang selaras dengan layanan inti: asesmen, implementasi, pelatihan, dan kurikulum.',
-    items:['Fee konsultasi','Proyek implementasi data/AI','Biaya pelatihan dan sertifikasi','Kerja sama kurikulum dengan kampus'] }
+    items:['Fee konsultasi','Proyek implementasi data/AI','Biaya pelatihan dan sertifikasi','Kerja sama pengelolaan kurikulum'] }
 };
 var BMC_REL = {
   segments:['value','channels','relationships','revenue'], value:['segments','activities','resources'],
@@ -2833,7 +2833,7 @@ window.__factory = function(host){
   });
   pane(groups.cabinet,1.31,1.255,0,1.37,.44,tex(480,460,(c,w,h) => { c.fillStyle = '#172224'; c.fillRect(0,0,w,h);
     ink(c,'START A',30,52,27,'#e8e8d8',600); ink(c,'CONVERSATION',30,84,27,'#e8e8d8',600);
-    ['Executive discovery session','Pendampingan proyek','Komunitas alumni dan mitra'].forEach((t,i) => { const y = 120+i*104;
+    ['Executive discovery session','Pendampingan proyek'].forEach((t,i) => { const y = 120+i*104;
       c.fillStyle = '#283839'; c.beginPath(); c.roundRect(22,y,436,86,8); c.fill();
       c.fillStyle = ['#ff7a1a','#bdbf9c','#7d938e'][i]; c.beginPath(); c.arc(58,y+43,19,0,Math.PI*2); c.fill();
       ink(c,String(i+1),52,y+50,20,'#1b2828',600); ink(c,t,92,y+51,20,'#e6e8dc',500); }); }));
