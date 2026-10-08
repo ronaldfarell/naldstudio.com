@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Invoice Influencer – Cherylita Adelyn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f1f3;--panel:#fff;--ink:#2a1b2e;--mute:#7b6a80;--line:#eadde3;--berry:#b3265f;--blush:#fbeef3;--field:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1220;--panel:#241a2b;--ink:#f3e9f1;--mute:#a794ad;--line:#3a2c43;--blush:#33202e;--field:#1a1220}}
+:root[data-theme="dark"]{--bg:#1a1220;--panel:#241a2b;--ink:#f3e9f1;--mute:#a794ad;--line:#3a2c43;--blush:#33202e;--field:#1a1220}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 'Plus Jakarta Sans',system-ui,sans-serif}
+.app{display:grid;grid-template-columns:400px 1fr;gap:20px;max-width:1280px;margin:0 auto;padding:16px}
+.tabs{display:none}
+.form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 18px 18px;align-self:start;max-height:calc(100vh - 32px);overflow:auto}
+.form h2{font:700 16px 'Bricolage Grotesque',sans-serif;margin:20px 0 10px;color:var(--berry)}
+label{display:block;font-size:12.5px;color:var(--mute);margin:8px 0 3px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--berry);outline-offset:1px}
+textarea{resize:vertical;min-height:70px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{border:1px solid var(--line);border-radius:10px;padding:8px 10px 10px;margin-bottom:8px;background:var(--blush)}
+.item .row3{display:grid;grid-template-columns:70px 1fr auto;gap:8px;align-items:end}
+button{font:600 14px 'Plus Jakarta Sans',sans-serif;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 12px;cursor:pointer}
+button.pri{background:var(--berry);border-color:var(--berry);color:#fff}
+.del{padding:8px 10px;color:var(--berry)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.sheet-wrap{overflow-x:auto}
+.sheet{background:#fff;color:#2a1b2e;width:794px;max-width:none;min-height:1000px;margin:0 auto;border-radius:6px;box-shadow:0 2px 18px rgba(60,20,50,.14);padding:48px 52px;position:relative;overflow:hidden}
+.sheet:before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:#b3265f}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.name{font:700 30px/1.1 'Bricolage Grotesque',sans-serif;margin:0}
+.handle{color:#7b6a80;font-size:13px;margin-top:6px}
+.title{text-align:right}
+.title b{font:700 34px 'Bricolage Grotesque',sans-serif;color:#b3265f;letter-spacing:.5px}
+.title div{font-size:13px;color:#7b6a80}
+.badge{display:inline-block;margin-top:8px;padding:3px 12px;border-radius:99px;font-weight:600;font-size:12.5px;background:#fbeef3;color:#b3265f;border:1px solid #b3265f}
+.badge.lunas{background:#e6f5ec;color:#1d7a46;border-color:#1d7a46}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:34px 0 26px}
+.meta h4{margin:0 0 6px;font-size:12.5px;color:#7b6a80;font-weight:500}
+.meta p{margin:0;font-size:14px;white-space:pre-line}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:600;font-size:12.5px;color:#7b6a80;border-bottom:2px solid #2a1b2e;padding:8px 6px}
+td{padding:11px 6px;border-bottom:1px solid #eadde3;vertical-align:top}
+.r{text-align:right;white-space:nowrap}
+.sum{margin:18px 0 0 auto;width:310px;font-size:14px}
+.sum div{display:flex;justify-content:space-between;padding:5px 0}
+.sum .tot{border-top:2px solid #2a1b2e;margin-top:6px;padding-top:10px;font:700 19px 'Bricolage Grotesque',sans-serif;color:#b3265f}
+.pay{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.pay h4{margin:0 0 6px;font-size:12.5px;color:#7b6a80;font-weight:500}
+.pay p{margin:0;font-size:14px;white-space:pre-line}
+.ttd{text-align:center;margin-top:20px}
+.ttd .sig{height:64px;border-bottom:1px solid #2a1b2e;margin-bottom:6px}
+.foot{position:absolute;left:62px;right:52px;bottom:26px;font-size:12px;color:#7b6a80;border-top:1px solid #eadde3;padding-top:10px}
+@media (max-width:900px){
+ .app{grid-template-columns:1fr;padding:12px}
+ .tabs{display:flex;gap:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:6px 0}
+ .tabs button{flex:1}.tabs button.on{background:var(--berry);color:#fff;border-color:var(--berry)}
+ .form{max-height:none}
+ .app[data-v="form"] .prev{display:none}.app[data-v="prev"] .form{display:none}
+}
+@media print{
+ :root{padding:0}body{background:#fff}.form,.tabs{display:none!important}
+ .app{display:block;padding:0;max-width:none}.prev{display:block!important}
+ .sheet-wrap{overflow:visible}.sheet{box-shadow:none;margin:0;width:100%;border-radius:0}
+ @page{size:A4;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app" data-v="form">
+ <div class="tabs"><button class="on" data-t="form">Isi data</button><button data-t="prev">Pratinjau</button></div>
+ <form class="form" id="form" onsubmit="return false"></form>
+ <div class="prev"><div class="sheet-wrap"><div class="sheet" id="sheet"></div></div></div>
+</div>
+<script>
+var KEY='inv-cherylita-v1';
+var DEF={nama:'Cherylita Adelyn',ig:'cherylitadelyn',tt:'cherylitadelyn',wa:'',email:'',bank:'',norek:'',an:'Cherylita Adelyn',
+ klien:'Nama Brand / Perusahaan',pic:'',alamat:'',kampanye:'Kampanye Endorsement',
+ no:'INV/CA/2026/001',tgl:'2026-10-08',tempo:'2026-10-15',status:'Belum dibayar',
+ diskon:0,pajak:0,dp:0,
+ catatan:'Pembayaran paling lambat pada tanggal jatuh tempo.\nHarga belum termasuk biaya boost/ads dan revisi di luar kesepakatan.\nKonten tayang sesuai brief yang telah disetujui.',
+ items:[{d:'Instagram Reels (1 video)',q:1,p:0},{d:'TikTok Video (1 video)',q:1,p:0},{d:'Instagram Story (3 frame)',q:1,p:0}]};
+var S=load();
+function load(){try{var s=localStorage.getItem(KEY);if(s)return Object.assign({},DEF,JSON.parse(s))}catch(e){}return JSON.parse(JSON.stringify(DEF))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function rp(n){return 'Rp '+Math.round(n||0).toLocaleString('id-ID')}
+function tgl(v){if(!v)return '-';var d=new Date(v+'T00:00:00');return isNaN(d)?v:d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}
+function f(k,l,t){return '<label>'+l+'</label><input data-k="'+k+'" type="'+(t||'text')+'" value="'+esc(S[k])+'">'}
+function buildForm(){
+ var h='<h2>Data influencer</h2>'+f('nama','Nama')+'<div class="row2"><div>'+f('ig','Instagram')+'</div><div>'+f('tt','TikTok')+'</div></div><div class="row2"><div>'+f('wa','WhatsApp')+'</div><div>'+f('email','Email')+'</div></div>'
+ +'<h2>Klien</h2>'+f('klien','Nama brand / perusahaan')+f('pic','Nama PIC')+'<label>Alamat</label><textarea data-k="alamat" style="min-height:54px">'+esc(S.alamat)+'</textarea>'+f('kampanye','Nama kampanye')
+ +'<h2>Invoice</h2>'+f('no','Nomor invoice')+'<div class="row2"><div>'+f('tgl','Tanggal terbit','date')+'</div><div>'+f('tempo','Jatuh tempo','date')+'</div></div>'
+ +'<label>Status</label><select data-k="status">'+['Belum dibayar','DP dibayar','Lunas'].map(function(o){return '<option'+(S.status===o?' selected':'')+'>'+o+'</option>'}).join('')+'</select>'
+ +'<h2>Rincian pekerjaan</h2><div id="items">';
+ S.items.forEach(function(it,i){h+='<div class="item"><label>Deskripsi</label><input data-i="'+i+'" data-f="d" value="'+esc(it.d)+'"><div class="row3"><div><label>Qty</label><input data-i="'+i+'" data-f="q" type="number" min="0" value="'+it.q+'"></div><div><label>Harga satuan (Rp)</label><input data-i="'+i+'" data-f="p" type="number" min="0" value="'+it.p+'"></div><button type="button" class="del" data-del="'+i+'" aria-label="Hapus baris">Hapus</button></div></div>'});
+ h+='</div><button type="button" id="add">+ Tambah baris</button>'
+ +'<h2>Biaya</h2><div class="row2"><div>'+f('diskon','Diskon (%)','number')+'</div><div>'+f('pajak','Pajak (%)','number')+'</div></div>'+f('dp','Sudah dibayar / DP (Rp)','number')
+ +'<h2>Pembayaran</h2>'+f('bank','Bank / e-wallet')+f('norek','Nomor rekening')+f('an','Atas nama')
+ +'<h2>Catatan &amp; syarat</h2><textarea data-k="catatan" style="min-height:96px">'+esc(S.catatan)+'</textarea>'
+ +'<div class="acts"><button type="button" class="pri" id="print">Cetak / Simpan PDF</button><button type="button" id="reset">Reset</button></div>';
+ document.getElementById('form').innerHTML=h;
+}
+function render(){
+ var sub=0;S.items.forEach(function(i){sub+=(+i.q||0)*(+i.p||0)});
+ var dis=sub*(+S.diskon||0)/100,tax=(sub-dis)*(+S.pajak||0)/100,tot=sub-dis+tax,dp=+S.dp||0,sisa=Math.max(tot-dp,0);
+ var rows=S.items.map(function(i,n){var q=+i.q||0,p=+i.p||0;return '<tr><td>'+(n+1)+'</td><td>'+esc(i.d)+'</td><td class="r">'+q+'</td><td class="r">'+rp(p)+'</td><td class="r">'+rp(q*p)+'</td></tr>'}).join('');
+ var h='<div class="top"><div><h1 class="name">'+esc(S.nama)+'</h1><div class="handle">'+(S.ig?'Instagram @'+esc(S.ig):'')+(S.ig&&S.tt?' &nbsp;|&nbsp; ':'')+(S.tt?'TikTok @'+esc(S.tt):'')+'</div><div class="handle">'+[S.wa,S.email].filter(Boolean).map(esc).join(' &nbsp;|&nbsp; ')+'</div></div>'
+ +'<div class="title"><b>INVOICE</b><div>'+esc(S.no)+'</div><span class="badge'+(S.status==='Lunas'?' lunas':'')+'">'+esc(S.status)+'</span></div></div>'
+ +'<div class="meta"><div><h4>Ditagihkan kepada</h4><p><b>'+esc(S.klien)+'</b>'+(S.pic?'\nUp. '+esc(S.pic):'')+(S.alamat?'\n'+esc(S.alamat):'')+'</p></div>'
+ +'<div><h4>Detail</h4><p>Kampanye: '+esc(S.kampanye)+'\nTanggal terbit: '+tgl(S.tgl)+'\nJatuh tempo: '+tgl(S.tempo)+'</p></div></div>'
+ +'<table><thead><tr><th style="width:30px">No</th><th>Deskripsi</th><th class="r">Qty</th><th class="r">Harga</th><th class="r">Jumlah</th></tr></thead><tbody>'+rows+'</tbody></table>'
+ +'<div class="sum"><div><span>Subtotal</span><span>'+rp(sub)+'</span></div>'+(dis?'<div><span>Diskon ('+(+S.diskon)+'%)</span><span>-'+rp(dis)+'</span></div>':'')+(tax?'<div><span>Pajak ('+(+S.pajak)+'%)</span><span>'+rp(tax)+'</span></div>':'')
+ +'<div><span>Total</span><span>'+rp(tot)+'</span></div>'+(dp?'<div><span>Sudah dibayar</span><span>-'+rp(dp)+'</span></div>':'')+'<div class="tot"><span>'+(dp?'Sisa tagihan':'Total tagihan')+'</span><span>'+rp(sisa)+'</span></div></div>'
+ +'<div class="pay"><div><h4>Pembayaran ke</h4><p><b>'+esc(S.bank)+'</b>\n'+esc(S.norek)+'\na.n. '+esc(S.an)+'</p><h4 style="margin-top:18px">Catatan</h4><p style="font-size:13px">'+esc(S.catatan)+'</p></div>'
+ +'<div class="ttd"><div style="font-size:13px;color:#7b6a80">Hormat kami,</div><div class="sig"></div><b>'+esc(S.nama)+'</b></div></div>'
+ +'<div class="foot">Terima kasih atas kerja samanya.</div>';
+ document.getElementById('sheet').innerHTML=h;
+}
+var form=document.getElementById('form');
+form.addEventListener('input',function(e){var t=e.target;
+ if(t.dataset.k){S[t.dataset.k]=t.type==='number'?(+t.value||0):t.value}
+ else if(t.dataset.f){var it=S.items[+t.dataset.i];it[t.dataset.f]=t.dataset.f==='d'?t.value:(+t.value||0)}
+ save();render()});
+form.addEventListener('change',function(e){if(e.target.tagName==='SELECT'){S[e.target.dataset.k]=e.target.value;save();render()}});
+form.addEventListener('click',function(e){var t=e.target;
+ if(t.id==='add'){S.items.push({d:'',q:1,p:0});save();buildForm();render()}
+ else if(t.dataset.del!==undefined){S.items.splice(+t.dataset.del,1);save();buildForm();render()}
+ else if(t.id==='print'){window.print()}
+ else if(t.id==='reset'&&confirm('Kembalikan semua isian ke awal?')){S=JSON.parse(JSON.stringify(DEF));save();buildForm();render()}});
+document.querySelector('.tabs').addEventListener('click',function(e){var v=e.target.dataset.t;if(!v)return;document.getElementById('app').dataset.v=v;
+ [].forEach.call(this.children,function(b){b.classList.toggle('on',b.dataset.t===v)});window.scrollTo(0,0)});
+buildForm();render();
+</script>
+</body>
+</html>
