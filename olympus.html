@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NarasioData — Olympus Virtual Office</title>
+<style>
+  :root{--gold:#e9bb65;--ink:#182238;--glass:rgba(16,25,44,.84)}
+  *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#b9d9f5;font-family:Inter,Segoe UI,Arial,sans-serif}
+  #scene{position:fixed;inset:0} canvas{display:block}
+  .brand{position:fixed;left:22px;top:18px;color:#fff;text-shadow:0 2px 10px #314b72;z-index:3}
+  .brand strong{font-size:20px;letter-spacing:.3px}.brand small{display:block;font-size:11px;opacity:.9;margin-top:4px}
+  .tag{position:fixed;right:22px;top:20px;color:white;font-size:12px;letter-spacing:1.5px;text-shadow:0 2px 8px #314b72;z-index:3}
+  .panel{position:fixed;left:20px;bottom:20px;width:min(330px,calc(100vw - 40px));padding:17px 18px;border:1px solid #ffffff40;border-radius:17px;background:var(--glass);color:white;backdrop-filter:blur(12px);z-index:4;box-shadow:0 12px 40px #20334a45}
+  .panel .eyebrow{color:var(--gold);font-size:10px;letter-spacing:1.7px;text-transform:uppercase}
+  .panel h2{margin:7px 0 5px;font-size:23px}.panel p{margin:0;color:#dce5f5;font-size:13px;line-height:1.5}
+  .controls{position:fixed;right:20px;bottom:20px;display:flex;gap:8px;z-index:4;flex-wrap:wrap;justify-content:flex-end;max-width:50vw}
+  button{border:1px solid #ffffff80;background:rgba(20,33,54,.78);color:white;padding:10px 13px;border-radius:12px;font-size:12px;cursor:pointer;backdrop-filter:blur(8px)}
+  button:hover{background:#dba84e;color:#182238}
+  .hint{position:fixed;left:50%;bottom:23px;transform:translateX(-50%);font-size:11px;color:white;text-shadow:0 2px 8px #263b55;z-index:2;pointer-events:none}
+  .roomlist{position:fixed;right:20px;top:60px;width:175px;display:flex;flex-direction:column;gap:6px;z-index:3}
+  .roomlist button{text-align:left;padding:8px 11px;font-size:11px}
+  @media(max-width:650px){.roomlist{top:68px;right:10px;width:132px;gap:4px}.roomlist button{padding:7px;font-size:10px}.brand{left:12px;top:12px}.brand strong{font-size:16px}.tag{display:none}.panel{left:10px;bottom:68px;padding:12px;width:calc(100vw - 20px)}.panel h2{font-size:19px}.controls{right:10px;bottom:10px;max-width:100vw}.hint{display:none}}
+</style>
+</head>
+<body>
+<div id="scene"></div>
+<div class="brand"><strong>◈ NarasioData</strong><small>OLYMPUS VIRTUAL WORKSPACE</small></div>
+<div class="tag">DIFFERENT GODS · ONE TEAM</div>
+<div class="roomlist" id="roomlist"></div>
+<div class="panel" id="panel"><div class="eyebrow">Central Command</div><h2>Hermes — Orchestrator</h2><p>Pusat koordinasi seluruh AI Agent. Pilih ruangan untuk melihat area kerja masing-masing dewa.</p></div>
+<div class="controls"><button id="overview">Overview</button><button id="spin">Auto Rotate: Off</button><button id="reset">Reset View</button></div>
+<div class="hint">Drag untuk memutar · Scroll untuk zoom · Klik ruangan untuk menjelajah</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+const host=document.getElementById('scene');
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#b9d9f5'); scene.fog=new THREE.Fog('#b9d9f5',35,75);
+const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,150); camera.position.set(19,19,25);
+const renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15; host.appendChild(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement); controls.enableDamping=true; controls.target.set(0,1.2,0); controls.minDistance=8; controls.maxDistance=50; controls.maxPolarAngle=Math.PI*.48;
+scene.add(new THREE.HemisphereLight(0xeaf5ff,0x8d755b,2.1));
+const sun=new THREE.DirectionalLight(0xffedcf,3.2); sun.position.set(-10,22,10); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); scene.add(sun);
+function mat(color,roughness=.7,metalness=0){return new THREE.MeshStandardMaterial({color,roughness,metalness})}
+const marble=mat('#f4e7ce'),white=mat('#fff8e9'),gold=mat('#dca94f',.35,.45),orange=mat('#ff603b'),dark=mat('#202a3a'),leaf=mat('#63945c'),blue=mat('#6bb9e9'),pink=mat('#e989a6'),purple=mat('#7771c9');
+function box(parent,x,y,z,sx,sy,sz,m){const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
+function cyl(parent,x,y,z,r1,r2,h,m,n=16){const o=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,n),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
+function sphere(parent,x,y,z,r,m){const o=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),m);o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o}
+function column(parent,x,z,h=2.5){cyl(parent,x,h/2,z,.19,.24,h,white,12);cyl(parent,x,h,z,.29,.29,.13,gold,12);cyl(parent,x,.08,z,.31,.31,.16,white,12)}
+// floating Olympus platform
+cyl(scene,0,-.15,0,14.8,13.8,.8,marble,64); cyl(scene,0,-.58,0,13.2,11.8,.55,gold,64); cyl(scene,0,-.85,0,12.7,11.5,.25,white,64);
+const floor=new THREE.Mesh(new THREE.CircleGeometry(13.6,64),mat('#e8d8bb'));floor.rotation.x=-Math.PI/2;floor.position.y=.27;floor.receiveShadow=true;scene.add(floor);
+for(let i=0;i<18;i++){const a=i/18*Math.PI*2;column(scene,13.1*Math.cos(a),13.1*Math.sin(a),2.0)}
+// distant temple
+for(let i=0;i<6;i++) column(scene,-2.5+i, -9.6,3.0);
+box(scene,0,3.15,-9.6,8,0.45,2.1,white); 
+const roof=cyl(scene,0,3.65,-9.6,4.5,3.8,.65,gold,3); roof.rotation.y=Math.PI/2;
+box(scene,0,4.05,-9.6,2.8,.22,.4,white);
+// cloud-like floating islands
+for(let i=0;i<13;i++){let a=i*2.4,r=19+Math.random()*5;const c=new THREE.Mesh(new THREE.SphereGeometry(1.1+Math.random(),12,8),white);c.position.set(Math.cos(a)*r,Math.random()*4-1,Math.sin(a)*r);c.scale.y=.55;c.castShadow=true;scene.add(c)}
+const rooms=[
+{name:'Hermes',role:'Orchestrator',desc:'Pusat kendali yang menghubungkan, membagi tugas, dan menyatukan hasil semua agent.',x:0,z:0,color:'#e5ad42',theme:'command'},
+{name:'Apollo',role:'Customer Frontier',desc:'Ruang pengetahuan produk, kebutuhan pelanggan, dokumentasi, dan insight customer.',x:-7,z:-5,color:'#e9a83e',theme:'sun'},
+{name:'Hades',role:'Accounting & Finance',desc:'Ruang finansial bernuansa obsidian dengan arsip, buku besar, dan kristal ungu.',x:-2,z:-7,color:'#5c4c79',theme:'underworld'},
+{name:'Aphrodite',role:'Business Development',desc:'Ruang relasi, partnership, pipeline, dan strategi komunikasi bisnis.',x:4,z:-6,color:'#e88ba9',theme:'rose'},
+{name:'Zeus',role:'Leadership & Strategy',desc:'Ruang dewan di puncak dengan kilat, marmer, dan aksen emas untuk keputusan strategis.',x:8,z:-3,color:'#e5b13e',theme:'storm'},
+{name:'Athena',role:'Research & Innovation',desc:'Perpustakaan strategi, riset, validasi ide, dan pengembangan inovasi.',x:9,z:3,color:'#4c8cc9',theme:'wisdom'},
+{name:'Hephaestus',role:'Product & Engineering',desc:'Bengkel teknologi dengan forge, tools, prototipe, dan meja rekayasa.',x:-8,z:2,color:'#bd8050',theme:'forge'},
+{name:'Artemis',role:'Operations',desc:'Ruang operasional yang ringkas, terstruktur, dan fokus pada eksekusi harian.',x:-5,z:7,color:'#a7ba6b',theme:'forest'},
+{name:'Demeter',role:'People & Culture',desc:'Ruang hijau untuk kolaborasi tim, pengembangan SDM, dan budaya kerja.',x:2,z:7,color:'#67935a',theme:'garden'},
+{name:'Poseidon',role:'Data & Analytics',desc:'Laboratorium analitik dengan aliran data biru, dashboard, dan visualisasi.',x:7,z:7,color:'#2e9ad7',theme:'ocean'},
+{name:'Ares',role:'Sales & Growth',desc:'Ruang pertumbuhan yang energik untuk target, peluang, dan strategi penjualan.',x:11,z:-1,color:'#c94c3c',theme:'war'},
+{name:'Dionysus',role:'Creative & Marketing',desc:'Studio kreatif dengan warna, inspirasi, kampanye, dan eksperimen konten.',x:-11,z:-2,color:'#8e70b4',theme:'creative'},
+{name:'Asclepius',role:'Health & Wellbeing',desc:'Ruang wellbeing untuk dukungan tim, keseimbangan, dan kebiasaan kerja sehat.',x:-10,z:6,color:'#68a57a',theme:'healing'},
+{name:'Eros',role:'Talent Acquisition',desc:'Ruang pencarian talenta, pencocokan kompetensi, dan pengalaman kandidat.',x:-2,z:10,color:'#d97778',theme:'heart'},
+{name:'Nyx',role:'Risk & Compliance',desc:'Ruang malam untuk pemeriksaan risiko, keamanan, dan kepatuhan.',x:4,z:11,color:'#4e467c',theme:'night'},
+{name:'Selene',role:'Systems & IT',desc:'Observatorium sistem, infrastruktur, otomasi, dan pemantauan teknologi.',x:11,z:9,color:'#a6c4d9',theme:'moon'},
+{name:'Themis',role:'Legal & Governance',desc:'Ruang tata kelola, kebijakan, kontrak, dan pemeriksaan kepatuhan.',x:-12,z:2,color:'#d4b878',theme:'law'},
+{name:'Chronos',role:'Project Management',desc:'Ruang timeline, milestone, koordinasi proyek, dan pengendalian progres.',x:-7,z:11,color:'#6494d2',theme:'time'},
+{name:'Gaia',role:'Sustainability',desc:'Ruang bumi dengan taman, peta dampak, dan inisiatif berkelanjutan.',x:0,z:12,color:'#6eaa70',theme:'earth'},
+{name:'Hera',role:'Customer Success',desc:'Ruang pendampingan pelanggan, retensi, onboarding, dan keberhasilan implementasi.',x:8,z:12,color:'#d5a64d',theme:'owl'},
+{name:'Hestia',role:'Culture & Engagement',desc:'Ruang hangat untuk engagement, ritual tim, dan semangat komunitas.',x:-12,z:8,color:'#d88952',theme:'hearth'}
+];
+const clickable=[];
+function createRoom(r){
+ const g=new THREE.Group();g.position.set(r.x,0,r.z);g.userData.room=r;scene.add(g);
+ const base=box(g,0,.35,0,3.1,.35,2.7,marble);base.material=marble;
+ box(g,0,.57,0,2.8,.12,2.4,gold);
+ // room walls, intentionally open-front for readable miniature interior
+ box(g,-1.38,1.3,-.95,.16,1.55,.16,white);box(g,1.38,1.3,-.95,.16,1.55,.16,white);
+ box(g,0,2.08,-.95,2.9,.18,.2,gold);
+ box(g,-1.38,1.3,.25,.16,1.55,.16,white);box(g,1.38,1.3,.25,.16,1.55,.16,white);
+ // themed back panel and roof accent
+ box(g,0,1.35,-.83,2.55,1.35,.12,mat(r.color));
+ const roof=cyl(g,0,2.22,-.1,1.75,1.45,.32,white,6);roof.rotation.y=Math.PI/6;
+ // desks and agent mascot: orange cube with four little legs
+ box(g,0,.95,.25,1.15,.15,.62,dark);box(g,0,1.05,.25,.86,.08,.43,blue);
+ box(g,0,1.72,.15,.85,.83,.72,orange);
+ for(const x of [-.31,.31])for(const z of [-.08,.35])box(g,x,1.18,z,.13,.35,.13,orange);
+ box(g,-.2,1.8,.52,.07,.19,.045,dark);box(g,.2,1.8,.52,.07,.19,.045,dark);
+ // smile
+ const smile=new THREE.Mesh(new THREE.TorusGeometry(.12,.025,6,16,Math.PI),dark);smile.position.set(0,1.59,.535);smile.rotation.z=Math.PI;g.add(smile);
+ // distinctive themed prop
+ if(r.theme==='sun'||r.theme==='storm'||r.theme==='war'){const p=cyl(g,-.95,1.5,.5,.08,.08,1.3,gold,8);p.rotation.z=-.25;sphere(g,-.95,2.22,.5,.2,r.theme==='storm'?gold:mat(r.color))}
+ if(r.theme==='underworld'){for(let i=0;i<4;i++)box(g,-.8+i*.5,2.05,-.55,.18,.5,.18,purple)}
+ if(r.theme==='rose'||r.theme==='garden'||r.theme==='forest'||r.theme==='creative'||r.theme==='earth'){for(let i=0;i<5;i++)sphere(g,-.9+i*.45,2.25,-.15,.16,i%2?leaf:pink)}
+ if(r.theme==='ocean'){for(let i=0;i<3;i++){const w=new THREE.Mesh(new THREE.TorusGeometry(.4+i*.12,.07,8,24,Math.PI),blue);w.position.set(.7,1.2,.7+i*.08);w.rotation.z=Math.PI/2;g.add(w)}}
+ if(r.theme==='forge'){const h=box(g,.9,1.4,.5,.28,.28,.28,dark);h.rotation.z=.4;box(g,.9,1.15,.5,.12,.55,.12,gold)}
+ if(r.theme==='night'||r.theme==='moon'){const moon=new THREE.Mesh(new THREE.TorusGeometry(.25,.08,8,24,Math.PI*1.5),gold);moon.position.set(.75,2.15,-.2);g.add(moon)}
+ // label plaque
+ box(g,0,.38,1.48,2.75,.45,.12,dark);
+ const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');
+ ctx.fillStyle='#182238';ctx.fillRect(0,0,512,128);ctx.fillStyle='#f0c56f';ctx.font='bold 32px Arial';ctx.textAlign='center';ctx.fillText(r.name,256,48);ctx.fillStyle='#ffffff';ctx.font='22px Arial';ctx.fillText(r.role,256,88);
+ const tex=new THREE.CanvasTexture(canvas);const sign=new THREE.Mesh(new THREE.PlaneGeometry(2.65,.62),new THREE.MeshBasicMaterial({map:tex,transparent:false}));sign.position.set(0,.4,1.55);g.add(sign);
+ g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});clickable.push(g);return g;
+}
+rooms.slice(1).forEach(createRoom);
+// Hermes larger command island in center
+const center=new THREE.Group();scene.add(center);center.userData.room=rooms[0];
+cyl(center,0,.43,0,2.2,2.2,.25,gold,48);cyl(center,0,.62,0,1.8,1.8,.2,white,48);
+box(center,0,1.1,0,1.8,.65,1.1,orange);
+for(const x of [-.55,.55])for(const z of [-.3,.3])box(center,x,.77,z,.15,.42,.15,orange);
+box(center,-.3,1.18,.57,.09,.2,.05,dark);box(center,.3,1.18,.57,.09,.2,.05,dark);
+box(center,0,.83,.58,.25,.04,.04,dark);
+box(center,0,.8,1.65,2.6,.48,.12,dark);
+const cc=document.createElement('canvas');cc.width=512;cc.height=128;let cx=cc.getContext('2d');cx.fillStyle='#182238';cx.fillRect(0,0,512,128);cx.fillStyle='#f0c56f';cx.font='bold 35px Arial';cx.textAlign='center';cx.fillText('HERMES',256,48);cx.fillStyle='#fff';cx.font='23px Arial';cx.fillText('ORCHESTRATOR',256,88);
+const cs=new THREE.Mesh(new THREE.PlaneGeometry(2.5,.62),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cc)}));cs.position.set(0,.82,1.72);center.add(cs);clickable.push(center);
+// decorative path stones
+for(let i=0;i<10;i++){let a=i/10*Math.PI*2;const s=box(scene,Math.cos(a)*4,.31,Math.sin(a)*4,.65,.07,.65,gold);s.rotation.y=a}
+const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2();
+function selectRoom(r){
+ document.getElementById('panel').innerHTML=`<div class="eyebrow">${r.role}</div><h2>${r.name}</h2><p>${r.desc}</p>`;
+ const target=new THREE.Vector3(r.x,1,r.z);
+ controls.target.copy(target);
+ const offset=new THREE.Vector3(5,5,7);camera.position.copy(target).add(offset);controls.update();
+}
+renderer.domElement.addEventListener('pointerdown',e=>{mouse.x=e.clientX/innerWidth*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObjects(clickable,true);if(hits.length){let o=hits[0].object;while(o&&!o.userData.room)o=o.parent;if(o?.userData.room)selectRoom(o.userData.room)}});
+const list=document.getElementById('roomlist');
+rooms.forEach(r=>{const b=document.createElement('button');b.textContent=r.name+' · '+r.role;b.onclick=()=>selectRoom(r);list.appendChild(b)});
+let spinning=false;document.getElementById('spin').onclick=()=>{spinning=!spinning;document.getElementById('spin').textContent='Auto Rotate: '+(spinning?'On':'Off');controls.autoRotate=spinning;controls.autoRotateSpeed=.7};
+document.getElementById('overview').onclick=()=>{controls.target.set(0,1,0);camera.position.set(19,19,25);controls.update()};
+document.getElementById('reset').onclick=()=>{controls.target.set(0,1.2,0);camera.position.set(19,19,25);controls.update()};
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera)}animate();
+</script>
+</body></html>
