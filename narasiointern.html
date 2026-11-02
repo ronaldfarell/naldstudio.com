@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Narasio Intern Development Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--maroon:#8A1538;--blue:#1B3FA0;--bluedeep:#122B73;--em:#0E9E68;--bg:#FAF9F5;--alt:#F2F0E9;--ink:#17171A;--mut:#6B6A63;--line:rgba(23,23,26,.08);--card:#fff;--grad:linear-gradient(120deg,#8A1538 0%,#1B3FA0 52%,#0E9E68 100%);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:light}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+.gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.app{display:flex;min-height:100vh}
+aside{width:236px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto;transition:.25s}
+.logo{font:700 18px 'Space Grotesk';padding:4px 8px 16px;display:flex;gap:9px;align-items:center}
+.mk{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:12px}
+.nv{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:10px 12px;border-radius:100px;color:var(--mut);font-weight:500;margin-bottom:2px}
+.nv:hover{background:var(--alt)}.nv.on{background:var(--ink);color:var(--bg)}
+main{flex:1;min-width:0;padding:22px 28px 60px;max-width:1120px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.burger{display:none;border:1px solid var(--line);border-radius:10px;padding:7px 11px;background:var(--card)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:100px;border:1px solid var(--line);background:var(--card);padding:5px 12px;font-size:12px;font-weight:600;color:var(--mut)}
+.btn{border-radius:100px;padding:9px 18px;font-weight:600;background:var(--ink);color:var(--bg)}
+.btn.g{background:var(--grad);color:#fff}.btn.o{background:none;border:1px solid var(--line);color:var(--ink)}.btn.s{padding:5px 12px;font-size:12px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.card h3{font-size:16px;margin-bottom:12px}
+.big{font:700 30px 'Space Grotesk';letter-spacing:-.03em}.lb{font-size:12px;color:var(--mut);font-weight:500}
+.hero{background:var(--grad);color:#fff;border-radius:24px;padding:26px;margin-bottom:16px}
+.hero h1{font-size:26px}.hero p{opacity:.9;margin:6px 0 0}
+.bar{height:8px;background:var(--alt);border-radius:100px;overflow:hidden}.bar i{display:block;height:100%;background:var(--grad);border-radius:100px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--alt);color:var(--mut);white-space:nowrap}
+.tag.em{background:rgba(14,158,104,.14);color:var(--em)}.tag.bl{background:rgba(27,63,160,.12);color:#1B3FA0}.tag.mr{background:rgba(138,21,56,.12);color:#8A1538}
+.next{border:1.5px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,var(--grad) border-box;border-radius:20px;padding:20px;margin-bottom:16px}
+.next h3{font-size:12px;letter-spacing:.12em}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 12px;margin:4px 0 12px}
+label{font-size:12px;font-weight:600;color:var(--mut)}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}th{font-size:12px;color:var(--mut)}
+.ov{overflow-x:auto}
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:50;padding:16px}.mod>div{background:var(--card);border-radius:22px;padding:24px;width:min(480px,100%);max-height:90vh;overflow:auto}
+.flow{display:flex;gap:8px;overflow-x:auto;padding:6px 0 12px;align-items:center}
+.node{min-width:130px;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card);text-align:left;font-weight:600}.node.on{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,63,160,.18)}
+.ar{color:var(--mut)}
+.login{max-width:760px;margin:0 auto;padding:48px 20px}
+.acc{text-align:left;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:20px;transition:.2s}.acc:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.08)}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:100px;z-index:99;font-weight:600}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){body{font-size:13px}aside{position:fixed;z-index:40;left:-260px;width:220px;box-shadow:0 0 40px rgba(0,0,0,.2)}aside.open{left:0}.burger{display:block;padding:5px 10px}main{padding:12px 12px 48px}.top{margin-bottom:12px}.g2,.g3,.g4{grid-template-columns:1fr}.g4.k{grid-template-columns:repeat(2,1fr)}.grid{gap:10px}.card{padding:14px;border-radius:16px}.card h3{font-size:14px;margin-bottom:8px}.big{font-size:22px}.hero{padding:16px;border-radius:18px;margin-bottom:10px}.hero h1{font-size:19px}.next{padding:14px;border-radius:16px;margin-bottom:10px}h2{font-size:18px}.row{padding:8px 0}.nv{padding:8px 12px}.btn{padding:7px 14px}.btn.s{padding:4px 10px;font-size:11px}.login{padding:24px 14px}.acc{padding:14px;border-radius:16px}.node{min-width:104px;padding:9px}input,select,textarea{padding:8px 10px;margin:3px 0 8px}.mod>div{padding:18px}.pill{padding:4px 10px;font-size:11px}.lb{font-size:11px}td,th{padding:7px 6px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const KP=[['tc','Task Completion & Quality'],['lp','Learning & Product Knowledge'],['ip','Initiative & Problem Solving'],['cc','Communication & Collaboration'],['dp','Discipline & Professionalism'],['pc','Project Contribution']];
+const DIV=['Data & Analytics','Marketing & Growth','Product & Tech','Operations'];
+const DB={
+W:{tc:25,lp:20,ip:20,cc:15,dp:10,pc:10},
+I:[
+{id:1,n:'Dimas Pratama',d:0,m:'Sari Wulandari',s:{tc:82,lp:75,ip:70,cc:80,dp:90,pc:65},self:{},lp:40},
+{id:2,n:'Aulia Rahma',d:1,m:'Bagas Santoso',s:{tc:88,lp:80,ip:85,cc:78,dp:92,pc:70},lp:62},
+{id:3,n:'Kevin Hartono',d:2,m:'Sari Wulandari',s:{tc:70,lp:68,ip:75,cc:72,dp:80,pc:60},lp:48},
+{id:4,n:'Nadia Safitri',d:3,m:'Bagas Santoso',s:{tc:91,lp:86,ip:80,cc:90,dp:95,pc:82},lp:80},
+{id:5,n:'Rizky Fadillah',d:0,m:'Sari Wulandari',s:{tc:76,lp:72,ip:66,cc:74,dp:85,pc:58},lp:35}],
+OB:[['Pengenalan perusahaan & sejarah',1],['Visi, misi & struktur organisasi',1],['Budaya kerja & etika profesional',0],['Employee handbook & kebijakan internal',0],['Digital security awareness',0]],
+P:[
+{n:'NORI',ov:'Produk baru NarasioData yang membantu klien mengubah data menjadi cerita bisnis.',au:'Tim bisnis & manajemen klien',pr:'Data tersebar dan sulit dipahami pengambil keputusan.',va:'Insight cepat, visual naratif, siap presentasi.',m:[['Pengantar NORI',1],['Fitur & alur penggunaan',0],['Demo studi kasus klien',0]],q:{q:'Masalah utama klien yang diselesaikan NORI?',o:['Data sulit dipahami pengambil keputusan','Biaya server mahal','Desain logo'],a:0}},
+{n:'Data Insight Suite',ov:'Contoh produk: paket dashboard analitik untuk monitoring kinerja klien.',au:'Analis & manajer divisi',pr:'Laporan manual memakan waktu.',va:'Dashboard otomatis dan terstandar.',m:[['Konsep KPI klien',1],['Menyusun dashboard pertama',0]],q:{q:'Manfaat utama dashboard otomatis?',o:['Mengurangi laporan manual','Menambah rapat','Mengganti tim'],a:0}}],
+SOP:[
+{n:'Data & Analytics',st:[['Terima permintaan','Brief dari klien/PM dicatat di tiket.'],['Kumpulkan data','Ambil data dari sumber resmi, cek kualitas.'],['Analisis','Olah data, buat temuan utama.'],['Review mentor','Mentor memvalidasi metode & hasil.'],['Delivery','Kirim laporan ke Product/Marketing.']],dep:'Product & Tech (spesifikasi), Marketing (konten insight)'},
+{n:'Marketing & Growth',st:[['Riset audiens','Pahami target dan masalah klien.'],['Rencana konten','Kalender dan pesan utama.'],['Produksi','Desain & copy sesuai brand.'],['Publikasi','Jadwalkan dan pantau.'],['Laporan','Ukur hasil kampanye.']],dep:'Data & Analytics (data performa)'},
+{n:'Product & Tech',st:[['Kumpulkan kebutuhan','Dari klien dan tim internal.'],['Rancang solusi','Spesifikasi dan prototipe.'],['Pengembangan','Bangun dan uji fitur.'],['QA','Uji sebelum rilis.'],['Rilis','Deploy dan dokumentasi.']],dep:'Operations (rollout), Data (kebutuhan metrik)'},
+{n:'Operations',st:[['Jadwalkan','Atur sumber daya dan timeline.'],['Eksekusi','Jalankan proses harian.'],['Monitor','Pantau SLA dan isu.'],['Eskalasi','Naikkan isu ke PIC.'],['Laporan','Rekap mingguan.']],dep:'Semua divisi'}],
+T:[
+{id:1,t:'Rangkum notulen meeting klien',c:'Operational',w:1,df:'Mudah',pr:'Tinggi',due:'2 Nov',st:'todo',out:'Dokumen notulen'},
+{id:2,t:'Riset 3 kompetitor NORI',c:'Research',w:1,df:'Sedang',pr:'Sedang',due:'5 Nov',st:'review',out:'Tabel perbandingan',sub:'Sudah dikumpulkan, tabel di Drive tim.'},
+{id:3,t:'Pelajari workflow divisi & gambar ulang',c:'Learning',w:null,df:'Mudah',pr:'Rendah',due:'Fleksibel',st:'open',out:'Diagram sederhana'},
+{id:4,t:'Analisis data penjualan sampel',c:'Research',w:null,df:'Sedang',pr:'Sedang',due:'Fleksibel',st:'open',out:'Ringkasan temuan',pic:1},
+{id:5,t:'Usulan perbaikan proses onboarding klien',c:'Cross-Division',w:null,df:'Sulit',pr:'Sedang',due:'Fleksibel',st:'open',out:'Proposal 1 halaman',pic:1},
+{id:6,t:'Kuis pengetahuan perusahaan',c:'Learning',w:3,df:'Mudah',pr:'Rendah',due:'1 Nov',st:'done',score:88,out:'Skor kuis'}],
+F:[{by:'Sari Wulandari',tx:'Notulen hari pertama rapi. Tambahkan daftar action item di akhir.',dt:'30 Okt'},{by:'Sari Wulandari',tx:'Inisiatif riset kompetitor bagus, lengkapi sumber data.',dt:'28 Okt'}],
+ID:[{t:'Ringkasan meeting otomatis untuk tim',by:'Dimas Pratama',st:'Menunggu review'}],
+H:[],
+GQ:[{q:'Apa nama perusahaan tempat program magang ini?',o:['NarasioData','Narasio Studio','DataNarasi'],a:0},{q:'KPI tidak hanya menghitung jumlah tugas.',o:['Benar','Salah'],a:0},{q:'Tugas mandiri otomatis menjadi tugas operasional.',o:['Benar','Salah'],a:1}]
+};
+try{const x=localStorage.getItem('nihub');if(x)Object.assign(DB,JSON.parse(x))}catch(e){}
+const save=()=>{try{localStorage.setItem('nihub',JSON.stringify(DB))}catch(e){}};
+let R=null,PG='dash',SD=0,SN=0,OPEN=0;
+const me=()=>DB.I[0];
+const $=s=>document.querySelector(s);
+const kpi=s=>{let t=0,w=0;KP.forEach(([k])=>{t+=s[k]*DB.W[k];w+=DB.W[k]});return w?Math.round(t/w):0};
+const bar=v=>`<div class="bar"><i style="width:${v}%"></i></div>`;
+const toast=m=>{const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)};
+const modal=h=>{const e=document.createElement('div');e.className='mod';e.id='mod';e.onclick=ev=>{if(ev.target===e)e.remove()};e.innerHTML='<div>'+h+'</div>';document.body.appendChild(e)};
+const cls=()=>{const m=$('#mod');if(m)m.remove()};
+const prog=()=>{const m=DB.P.flatMap(p=>p.m),o=DB.OB;const d=m.filter(x=>x[1]).length+o.filter(x=>x[1]).length;return Math.round(d/(m.length+o.length)*100)};
+const NAV={
+intern:[['dash','Beranda','◧'],['onb','Onboarding','✓'],['acad','Product Academy','◈'],['sop','Workflow & SOP','⇄'],['task','Task Center','☰'],['kpi','KPI Saya','▲'],['asm','Assessment','✎'],['inn','Inovasi','✦'],['fb','Feedback','✉']],
+mentor:[['dash','Ringkasan','◧'],['rev','Review & Persetujuan','✓'],['asg','Beri Tugas','☰'],['kn','Nilai KPI','▲']],
+hr:[['dash','Analitik','◧'],['ppl','Peserta','☺'],['cfg','Bobot KPI','▲'],['prd','Produk & Materi','◈']],
+exec:[['dash','Executive View','◧']]};
+const RN={intern:'Intern',mentor:'Mentor',hr:'HR Admin',exec:'C-Level'};
+const DEMO=[['intern','Dimas Pratama','Lihat dashboard pribadi, ambil tugas mandiri, ikuti assessment.'],['mentor','Sari Wulandari','Review hasil kerja, beri tugas, nilai KPI peserta bimbingan.'],['hr','HR Administrator','Kelola peserta, bobot KPI, produk dan materi.'],['exec','Direktur Narasio','Ringkasan strategis program magang.']];
+function login(r){R=r;PG='dash';render()}
+function render(){
+ if(!R){$('#root').innerHTML=`<div class="login"><div class="logo"><span class="mk">N</span><span>Narasio <span class="gt">Intern Hub</span></span></div><h1 style="font-size:clamp(24px,6vw,36px);margin:14px 0 8px">Dari <span class="gt">instruksi</span> menuju pengembangan diri yang terstruktur.</h1><p style="color:var(--mut);margin-bottom:26px">Pilih akun demo untuk mencoba setiap role. Data bersifat contoh dan tersimpan di browser Anda.</p><div class="grid g2">${DEMO.map(d=>`<button class="acc" onclick="login('${d[0]}')"><span class="tag bl">${RN[d[0]]}</span><h3 style="margin:10px 0 4px">${d[1]}</h3><span class="lb">${d[2]}</span></button>`).join('')}</div></div>`;return}
+ const nav=NAV[R].map(n=>`<button class="nv ${PG==n[0]?'on':''}" onclick="PG='${n[0]}';OPEN=0;render();$('aside').classList.remove('open');scrollTo(0,0)"><span>${n[2]}</span>${n[1]}</button>`).join('');
+ $('#root').innerHTML=`<div class="app"><aside><div class="logo"><span class="mk">N</span>Intern <span class="gt">Hub</span></div>${nav}<button class="nv" style="margin-top:20px" onclick="R=null;render()">⏏ Ganti akun</button></aside><main><div class="top"><button class="burger" onclick="$('aside').classList.toggle('open')">☰</button><span class="pill">● ${RN[R]} · demo</span><span class="pill">${R=='intern'?me().n:R=='mentor'?'Sari Wulandari':'NarasioData'}</span></div>${PAGES[R+'_'+PG]()}</main></div>`;
+}
+const stat=(l,v,s='')=>`<div class="card"><div class="lb">${l}</div><div class="big">${v}</div>${s}</div>`;
+const tagc=s=>s=='done'?'em':s=='review'?'bl':s=='todo'?'mr':'';
+const stl={todo:'Dikerjakan',review:'Menunggu review',done:'Selesai',open:'Tersedia',pic:'Menunggu PIC'};
+function nextActs(){
+ const a=[],ts=DB.T.filter(t=>t.w==1&&t.st=='todo');ts.forEach(t=>a.push(['Tugas aktif: '+t.t,'task']));
+ DB.P.forEach(p=>p.m.forEach(m=>{if(!m[1]&&a.length<4)a.push(['Pelajari: '+m[0]+' ('+p.n+')','acad'])}));
+ DB.OB.forEach(o=>{if(!o[1]&&a.length<4)a.push(['Onboarding: '+o[0],'onb'])});
+ a.push(['Ikuti Knowledge Test Level 1','asm']);
+ const mk=DB.T.find(t=>t.st=='open');if(mk)a.push(['Ambil tugas mandiri: '+mk.t,'task']);
+ return a.slice(0,4);
+}
+const PAGES={
+intern_dash(){const m=me(),k=kpi(m.s),dn=DB.T.filter(t=>t.w==1&&t.st=='done'||t.st=='done').length;
+ return `<div class="hero"><h1>Halo, ${m.n.split(' ')[0]}! 👋</h1><p>${DIV[m.d]} · Mentor ${m.m} · Periode 3 bulan (hari ke-2)</p></div>
+ <div class="next"><h3 class="gt">WHAT SHOULD I DO NEXT?</h3>${nextActs().map(a=>`<div class="row"><span>${a[0]}</span><button class="btn s" onclick="PG='${a[1]}';render()">Mulai →</button></div>`).join('')}</div>
+ <div class="grid g4 k">${stat('Learning progress',prog()+'%',bar(prog()))}${stat('Skor KPI',k)}${stat('Tugas selesai',dn+'/'+DB.T.filter(t=>t.w).length)}${stat('Review tertunda',DB.T.filter(t=>t.st=='review').length)}</div>
+ <div class="card" style="margin-top:16px"><h3>Deadline mendatang</h3>${DB.T.filter(t=>t.st=='todo'||t.st=='review').map(t=>`<div class="row"><span>${t.t}</span><span class="tag">${t.due}</span></div>`).join('')||'<span class="lb">Tidak ada.</span>'}</div>`},
+intern_onb(){return `<h2>Onboarding Journey</h2><p class="lb">Centang untuk menandai selesai.</p><div class="card" style="margin:14px 0">${bar(Math.round(DB.OB.filter(o=>o[1]).length/DB.OB.length*100))}${DB.OB.map((o,i)=>`<div class="row"><span>${o[0]}</span><button class="tag ${o[1]?'em':''}" onclick="DB.OB[${i}][1]^=1;save();render()">${o[1]?'✓ Selesai':'Tandai selesai'}</button></div>`).join('')}</div>`},
+intern_acad(){return `<h2>Product Knowledge Academy</h2><div class="grid g2" style="margin-top:14px">${DB.P.map((p,i)=>`<div class="card"><h3>${p.n}</h3><p style="margin:0 0 8px">${p.ov}</p><div class="lb">Target: ${p.au}<br>Masalah: ${p.pr}<br>Nilai: ${p.va}</div><div style="margin:12px 0">${p.m.map((m,j)=>`<div class="row"><span>${m[0]}</span><button class="tag ${m[1]?'em':''}" onclick="DB.P[${i}].m[${j}][1]^=1;save();render()">${m[1]?'✓':'Pelajari'}</button></div>`).join('')}</div><button class="btn o s" onclick="quiz(${i})">Assessment produk</button></div>`).join('')}</div>`},
+intern_sop(){const d=DB.SOP[SD];return `<h2>Division Workflow & SOP</h2><div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">${DB.SOP.map((x,i)=>`<button class="btn ${i==SD?'':'o'} s" onclick="SD=${i};SN=0;render()">${x.n}</button>`).join('')}</div><div class="card"><h3>Alur kerja ${d.n}</h3><div class="flow">${d.st.map((s,i)=>`<button class="node ${i==SN?'on':''}" onclick="SN=${i};render()"><span class="lb">Langkah ${i+1}</span><br>${s[0]}</button>${i<d.st.length-1?'<span class="ar">→</span>':''}`).join('')}</div><p><b>${d.st[SN][0]}:</b> ${d.st[SN][1]}</p><div class="lb">Ketergantungan lintas divisi: ${d.dep}</div></div>`},
+intern_task(){const mine=DB.T.filter(t=>t.w==1||t.w==3),mk=DB.T.filter(t=>t.w===null);return `<h2>Task & Assignment Center</h2><div class="card" style="margin:14px 0"><h3>Tugas saya</h3>${mine.map(t=>`<div class="row"><div><b>${t.t}</b><br><span class="lb">${t.c} · ${t.df} · Prioritas ${t.pr} · Deadline ${t.due}</span></div><span style="display:flex;gap:8px;align-items:center"><span class="tag ${tagc(t.st)}">${stl[t.st]}${t.score?' · '+t.score:''}</span>${t.st=='todo'?`<button class="btn s" onclick="subm(${t.id})">Kumpulkan</button>`:''}</span></div>`).join('')}</div><div class="card"><h3>Independent Learning Marketplace</h3><p class="lb">Tugas yang butuh akses data atau tindakan operasional perlu persetujuan PIC.</p>${mk.map(t=>`<div class="row"><div><b>${t.t}</b><br><span class="lb">${t.c} · ${t.df}${t.pic?' · perlu persetujuan PIC':''}</span></div><button class="btn o s" onclick="apply(${t.id})">Ajukan diri</button></div>`).join('')||'<span class="lb">Belum ada tugas tersedia.</span>'}</div>`},
+intern_kpi(){const m=me();return `<h2>KPI & Performance</h2><div class="grid g2" style="margin-top:14px"><div class="card"><div class="lb">Skor keseluruhan</div><div class="big gt">${kpi(m.s)}</div>${KP.map(([k,n])=>`<div style="margin-top:12px"><div class="row" style="border:0;padding:0"><span>${n}</span><b>${m.s[k]} <span class="lb">(${DB.W[k]}%)</span></b></div>${bar(m.s[k])}</div>`).join('')}</div><div class="card"><h3>Self-assessment</h3>${KP.map(([k,n])=>`<label>${n}: <b id="sv${k}">${m.self[k]||50}</b></label><input type="range" min="0" max="100" value="${m.self[k]||50}" oninput="me().self.${k}=+this.value;$('#sv${k}').textContent=this.value">`).join('')}<button class="btn g" onclick="save();toast('Self-assessment tersimpan')">Simpan</button></div></div>`},
+intern_asm(){return `<h2>Competency Assessment</h2><div class="grid g2" style="margin-top:14px"><div class="card"><span class="tag em">Level 1</span><h3 style="margin-top:8px">Knowledge Test</h3><p class="lb">3 soal pengetahuan perusahaan.</p><button class="btn g" onclick="gq()">Mulai</button></div>${['Level 2 · Practical Assignment','Level 3 · Business Case Study','Level 4 · Final Innovation Project'].map(l=>`<div class="card"><span class="tag">${l.split(' · ')[0]}</span><h3 style="margin-top:8px">${l.split(' · ')[1]}</h3><p class="lb">Dibuka mentor setelah level sebelumnya lulus. Dinilai manual dengan rubric.</p></div>`).join('')}</div><div class="card" style="margin-top:16px"><h3>Riwayat</h3>${DB.H.map(h=>`<div class="row"><span>${h[0]}</span><b>${h[1]}</b></div>`).join('')||'<span class="lb">Belum ada.</span>'}</div>`},
+intern_inn(){return `<h2>Innovation Space</h2><div class="grid g2" style="margin-top:14px"><div class="card"><h3>Ajukan ide</h3><label>Judul</label><input id="it"><label>Masalah</label><textarea id="ip" rows="2"></textarea><label>Solusi & dampak bisnis</label><textarea id="is" rows="2"></textarea><button class="btn g" onclick="idea()">Kirim ide</button></div><div class="card"><h3>Ide terkirim</h3>${DB.ID.map(i=>`<div class="row"><span><b>${i.t}</b><br><span class="lb">${i.by}</span></span><span class="tag bl">${i.st}</span></div>`).join('')}</div></div>`},
+intern_fb(){return `<h2>Mentor & Feedback</h2><div class="card" style="margin:14px 0"><h3>Riwayat feedback</h3>${DB.F.map(f=>`<div class="row"><span>${f.tx}<br><span class="lb">${f.by} · ${f.dt}</span></span></div>`).join('')}</div><button class="btn g" onclick="toast('Permintaan check-in terkirim ke mentor')">Minta check-in</button>`},
+mentor_dash(){const my=DB.I.filter(i=>i.m=='Sari Wulandari');return `<h2>Peserta bimbingan</h2><div class="grid g3" style="margin:14px 0">${my.map(i=>`<div class="card"><h3>${i.n}</h3><span class="lb">${DIV[i.d]}</span><div class="big">${kpi(i.s)}</div>${bar(i.lp)}<span class="lb">Learning ${i.lp}%</span></div>`).join('')}</div>`},
+mentor_rev(){const rv=DB.T.filter(t=>t.st=='review'),pc=DB.T.filter(t=>t.st=='pic');return `<h2>Review & Persetujuan</h2><div class="card" style="margin:14px 0"><h3>Hasil kerja menunggu validasi</h3>${rv.map(t=>`<div class="row"><span><b>${t.t}</b><br><span class="lb">${t.sub||''}</span></span><button class="btn s" onclick="review(${t.id})">Nilai</button></div>`).join('')||'<span class="lb">Tidak ada.</span>'}</div><div class="card"><h3>Pengajuan tugas (PIC)</h3>${pc.map(t=>`<div class="row"><span>${t.t}</span><button class="btn s" onclick="DB.T.find(x=>x.id==${t.id}).st='todo';DB.T.find(x=>x.id==${t.id}).w=1;save();render()">Setujui</button></div>`).join('')||'<span class="lb">Tidak ada.</span>'}</div>`},
+mentor_asg(){return `<h2>Beri Tugas</h2><div class="card" style="margin-top:14px;max-width:520px"><label>Judul tugas</label><input id="at"><label>Kategori</label><select id="ac">${['Operational','Learning','Research','Cross-Division','Innovation'].map(c=>`<option>${c}</option>`).join('')}</select><label>Tingkat kesulitan</label><select id="ad"><option>Mudah</option><option>Sedang</option><option>Sulit</option></select><label>Deadline</label><input id="au" placeholder="mis. 10 Nov"><button class="btn g" onclick="assign()">Tetapkan ke Dimas</button></div>`},
+mentor_kn(){const my=DB.I.filter(i=>i.m=='Sari Wulandari');return `<h2>Nilai KPI</h2><div class="grid g2" style="margin-top:14px">${my.map(i=>`<div class="card"><h3>${i.n} <span class="gt">${kpi(i.s)}</span></h3>${KP.map(([k,n])=>`<label>${n}: <b id="k${i.id}${k}">${i.s[k]}</b></label><input type="range" min="0" max="100" value="${i.s[k]}" oninput="DB.I[${DB.I.indexOf(i)}].s.${k}=+this.value;$('#k${i.id}${k}').textContent=this.value">`).join('')}<button class="btn g s" onclick="save();render();toast('Penilaian tersimpan')">Simpan</button></div>`).join('')}</div>`},
+hr_dash(){const a=DB.I.reduce((s,i)=>s+kpi(i.s),0)/DB.I.length;return `<h2>HR Analytics</h2><div class="grid g4 k" style="margin:14px 0">${stat('Peserta aktif',DB.I.length)}${stat('Rata-rata KPI',Math.round(a))}${stat('Rata-rata learning',Math.round(DB.I.reduce((s,i)=>s+i.lp,0)/DB.I.length)+'%')}${stat('Mentor',2)}</div><div class="grid g2"><div class="card"><h3>Peserta per divisi</h3>${DIV.map((d,i)=>{const n=DB.I.filter(x=>x.d==i).length;return `<div class="row"><span>${d}</span><b>${n}</b></div>${bar(n/DB.I.length*100)}`}).join('')}</div><div class="card"><h3>Beban mentor</h3>${['Sari Wulandari','Bagas Santoso'].map(m=>{const n=DB.I.filter(x=>x.m==m).length;return `<div class="row"><span>${m}</span><b>${n} peserta</b></div>${bar(n/5*100)}`}).join('')}</div></div>`},
+hr_ppl(){return `<h2>Daftar Peserta</h2><div class="card ov" style="margin-top:14px"><table><tr><th>Nama</th><th>Divisi</th><th>Mentor</th><th>Learning</th><th>KPI</th></tr>${DB.I.map(i=>`<tr><td><b>${i.n}</b></td><td>${DIV[i.d]}</td><td>${i.m}</td><td>${i.lp}%</td><td><span class="tag em">${kpi(i.s)}</span></td></tr>`).join('')}</table></div>`},
+hr_cfg(){const t=Object.values(DB.W).reduce((a,b)=>a+b,0);return `<h2>Konfigurasi Bobot KPI</h2><div class="card" style="margin-top:14px;max-width:520px">${KP.map(([k,n])=>`<label>${n} (%)</label><input type="number" id="w${k}" value="${DB.W[k]}" min="0" max="100">`).join('')}<button class="btn g" onclick="sw()">Simpan bobot</button><p class="lb">Total saat ini: ${t}%. Disarankan 100%.</p></div>`},
+hr_prd(){return `<h2>Produk & Materi</h2><div class="grid g2" style="margin-top:14px"><div class="card"><h3>Tambah produk</h3><label>Nama produk</label><input id="pn"><label>Ringkasan</label><textarea id="po" rows="2"></textarea><label>Judul materi pertama</label><input id="pm"><button class="btn g" onclick="addp()">Tambah</button></div><div class="card"><h3>Produk terdaftar</h3>${DB.P.map(p=>`<div class="row"><span>${p.n}</span><span class="tag">${p.m.length} materi</span></div>`).join('')}</div></div>`},
+exec_dash(){const a=Math.round(DB.I.reduce((s,i)=>s+kpi(i.s),0)/5),top=[...DB.I].sort((x,y)=>kpi(y.s)-kpi(x.s)).slice(0,3);return `<div class="hero"><h1>Ringkasan Program Magang</h1><p>Gambaran strategis performa dan potensi talenta.</p></div><div class="grid g4 k">${stat('Peserta aktif',DB.I.length)}${stat('KPI rata-rata',a)}${stat('Completion rate','68%')}${stat('Kontribusi proyek',DB.ID.length+' ide')}</div><div class="grid g2" style="margin-top:16px"><div class="card"><h3>Distribusi divisi</h3>${DIV.map((d,i)=>`<div class="row"><span>${d}</span><b>${DB.I.filter(x=>x.d==i).length}</b></div>`).join('')}</div><div class="card"><h3>Talent potential</h3>${top.map(i=>`<div class="row"><span>${i.n}<br><span class="lb">${DIV[i.d]}</span></span><span class="tag em">${kpi(i.s)}</span></div>`).join('')}</div></div>`}
+};
+function quiz(i){const q=DB.P[i].q;modal(`<h3>${DB.P[i].n}</h3><p>${q.q}</p>${q.o.map((o,j)=>`<button class="btn o" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="cls();toast('${j==q.a?'Benar! ✓':'Belum tepat, pelajari lagi'}')">${o}</button>`).join('')}`)}
+let GA=[];
+function gq(){GA=[];gstep(0)}
+function gstep(i){if(i>=DB.GQ.length){const s=Math.round(GA.filter(x=>x).length/DB.GQ.length*100);DB.H.unshift(['Knowledge Test L1',s]);save();cls();toast('Skor: '+s);render();return}const q=DB.GQ[i];cls();modal(`<span class="lb">Soal ${i+1}/${DB.GQ.length}</span><p><b>${q.q}</b></p>${q.o.map((o,j)=>`<button class="btn o" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="GA.push(${j==q.a});gstep(${i+1})">${o}</button>`).join('')}`)}
+function subm(id){modal(`<h3>Kumpulkan tugas</h3><label>Catatan / tautan hasil</label><textarea id="sb" rows="3"></textarea><button class="btn g" onclick="const t=DB.T.find(x=>x.id==${id});t.st='review';t.sub=$('#sb').value;save();cls();render();toast('Terkirim ke mentor')">Kirim</button>`)}
+function apply(id){const t=DB.T.find(x=>x.id==id);if(t.pic){t.st='pic';toast('Diajukan, menunggu persetujuan PIC')}else{t.st='todo';t.w=1;toast('Tugas diambil')}save();render()}
+function review(id){modal(`<h3>Nilai hasil kerja</h3><label>Skor (0-100)</label><input id="rs" type="number" value="85"><label>Feedback</label><textarea id="rf" rows="3"></textarea><button class="btn g" onclick="const t=DB.T.find(x=>x.id==${id});t.st='done';t.score=+$('#rs').value;if($('#rf').value)DB.F.unshift({by:'Sari Wulandari',tx:$('#rf').value,dt:'Hari ini'});save();cls();render();toast('Tervalidasi')">Setujui</button>`)}
+function assign(){const t=$('#at').value.trim();if(!t)return toast('Isi judul tugas');DB.T.push({id:Date.now(),t,c:$('#ac').value,w:1,df:$('#ad').value,pr:'Sedang',due:$('#au').value||'-',st:'todo',out:'Sesuai brief'});save();toast('Tugas ditetapkan');$('#at').value=''}
+function sw(){KP.forEach(([k])=>DB.W[k]=+$('#w'+k).value||0);save();render();toast('Bobot tersimpan')}
+function addp(){const n=$('#pn').value.trim();if(!n)return toast('Isi nama produk');DB.P.push({n,ov:$('#po').value,au:'-',pr:'-',va:'-',m:[[$('#pm').value||'Pengantar',0]],q:{q:'Apa tujuan produk '+n+'?',o:['Sesuai ringkasan','Tidak tahu'],a:0}});save();render();toast('Produk ditambahkan')}
+function idea(){const t=$('#it').value.trim();if(!t)return toast('Isi judul ide');DB.ID.push({t,by:me().n,st:'Menunggu review'});save();render();toast('Ide terkirim')}
+render();
+</script>
+</body>
+</html>
