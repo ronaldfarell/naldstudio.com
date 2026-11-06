@@ -161,7 +161,7 @@ const SITUASI={
  h7:"Follow-up 7 hari, belum ada kabar",
  reaktivasi:"Menyapa kembali klien lama"
 };
-let clients=[], dbCol=null, dbOn=false, sampleFn=null;
+let clients=[], dbCol=null, dbOn=false, sampleFn=null, DL=null, MCP=null;
 let rows=[{n:"Training Business Analytics (Online, 2 hari)",j:12,h:1225000,p:20},{n:"Sertifikasi IABAC",j:0,h:6275000,p:10}];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -623,18 +623,57 @@ function fieldsHTML(){
 V.surat=()=>{
   const L=letter();
   if(!vals().kota_tanggal&&bodyOf().includes("{{kota_tanggal}}"))vals().kota_tanggal=KT();
-  return `<div class="head"><div><h1>Surat</h1><p>Pilih jenis surat, isi bagian yang berubah, dan surat lengkapnya langsung tersusun di sebelah kanan. Bagian kuning belum terisi.</p></div></div>
+  return `<div class="head"><div><h1>Surat</h1><p>Pilih jenis surat, ceritakan kebutuhannya singkat, lalu Claude mengisi semua bagian. Periksa pratinjau, lalu unduh PDF atau buat Google Docs. Bagian kuning belum terisi.</p></div></div>
   <div class="tabs" id="s_tabs">${LETTERS.map(l=>`<button data-t="${l.id}" class="${l.id===SV.tid?"primary":""}">${l.n}</button>`).join("")}</div>
   <div class="sgrid">
    <div class="panel"><h2>Isi bagian surat</h2>
+    <label>Ceritakan singkat kebutuhan surat ini<textarea id="s_brief" style="min-height:72px" placeholder="Contoh: audiensi ke Dekan Fakultas Teknik UNIM, Bapak Dr. Andi, Jumat 6 November 09.00 online, menawarkan pelatihan IABAC"></textarea></label>
+    <div class="actions" style="margin:8px 0 14px"><button class="primary" id="s_auto">Isi otomatis semua bagian</button><span class="muted" id="s_autost"></span></div>
     <label>Ambil data dari klien di pipeline<select id="s_cl"><option value="">Isi manual</option>${clients.map(c=>`<option value="${c.id}" ${c.id===SV.cl?"selected":""}>${esc(c.nama)}</option>`).join("")}</select></label>
     <div id="s_form" class="form">${fieldsHTML()}</div></div>
-   <div class="panel"><div class="head"><h2>Pratinjau ${esc(L.n)}</h2><div class="actions"><button class="primary" id="s_cp">Salin surat</button><a href="${L.url}" target="_blank" rel="noopener">Buka template Docs</a></div></div>
+   <div class="panel"><div class="head"><h2>Pratinjau ${esc(L.n)}</h2><div class="actions"><button class="primary" id="s_pdf">Unduh PDF</button><button class="primary" id="s_gdoc">Buat Google Docs</button><button id="s_cp">Salin</button></div></div>
+    <p id="s_exp" class="muted" style="margin:0 0 8px"></p>
     ${L.note?`<p><span class="pill warn">${esc(L.note)}</span></p>`:""}
     <p class="muted" id="s_prog"></p><div class="letter" id="s_pv"></div>
     ${L.body?"":`<div class="actions" style="margin-top:10px"><button class="ghost" id="s_edit">Ubah template</button></div>`}</div>
   </div>`;
 };
+const docName=()=>{const v=vals();return (letter().n+" - "+(v.institusi||v.nama_legal||v.nama_klien||"Klien")).replace(/[\\/:*?"<>|]+/g," ").trim()};
+function expNote(){const m=keysOf(bodyOf()).filter(k=>!(vals()[k]||"").trim());return m.length?`${m.length} bagian belum terisi dan tertulis dalam [kurung] di file.`:""}
+const setExp=h=>{const e=$("#s_exp");if(e)e.innerHTML=h};
+async function exportPDF(){
+  const t=fillText(bodyOf(),false);if(!bodyOf())return;
+  const b=$("#s_pdf");b.disabled=true;setExp("Menyiapkan PDF...");
+  try{
+    if(!window.jspdf)await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});
+    const doc=new window.jspdf.jsPDF({unit:"mm",format:"a4"});doc.setFont("times","normal");doc.setFontSize(11.5);
+    const M=25,TW=210-2*M,LH=5.6;let y=M+4;
+    t.split("\n").forEach(line=>{if(!line.trim()){y+=LH*.8;return}
+      doc.splitTextToSize(line,TW).forEach(p=>{if(y>297-M){doc.addPage();y=M+4}doc.text(p,M,y);y+=LH})});
+    if(!DL){doc.save(docName()+".pdf");setExp("PDF dibuat.");return}
+    await DL.save({filename:docName()+".pdf",data:doc.output("blob")});
+    setExp("PDF siap. "+expNote());
+  }catch(e){setExp(e&&e.code==="declined"?"Unduhan dibatalkan.":"PDF gagal dibuat. Coba lagi.")}
+  finally{b.disabled=false}
+}
+async function exportGDoc(){
+  if(!bodyOf())return;
+  if(!MCP){setExp("Google Docs hanya bisa dibuat dari halaman Claude yang terhubung ke Google Drive.");return}
+  const t=fillText(bodyOf(),false),b=$("#s_gdoc");b.disabled=true;setExp("Membuat Google Docs di Drive-mu...");
+  const html='<html><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt;line-height:1.5}p{margin:0 0 6pt}</style></head><body>'+
+    t.split("\n").map(l=>l.trim()?"<p>"+esc(l).replace(/^( +)/,m=>"&nbsp;".repeat(m.length))+"</p>":"<p>&nbsp;</p>").join("")+"</body></html>";
+  const call=extra=>MCP.callTool("Google Drive","create_file",{title:docName(),textContent:html,contentMimeType:"text/html",...extra});
+  try{
+    let r;
+    try{r=await call({parentId:"1gvTNUYaUrOKTUwWG7FdGGOCTEJluR22v"})}catch(e){if(e&&e.code==="tool_error")r=await call({});else throw e}
+    const p=r.payload&&typeof r.payload==="object"?r.payload:{};
+    const url=p.webViewLink||p.url||p.alternateLink||(p.id?`https://docs.google.com/document/d/${p.id}/edit`:"");
+    setExp(url?`Google Docs jadi: <a href="${esc(url)}" target="_blank" rel="noopener">buka dokumen</a>. ${esc(expNote())}`:"Google Docs dibuat di Drive-mu (folder BD Toolkit). "+esc(expNote()));
+  }catch(e){
+    const c=e&&e.code;
+    setExp(c==="approval_required"||c==="not_in_manifest"?"Izinkan akses Google Drive untuk halaman ini, lalu klik lagi.":c==="server_not_connected"||c==="needs_reauth"?"Sambungkan atau masuk ulang Google Drive di Pengaturan > Konektor Claude.":"Gagal membuat Google Docs. Cek Drive-mu sebelum mencoba lagi, dokumen mungkin sudah terbuat.");
+  }finally{b.disabled=false}
+}
 function suratBind(){
   const rerender=()=>{$("#s_form").innerHTML=fieldsHTML();bindForm();updatePV()};
   document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{SV.tid=b.dataset.t;SV.edit=false;render()});
@@ -645,6 +684,31 @@ function suratBind(){
     rerender();
   };
   $("#s_cp").onclick=()=>copy(fillText(bodyOf(),false));
+  $("#s_pdf").onclick=exportPDF;
+  $("#s_gdoc").onclick=exportGDoc;
+  $("#s_auto").onclick=async()=>{
+    const st=$("#s_autost"),btn=$("#s_auto"),b=$("#s_brief").value.trim();
+    if(!sampleFn){st.textContent="Fitur Claude hanya jalan di halaman Claude.";return}
+    if(!b){st.textContent="Tulis ringkasan singkat dulu.";return}
+    const ks=keysOf(bodyOf()),v=vals();
+    const spec=ks.map(k=>`- ${k}: ${meta(k).l}${meta(k).h?` (contoh format: ${meta(k).h})`:""}`).join("\n");
+    const pr=`Kamu membantu staf Business Development PT Berpikir Revolusioner Indonesia (Narasio Data) mengisi template surat resmi "${letter().n}".
+Isi bagian-bagian berikut berdasarkan cerita singkat ini:
+"""${b}"""
+Tanggal hari ini: ${today()}.
+Bagian yang harus diisi:
+${spec}
+Aturan: bahasa Indonesia formal; pakai hanya fakta dari cerita atau fakta umum yang pasti benar; jangan mengarang nomor surat, nama orang, angka, atau tanggal yang tidak disebut (isi string kosong ""); untuk bagian panjang (profil, ruang lingkup, modul) tulis isi lengkap yang siap pakai; jangan memakai markdown.
+Keluarkan HANYA satu objek JSON dengan kunci persis seperti di atas.`;
+    btn.disabled=true;st.textContent="Claude sedang menyusun surat...";
+    try{
+      const r=await sampleFn(pr,{cache:false});
+      const m=(r.text||"").match(/\{[\s\S]*\}/);const o=JSON.parse(m[0]);
+      let n=0;ks.forEach(k=>{const x=o[k];if(typeof x==="string"&&x.trim()&&!(k==="kota_tanggal"&&v[k])){v[k]=x.trim();n++}});
+      rerender();st.textContent=`${n} bagian terisi. Periksa, lalu unduh.`;
+    }catch(e){st.textContent="Gagal menyusun otomatis, coba lagi atau isi manual."}
+    finally{btn.disabled=false}
+  };
   const ed=$("#s_edit");if(ed)ed.onclick=()=>{SV.edit=true;rerender()};
   function bindForm(){
     const f=$("#s_form");
@@ -740,6 +804,8 @@ window.addEventListener("hashchange",render);
 (async()=>{
   clients=lsGet();render();
   try{sampleFn=await claude.use("sample")}catch(e){}
+  try{DL=await claude.use("downloads")}catch(e){}
+  try{MCP=await claude.use("mcp")}catch(e){}
   try{
     const db=await claude.use("db");
     if(db){
