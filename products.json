@@ -1,0 +1,12 @@
+{
+  "currency": "IDR",
+  "shipping_fee": 0,
+  "products": [
+    { "id": 1, "name": "Standard Theme Diorama", "cat": "standard", "catLabel": "Standard Theme", "emoji": "🏠", "badge": "popular", "badgeLabel": "Popular", "price": 250000, "stock": true,
+      "desc": "Premium handmade pixel art diorama in acrylic display case. Choose any theme — game scene, cozy interior, cityscape, and more. Fully customizable characters and layout." },
+    { "id": 2, "name": "Marriage Event Diorama", "cat": "marriage", "catLabel": "Marriage Event", "emoji": "💍", "badge": "hot", "badgeLabel": "Best Seller", "price": 375000, "stock": true,
+      "desc": "A beautifully crafted wedding diorama featuring your names, wedding date, and personal theme. The perfect keepsake for your special day — handmade with love." },
+    { "id": 3, "name": "Custom Order", "cat": "custom", "catLabel": "Custom Order", "emoji": "⭐", "badge": "new", "badgeLabel": "Custom", "price": 0, "priceLabel": "Harga sesuai kesepakatan", "stock": true,
+      "desc": "Have something unique in mind? We'll bring any concept to life: your favorite game, anime scene, personal memory, or brand mascot. Fully bespoke, one-of-a-kind." }
+  ]
+}
