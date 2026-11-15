@@ -1,0 +1,9 @@
+worker.js
+wrangler.jsonc
+.assetsignore
+functions
+supabase.sql
+SETUP.md
+README.md
+CNAME
+node_modules
