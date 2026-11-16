@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Content Hub — Strategi & Jadwal Konten</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#FFFFFF;--gr:#F3F4F6;--pn:#fff;--bd:#E5E7EB;--tx:#1F2937;--mu:#4B5563;--nv:#1E3A8A;--bl:#1D4ED8;--lb:#EAF1FF;--sb:#fff;
+--p0b:#1D4ED8;--p0t:#fff;--p1b:#0B2A5B;--p1t:#fff;--p2b:#DCE8FF;--p2t:#0B2A5B;--p3b:#E5E7EB;--p3t:#1F2937;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;-webkit-font-smoothing:antialiased}
+.app{display:flex;min-height:100vh}
+.sb{width:230px;background:var(--sb);border-right:1px solid var(--bd);color:var(--tx);padding:24px 14px;display:flex;flex-direction:column;gap:4px;flex-shrink:0;position:sticky;top:0;height:100vh}
+.lg{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin:0 8px 24px;color:var(--nv)}
+.mk{width:36px;height:36px;border-radius:8px;background:var(--bl);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.nv{display:flex;align-items:center;gap:12px;padding:0 12px;min-height:44px;border-radius:8px;font:500 14px Inter,Arial;color:var(--mu);background:none;border:0;cursor:pointer;text-align:left;width:100%}
+.nv:hover{background:var(--gr)}
+.nv.on{background:var(--lb);color:var(--bl);font-weight:700}
+.th{margin-top:auto}
+.mn{flex:1;padding:28px 36px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:25px;font-weight:800;color:var(--nv)}
+h2{margin:0;font-size:16px;font-weight:700;color:var(--nv)}
+.sub{font-size:13px;color:var(--mu);margin-top:4px}
+.bt{border:1px solid var(--bl);background:var(--pn);color:var(--nv);font:600 13px Inter,Arial;padding:0 16px;min-height:44px;border-radius:8px;cursor:pointer}
+.bt.p{background:var(--bl);color:#fff}
+.bt.d{border-color:#B91C1C;color:#B91C1C}
+.bt.s{min-height:36px;padding:0 12px}
+.pn{background:var(--pn);border:1px solid var(--bd);border-radius:12px;padding:20px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.k{background:var(--pn);border:1px solid var(--bd);border-top:4px solid var(--bl);border-radius:12px;padding:16px}
+.k b{display:block;font-size:30px;font-weight:800;color:var(--nv)}
+.k span{font-size:13px;font-weight:600;color:var(--mu)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.bar{height:10px;border-radius:99px;background:var(--p3b);overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;background:var(--bl)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:8px}
+.dy{background:var(--gr);border-radius:8px;padding:8px;min-height:170px;display:flex;flex-direction:column;gap:6px}
+.dy.td{outline:2px solid var(--bl)}
+.dh{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:var(--mu)}
+.ad{width:32px;height:32px;border-radius:6px;border:1px dashed var(--mu);background:none;color:var(--mu);cursor:pointer;font-size:16px}
+.ch{display:block;width:100%;text-align:left;font:600 12px/1.4 Inter,Arial;padding:8px;border-radius:6px;border:0;cursor:pointer}
+.p0{background:var(--p0b);color:var(--p0t)}.p1{background:var(--p1b);color:var(--p1t)}.p2{background:var(--p2b);color:var(--p2t);outline:1px solid var(--bl)}.p3{background:var(--p3b);color:var(--p3t)}
+.sc{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:680px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;color:var(--mu);padding:10px 8px;border-bottom:2px solid var(--nv)}
+td{padding:11px 8px;border-bottom:1px solid var(--bd);vertical-align:top}
+tr.r{cursor:pointer}tr.r:hover td{background:var(--gr)}
+.mg{display:grid;grid-template-columns:repeat(7,minmax(112px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:10px;overflow:hidden;min-width:820px}
+.mh{background:var(--gr);padding:10px;font-size:12px;font-weight:700;color:var(--mu);text-align:center}
+.mc{background:var(--pn);min-height:128px;padding:8px;display:flex;flex-direction:column;gap:4px}
+.mc.ot{background:var(--gr)}
+.mc.td .dh span{background:var(--bl);color:#fff;border-radius:99px;padding:2px 9px}
+.mc .ch{font-size:11px;padding:5px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bd{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px}
+.fl{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--mu)}
+input,select,textarea{font:400 14px Inter,Arial;padding:0 10px;min-height:44px;border:1px solid var(--bd);border-radius:8px;background:var(--pn);color:var(--tx)}
+textarea{padding:10px;min-height:64px;width:100%;resize:vertical}
+input[type=range]{padding:0;min-height:32px}
+dialog{border:1px solid var(--bd);border-radius:12px;background:var(--pn);color:var(--tx);padding:24px;width:min(480px,94vw)}
+dialog::backdrop{background:rgba(7,20,46,.55)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.fg .w{grid-column:1/-1}
+.li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
+.li p{margin:4px 0 0;color:var(--tx)}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--nv);color:var(--pn);padding:12px 20px;border-radius:8px;font-weight:600;display:none;z-index:9}
+.em{color:var(--mu);padding:20px 0;text-align:center}
+html{-webkit-text-size-adjust:100%}.bt,.nv,input,select,textarea{font-family:inherit!important}h1{display:flex;align-items:center;gap:10px}h1 svg{color:var(--bl);flex-shrink:0}.bt{display:inline-flex;align-items:center;justify-content:center;gap:6px}.ib{padding:0;width:36px}.k span{display:flex;align-items:center;gap:6px}.mc{cursor:pointer}.mc.sl{outline:2px solid var(--bl);outline-offset:-2px}
+@media(max-width:820px){body{font-size:13px}.app{display:block}.sb{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;height:auto;z-index:5;flex-direction:row;justify-content:space-around;gap:0;padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--bd)}.lg{display:none}.nv{flex:1;flex-direction:column;gap:2px;justify-content:center;min-height:50px;padding:4px 0;font-size:10px;font-weight:600;text-align:center;width:auto}.mn{padding:14px 14px 84px;gap:14px}h1{font-size:20px}h1 svg{width:20px;height:20px}h2{font-size:15px}.sub{font-size:12px}.hd>.fl{width:100%}.hd>.fl .bt{flex:1;padding:0 8px}.hd>.fl .ib{flex:0 0 36px}.bt{min-height:40px;font-size:12.5px;padding:0 12px}.bt.s{min-height:34px}.pn{padding:14px;border-radius:10px}.g4{grid-template-columns:1fr 1fr;gap:10px}.k{padding:12px}.k b{font-size:24px}.g2{grid-template-columns:1fr;gap:12px}.cal{grid-template-columns:1fr!important;min-width:0!important}.dy{min-height:0}.mg{min-width:0;grid-template-columns:repeat(7,1fr)}.mh{padding:6px 0;font-size:11px}.mc{min-height:56px;padding:4px 2px;align-items:center;gap:3px}.mc .ad{display:none}.mc .dh{justify-content:center;font-size:12px}.mc .ch{width:70%;height:5px;min-height:0;padding:0;font-size:0;border-radius:99px}input,select,textarea{font-size:16px;min-height:40px}textarea{min-height:56px}table{min-width:0!important}thead{display:none}table,tbody,tr,td{display:block}tr{border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:8px}tr.r{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}tr.r td:nth-child(1),tr.r td:nth-child(5){grid-column:1/-1}tr.r td:nth-child(5){order:5}tr.r td:nth-child(6){order:4}td{padding:0;border:0}td[data-l]::before{content:attr(data-l);display:block;font-size:10px;font-weight:600;color:var(--mu);margin-bottom:2px}dialog{margin:auto 0 0;width:100%;max-width:100%;border-radius:16px 16px 0 0;max-height:90vh;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px))}.fg{gap:10px}#toast{bottom:calc(76px + env(safe-area-inset-bottom,0px));max-width:90%}.li{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="sb" aria-label="Navigasi utama"><div class="lg"><div class="mk">C</div>Content Hub</div><div id="nav" style="display:contents"></div></nav>
+<main class="mn" id="view"></main>
+</div>
+<dialog id="dlg"><form id="fm"><h2 id="dt">Konten Baru</h2><input type="hidden" id="f_id">
+<div class="fg"><label class="w">Judul<input id="f_title" required></label>
+<label>Platform<select id="f_plat"></select></label><label>Pilar<select id="f_pil"></select></label>
+<label>Format<input id="f_fmt" placeholder="Reels 30 detik"></label><label>Tanggal tayang<input type="date" id="f_date" required></label>
+<label>Status<select id="f_st"></select></label><label>Hook<input id="f_hook"></label></div>
+<div class="fl" style="justify-content:flex-end"><button type="button" class="bt d" id="f_del" data-a="del">Hapus</button><button type="button" class="bt" data-a="close">Batal</button><button class="bt p">Simpan</button></div></form></dialog>
+<div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const mon=d=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+const fmt=s=>new Date(s+'T00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+const PIL=['Edukasi','Autoritas','UGC','Promosi'],ST=['Draft','Review','Siap tayang','Tayang'],PL=['Instagram','TikTok','LinkedIn','YouTube'],HT=['Pertanyaan','Angka','Kontra','Cerita'],US=['Brief','Produksi','Review','Selesai'];
+const KEY='content-hub-v1';
+function seed(){const m=mon(new Date()),d=n=>iso(addD(m,n));let i=0;const c=(t,pl,pi,f,n,s,h)=>({id:'c'+(++i),title:t,plat:pl,pil:pi,fmt:f,date:d(n),st:s,hook:h});
+return{items:[c('3 Kesalahan Konten','Instagram','Edukasi','Reels 30 detik',0,'Siap tayang','Kenapa kontenmu sepi?'),c('Artikel Insight Industri','LinkedIn','Autoritas','Artikel',1,'Review','Data yang jarang dibahas'),c('Testimoni Klien','TikTok','UGC','Video UGC 45 detik',2,'Review','Awalnya saya ragu'),c('Panduan Langkah','Instagram','Edukasi','Carousel 8 slide',3,'Draft','Simpan, ini jarang dibahas'),c('Studi Kasus Klien','LinkedIn','Autoritas','Artikel',4,'Draft','Dari awal sampai hasil'),c('Penawaran Akhir Bulan','Instagram','Promosi','Story',5,'Draft','Hanya sampai Minggu')],
+hooks:[{id:'h1',type:'Pertanyaan',text:'Kenapa kontenmu sepi padahal rajin posting?'},{id:'h2',type:'Angka',text:'3 kesalahan yang bikin audiens kabur'},{id:'h3',type:'Kontra',text:'Posting tiap hari bukan solusinya'},{id:'h4',type:'Cerita',text:'Awalnya saya ragu, sampai satu hal ini terjadi'}],
+ugc:[{id:'u1',creator:'Kreator A',brief:'Video testimoni 30–45 detik, sebut manfaat utama di 5 detik pertama',st:'Produksi'},{id:'u2',creator:'Kreator B',brief:'Unboxing dan kesan pertama, tanpa klaim berlebihan',st:'Brief'}],
+strat:{goal:'Membangun kepercayaan dan menghasilkan prospek berkualitas lewat konten yang konsisten.',t:[40,30,20,10],plats:['Instagram','TikTok','LinkedIn']},
+script:{title:'3 Kesalahan Konten',hook:'Kenapa kontenmu sepi padahal rajin posting?',scenes:[{t:'0–3 dtk',v:'Close-up wajah, teks tebal di layar',vo:'Kenapa kontenmu sepi padahal rajin posting?'},{t:'3–12 dtk',v:'Cuplikan analitik dengan sorotan',vo:'Uraikan masalah utama audiens'},{t:'12–30 dtk',v:'Tiga poin muncul berurutan',vo:'Jelaskan tiga langkah solusi'},{t:'30–40 dtk',v:'Potongan testimoni UGC',vo:'Kutipan klien'},{t:'40–45 dtk',v:'Logo dan tombol ajakan',vo:'Simpan dan hubungi kami hari ini.'}]}}}
+let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S||!S.items)S=seed();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const U={v:'dash',w:0,m:0,mode:'m',q:'',f:'',sel:iso(new Date())};
+const uid=p=>p+Date.now().toString(36)+Math.floor(Math.random()*99);
+const toast=t=>{const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2200)};
+const IC={dash:'<rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>',strat:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',jad:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',mat:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h7"/>',hook:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',scr:'<path d="M4 20h4L19 9l-4-4L4 16z"/>'};
+Object.assign(IC,{plus:'<path d="M12 5v14M5 12h14"/>',l:'<path d="M15 6l-6 6 6 6"/>',r:'<path d="M9 6l6 6-6 6"/>',copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/>',layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',ok:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',users:'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 4a4 4 0 010 8"/>'});
+const I=(k,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0">${IC[k]}</svg>`;
+const NAV=[['dash','Dashboard'],['strat','Strategi'],['jad','Jadwal'],['mat','Materi'],['hook','Hook/UGC'],['scr','Script']];
+const bdg=s=>`<span class="bd p${s=='Siap tayang'||s=='Tayang'?1:s=='Review'?2:3}">${esc(s)}</span>`;
+const chip=i=>`<button class="ch p${PIL.indexOf(i.pil)}" data-a="edit" data-id="${i.id}" title="${esc(i.title)}">${esc(i.plat)} · ${esc(i.title)}</button>`;
+function head(t,s,b){return`<div class="hd"><div><h1>${I(U.v,22)}${t}</h1><div class="sub">${s}</div></div><div class="fl">${b||''}</div></div>`}
+const addBtn='<button class="bt p" data-a="add">'+I('plus',16)+'Konten Baru</button>';
+function vDash(){const n=S.items.length,m=mon(new Date()),a=iso(m),b=iso(addD(m,6)),today=iso(new Date());
+const up=S.items.filter(i=>i.date>=today).sort((x,y)=>x.date<y.date?-1:1).slice(0,5);
+const pc=PIL.map((p,k)=>{const c=S.items.filter(i=>i.pil==p).length,pct=n?Math.round(c*100/n):0;return`<div><b>${p}</b> <span class="sub">${pct}% aktual · target ${S.strat.t[k]}%</span><div class="bar"><i style="width:${pct}%"></i></div></div>`}).join('');
+return head('Dashboard','Ringkasan strategi dan jadwal konten',addBtn)+`<div class="g4"><div class="k"><span>${I('layers',16)}Total konten</span><b>${n}</b></div><div class="k"><span>${I('jad',16)}Jadwal minggu ini</span><b>${S.items.filter(i=>i.date>=a&&i.date<=b).length}</b></div><div class="k"><span>${I('ok',16)}Siap tayang</span><b>${S.items.filter(i=>i.st=='Siap tayang').length}</b></div><div class="k"><span>${I('users',16)}UGC berjalan</span><b>${S.ugc.filter(u=>u.st!='Selesai').length}</b></div></div>
+<div class="g2"><div class="pn"><h2>Komposisi pilar</h2><div style="margin-top:14px">${pc||'<div class="em">Belum ada konten</div>'}</div></div><div class="pn"><h2>Tayang berikutnya</h2>${up.map(i=>`<div class="li"><div><b>${esc(i.title)}</b><p class="sub">${fmt(i.date)} · ${esc(i.plat)} · ${esc(i.pil)}</p></div>${bdg(i.st)}</div>`).join('')||'<div class="em">Tidak ada jadwal mendatang</div>'}</div></div>`}
+function vStrat(){const t=S.strat.t,sum=t.reduce((a,b)=>a+b,0);
+return head('Strategi','Atur sasaran, target pilar, dan platform')+`<div class="pn"><h2>Sasaran utama</h2><div style="margin-top:12px"><label>Tuliskan sasaran strategi<textarea data-k="goal">${esc(S.strat.goal)}</textarea></label></div></div>
+<div class="g2"><div class="pn"><h2>Target komposisi pilar</h2><div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">${PIL.map((p,k)=>`<label>${p}: <span id="pv${k}">${t[k]}</span>%<input type="range" min="0" max="100" value="${t[k]}" data-p="${k}"></label>`).join('')}</div><p id="ps" class="sub" style="font-weight:700">Total ${sum}% ${sum==100?'· sesuai':'· idealnya 100%'}</p></div>
+<div class="pn"><h2>Platform aktif</h2><div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">${PL.map(p=>`<label style="flex-direction:row;align-items:center;gap:10px;font-size:14px;color:var(--tx)"><input type="checkbox" style="min-height:20px;width:20px" data-pl="${p}" ${S.strat.plats.includes(p)?'checked':''}>${p}</label>`).join('')}</div></div></div>`}
+function vJad(){return U.mode=='w'?vJadW():vJadM()}
+function MT(){return `<button class="bt s${U.mode=='w'?'':' p'}" data-a="mode" data-m="m">Bulan</button><button class="bt s${U.mode=='w'?' p':''}" data-a="mode" data-m="w">Minggu</button>`}
+function vJadM(){const b=new Date();b.setDate(1);b.setMonth(b.getMonth()+U.m);const mo=b.getMonth(),today=iso(new Date());let days=[...Array(42)].map((_,k)=>addD(mon(b),k));if(days[35].getMonth()!=mo)days=days.slice(0,35);
+const D=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+return head('Jadwal Konten',b.toLocaleDateString('id-ID',{month:'long',year:'numeric'}),MT()+'<button class="bt s ib" data-a="pm" aria-label="Bulan sebelumnya">'+I('l')+'</button><button class="bt s" data-a="tm">Hari Ini</button><button class="bt s ib" data-a="nm" aria-label="Bulan berikutnya">'+I('r')+'</button>'+addBtn)+`<div class="pn sc" style="padding:12px"><div class="mg">${D.map(x=>`<div class="mh">${x}</div>`).join('')}${days.map(d=>{const s=iso(d);return`<div class="mc${d.getMonth()!=mo?' ot':''}${s==today?' td':''}${s==U.sel?' sl':''}" data-a="sel" data-d="${s}"><div class="dh"><span>${d.getDate()}</span><button class="ad" data-a="add" data-d="${s}" aria-label="Tambah konten ${s}">+</button></div>${S.items.filter(i=>i.date==s).map(chip).join('')}</div>`}).join('')}</div></div><div class="fl">${PIL.map((p,k)=>`<span class="bd p${k}">${p}</span>`).join('')}</div>${agenda()}`}
+function agenda(){const L=S.items.filter(i=>i.date==U.sel);return `<div class="pn"><div class="hd"><h2>Agenda ${fmt(U.sel)}</h2><button class="bt s p" data-a="add" data-d="${U.sel}">${I('plus',14)}Tambah</button></div>${L.map(i=>`<div class="li" data-a="edit" data-id="${i.id}" style="cursor:pointer"><div><b>${esc(i.title)}</b><p class="sub">${esc(i.plat)} · ${esc(i.pil)}</p></div>${bdg(i.st)}</div>`).join('')||'<div class="em">Belum ada konten di tanggal ini</div>'}</div>`}
+function vJadW(){const m=addD(mon(new Date()),U.w*7),today=iso(new Date()),days=[...Array(7)].map((_,k)=>addD(m,k)),D=['SEN','SEL','RAB','KAM','JUM','SAB','MIN'];
+return head('Jadwal Konten',`${fmt(iso(m))} – ${fmt(iso(days[6]))}`,MT()+'<button class="bt s ib" data-a="pw" aria-label="Minggu sebelumnya">'+I('l')+'</button><button class="bt s" data-a="tw">Minggu Ini</button><button class="bt s ib" data-a="nw" aria-label="Minggu berikutnya">'+I('r')+'</button>'+addBtn)+`<div class="pn sc"><div class="cal" style="min-width:880px">${days.map((d,k)=>{const s=iso(d);return`<div class="dy${s==today?' td':''}"><div class="dh"><span>${D[k]} ${d.getDate()}</span><button class="ad" data-a="add" data-d="${s}" aria-label="Tambah konten ${s}">+</button></div>${S.items.filter(i=>i.date==s).map(chip).join('')}</div>`}).join('')}</div></div><div class="fl">${PIL.map((p,k)=>`<span class="bd p${k}">${p}</span>`).join('')}</div>`}
+function rows(){const q=U.q.toLowerCase(),L=S.items.filter(i=>(!U.f||i.st==U.f)&&(!q||(i.title+i.hook+i.plat).toLowerCase().includes(q))).sort((a,b)=>a.date<b.date?-1:1);
+return L.map(i=>`<tr class="r" data-a="edit" data-id="${i.id}"><td><b>${esc(i.title)}</b></td><td data-l="Tanggal">${fmt(i.date)}</td><td data-l="Platform">${esc(i.plat)}<br><span class="sub">${esc(i.fmt)}</span></td><td><span class="bd p${PIL.indexOf(i.pil)}">${esc(i.pil)}</span></td><td data-l="Hook">${esc(i.hook)}</td><td>${bdg(i.st)}</td></tr>`).join('')||'<tr><td colspan="6" class="em">Tidak ada materi yang cocok</td></tr>'}
+function vMat(){return head('Materi Konten','Klik baris untuk mengubah materi',addBtn)+`<div class="pn"><div class="fl"><label>Cari<input data-s="q" value="${esc(U.q)}" placeholder="Judul atau hook"></label><label>Status<select data-s="f"><option value="">Semua</option>${ST.map(s=>`<option ${U.f==s?'selected':''}>${s}</option>`).join('')}</select></label></div><div class="sc" style="margin-top:14px"><table><thead><tr><th>JUDUL</th><th>TANGGAL</th><th>PLATFORM</th><th>PILAR</th><th>HOOK</th><th>STATUS</th></tr></thead><tbody id="rows">${rows()}</tbody></table></div></div>`}
+function vHook(){return head('Hook & UGC','Bank hook dan kolaborasi kreator')+`<div class="g2"><div class="pn"><h2>Bank Hook</h2><form data-form="hook" class="fl" style="margin:14px 0"><label>Tipe<select name="t">${HT.map(h=>`<option>${h}</option>`).join('')}</select></label><label style="flex:1;min-width:160px">Teks hook<input name="x" required></label><button class="bt p">Tambah</button></form>${S.hooks.map(h=>`<div class="li"><div><span class="bd p2">${esc(h.type)}</span><p>${esc(h.text)}</p></div><div class="fl"><button class="bt s" data-a="usehook" data-id="${h.id}">Pakai</button><button class="bt s d" data-a="delhook" data-id="${h.id}">Hapus</button></div></div>`).join('')||'<div class="em">Belum ada hook</div>'}</div>
+<div class="pn"><h2>Kreator UGC</h2><form data-form="ugc" class="fl" style="margin:14px 0"><label>Kreator<input name="c" required></label><label style="flex:1;min-width:160px">Brief singkat<input name="b" required></label><button class="bt p">Tambah</button></form>${S.ugc.map(u=>`<div class="li"><div><b>${esc(u.creator)}</b><p>${esc(u.brief)}</p></div><div class="fl"><button class="bt s" data-a="ugcn" data-id="${u.id}">${esc(u.st)} ›</button><button class="bt s d" data-a="delugc" data-id="${u.id}">Hapus</button></div></div>`).join('')||'<div class="em">Belum ada kreator</div>'}</div></div>`}
+function vScr(){const c=S.script;return head('Script Studio','Susun script video per adegan','<button class="bt" data-a="addsc">'+I('plus',16)+'Adegan</button><button class="bt p" data-a="copy">'+I('copy',16)+'Salin</button>')+`<div class="pn"><div class="fg" style="margin-top:0"><label>Judul video<input data-sk="title" value="${esc(c.title)}"></label><label>Hook<select data-a2="hsel">${S.hooks.map(h=>`<option value="${h.id}">${esc(h.type)}: ${esc(h.text)}</option>`).join('')}</select></label><label class="w">Hook terpilih<input data-sk="hook" value="${esc(c.hook)}"></label></div>
+<div class="sc"><table><thead><tr><th style="width:110px">WAKTU</th><th>VISUAL</th><th>VOICE OVER</th><th style="width:80px"></th></tr></thead><tbody>${c.scenes.map((s,i)=>`<tr><td data-l="Waktu"><input data-i="${i}" data-f="t" value="${esc(s.t)}" aria-label="Waktu"></td><td data-l="Visual"><textarea data-i="${i}" data-f="v" aria-label="Visual">${esc(s.v)}</textarea></td><td data-l="Voice over"><textarea data-i="${i}" data-f="vo" aria-label="Voice over">${esc(s.vo)}</textarea></td><td><button class="bt s d" data-a="delsc" data-i="${i}">Hapus</button></td></tr>`).join('')}</tbody></table></div></div>`}
+const V={dash:vDash,strat:vStrat,jad:vJad,mat:vMat,hook:vHook,scr:vScr};
+function render(){$('#nav').innerHTML=NAV.map(([k,n])=>`<button class="nv${U.v==k?' on':''}" data-a="nav" data-v="${k}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg><span>${n}</span></button>`).join('');$('#view').innerHTML=V[U.v]();if(location.hash!=='#'+U.v)history.replaceState(null,'','#'+U.v)}
+const opt=(a,v)=>a.map(x=>`<option${x==v?' selected':''}>${x}</option>`).join('');
+function openF(id,date){const i=S.items.find(x=>x.id==id)||{id:'',title:'',plat:S.strat.plats[0]||PL[0],pil:PIL[0],fmt:'',date:date||iso(new Date()),st:'Draft',hook:''};
+$('#dt').textContent=id?'Ubah Konten':'Konten Baru';$('#f_id').value=i.id;$('#f_title').value=i.title;$('#f_plat').innerHTML=opt(PL,i.plat);$('#f_pil').innerHTML=opt(PIL,i.pil);$('#f_fmt').value=i.fmt;$('#f_date').value=i.date;$('#f_st').innerHTML=opt(ST,i.st);$('#f_hook').value=i.hook;$('#f_del').style.display=id?'':'none';$('#dlg').showModal()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,id=b.dataset.id;
+if(a=='nav'){U.v=b.dataset.v;render()}else if(a=='theme'){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
+else if(a=='add')openF('',b.dataset.d);else if(a=='edit')openF(id);else if(a=='close')$('#dlg').close();
+else if(a=='del'){S.items=S.items.filter(x=>x.id!=$('#f_id').value);save();$('#dlg').close();render();toast('Konten dihapus')}
+else if(a=='sel'){U.sel=b.dataset.d;render()}else if(a=='mode'){U.mode=b.dataset.m;render()}else if(a=='pm'){U.m--;render()}else if(a=='nm'){U.m++;render()}else if(a=='tm'){U.m=0;render()}else if(a=='pw'){U.w--;render()}else if(a=='nw'){U.w++;render()}else if(a=='tw'){U.w=0;render()}
+else if(a=='delhook'){S.hooks=S.hooks.filter(x=>x.id!=id);save();render()}
+else if(a=='usehook'){S.script.hook=S.hooks.find(x=>x.id==id).text;if(S.script.scenes[0])S.script.scenes[0].vo=S.script.hook;save();U.v='scr';render();toast('Hook dipakai di script')}
+else if(a=='ugcn'){const u=S.ugc.find(x=>x.id==id);u.st=US[(US.indexOf(u.st)+1)%US.length];save();render()}
+else if(a=='delugc'){S.ugc=S.ugc.filter(x=>x.id!=id);save();render()}
+else if(a=='addsc'){S.script.scenes.push({t:'',v:'',vo:''});save();render()}
+else if(a=='delsc'){S.script.scenes.splice(+b.dataset.i,1);save();render()}
+else if(a=='copy'){const c=S.script,t=c.title+'\nHook: '+c.hook+'\n\n'+c.scenes.map(s=>`[${s.t}] Visual: ${s.v}\nVO: ${s.vo}`).join('\n\n');try{navigator.clipboard.writeText(t).then(()=>toast('Script disalin'),()=>toast('Gagal menyalin'))}catch(x){toast('Gagal menyalin')}}});
+document.addEventListener('submit',e=>{e.preventDefault();const f=e.target;
+if(f.id=='fm'){const o={id:$('#f_id').value,title:$('#f_title').value.trim(),plat:$('#f_plat').value,pil:$('#f_pil').value,fmt:$('#f_fmt').value.trim(),date:$('#f_date').value,st:$('#f_st').value,hook:$('#f_hook').value.trim()};
+if(o.id){Object.assign(S.items.find(x=>x.id==o.id),o)}else{o.id=uid('c');S.items.push(o)}save();$('#dlg').close();render();toast('Konten disimpan')}
+else if(f.dataset.form=='hook'){S.hooks.push({id:uid('h'),type:f.t.value,text:f.x.value.trim()});save();render()}
+else if(f.dataset.form=='ugc'){S.ugc.push({id:uid('u'),creator:f.c.value.trim(),brief:f.b.value.trim(),st:'Brief'});save();render()}});
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;
+if(d.p!==undefined){S.strat.t[+d.p]=+t.value;$('#pv'+d.p).textContent=t.value;const s=S.strat.t.reduce((a,b)=>a+b,0);$('#ps').textContent='Total '+s+'% '+(s==100?'· sesuai':'· idealnya 100%');save()}
+else if(d.k){S.strat[d.k]=t.value;save()}
+else if(d.s){U[d.s]=t.value;$('#rows').innerHTML=rows()}
+else if(d.sk){S.script[d.sk]=t.value;save()}
+else if(d.f){S.script.scenes[+d.i][d.f]=t.value;save()}});
+document.addEventListener('change',e=>{const t=e.target,d=t.dataset;
+if(d.pl){const p=S.strat.plats;if(t.checked&&!p.includes(d.pl))p.push(d.pl);if(!t.checked)S.strat.plats=p.filter(x=>x!=d.pl);save()}
+else if(d.a2=='hsel'){const h=S.hooks.find(x=>x.id==t.value);if(h){S.script.hook=h.text;if(S.script.scenes[0])S.script.scenes[0].vo=h.text;save();render()}}});
+const h0=location.hash.slice(1);if(V[h0])U.v=h0;render();
+</script>
+</body>
+</html>
