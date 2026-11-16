@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pusat kendali inovasi internal Narasio Data</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#F3F7FF;--card:#fff;--ink:#1E293B;--mut:#5B6B85;--line:#D6E2F5;--hd:#0B1F4B;--blue:#1D5BD6;--cyan:#0AA5D4;--ice:#EAF3FF;--warn:#FFF4D6;--warnt:#7A5200;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 56px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+h1,h2,h3,.n{font-family:Montserrat,system-ui,sans-serif;font-variant-numeric:lining-nums}
+.wrap{max-width:1000px;margin:0 auto}
+.hero{background:linear-gradient(135deg,#0B1F4B,#1D5BD6);color:#fff;padding:28px 16px 22px}
+.hero h1{font-size:clamp(22px,5vw,32px);margin:0 0 6px;font-weight:800;line-height:1.2}
+.hero p{margin:0;color:#C7D7F5;font-size:14px}
+.bd{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.15);font-size:13px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav .wrap{display:flex;gap:4px;padding:8px 12px}
+nav a{color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;padding:8px 12px;border-radius:8px}
+nav a.on{background:var(--blue);color:#fff}
+nav a:focus-visible{outline:2px solid var(--blue)}
+main{padding:18px 16px 48px}
+.v{display:none}.v.on{display:block}
+h2{font-size:20px;margin:22px 0 4px;color:var(--hd)}h2:first-child{margin-top:0}
+.sub{color:var(--mut);margin:0 0 12px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card b.n{display:block;font-size:26px;color:var(--blue)}.card span{font-size:13px;color:var(--mut)}
+.prog{height:10px;background:var(--ice);border-radius:6px;overflow:hidden;margin:8px 0}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,#1D5BD6,#12B5E5)}
+.steps{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.st{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:8px;padding:10px;font-size:13px}
+.st.done{border-top-color:var(--blue)}.st.cur{border-top-color:#12B5E5;background:var(--ice);font-weight:600}
+.st b{display:block;font-family:Montserrat,sans-serif}
+.pill{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:var(--ice);color:var(--mut)}
+.pill.done{background:var(--blue);color:#fff}.pill.doing{background:#12B5E5;color:#0B1F4B}.pill.late{background:#E5484D;color:#fff}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-child{border-top:0}.row small{color:var(--mut);display:block}
+.note{background:var(--warn);color:var(--warnt);border-radius:10px;padding:11px 14px;font-size:14px;margin:10px 0}
+.note.i{background:var(--ice);color:var(--ink)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:620px;background:var(--card);border:1px solid var(--line)}
+th{background:#0B1F4B;color:#fff;font-size:13px;text-align:left;padding:8px 9px;font-weight:600}
+td{padding:8px 9px;border-top:1px solid var(--line);font-size:14px;vertical-align:top}
+input,select,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:5px 7px;max-width:100%}
+input[type=text]{width:100%}
+.gt{position:relative;height:18px;background:var(--ice);border-radius:9px;min-width:300px}
+.gt i{position:absolute;top:0;bottom:0;border-radius:9px;background:var(--line)}
+.gt i.done{background:var(--blue)}.gt i.doing{background:#12B5E5}
+.ph td{background:var(--ice);font-family:Montserrat,sans-serif;font-weight:700;color:var(--hd)}
+.q{padding:7px 0;border-top:1px solid var(--line);font-size:14px}.q:first-of-type{border-top:0}
+.q em{font-style:normal;font-size:11px;font-weight:700;background:#12B5E5;color:#0B1F4B;border-radius:8px;padding:1px 7px;margin-left:6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:8px}
+summary{cursor:pointer;font-weight:700;font-family:Montserrat,sans-serif;font-size:15px;color:var(--hd)}
+.ch h3{margin:16px 0 4px;font-size:15px;color:var(--blue)}.ch ul{margin:0;padding-left:20px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<header class="hero"><div class="wrap"><h1>Pusat kendali inovasi internal Narasio Data</h1>
+<p>Memantau realisasi proposal: tahap yang sedang berjalan, interview, dokumen, dan jadwal.</p><span class="bd" id="mode">Memuat…</span></div></header>
+<nav><div class="wrap" id="nav"></div></nav>
+<main><div class="wrap">
+<div class="v" id="v-ringkasan"></div><div class="v" id="v-charter"></div><div class="v" id="v-interview"></div><div class="v" id="v-rencana"></div><div class="v" id="v-dokumen"></div>
+</div></main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PH=['Persetujuan','Interview dan needs','Validasi scope','Prototipe','Uji dan pilot','Implementasi'];
+const ST={todo:'Belum mulai',doing:'Dikerjakan',done:'Selesai'};
+// id, fase, tugas, mulai (minggu ke-), durasi (minggu), status awal
+const T=[['t1',0,'Menyusun dan mengajukan proposal',0,1,'done'],['t2',0,'Mendapat arahan C-Level',1,1],['t3',0,'Menyusun Project Charter',1,1],['t4',0,'Menetapkan penanggung jawab dan anggaran',2,1],
+['t5',1,'Daftar stakeholder dan jadwal User Interview',2,1],['t6',1,'Menyiapkan panduan dan form catatan interview',2,1],['t7',1,'Melaksanakan User Interview',3,3],['t8',1,'Menyusun Needs Assessment',6,1],
+['t9',2,'Solution validation dan scope tiap prioritas',7,2],['t10',2,'Timeline dan work plan final, persetujuan scope',8,1],
+['t11',3,'Prototipe Hub, Content Hub, Ruang Tunggu',9,4],['t12',3,'Prototipe Radar BD (pilot terbatas)',9,4],
+['t13',4,'Pengujian dan evaluasi prototipe',13,2],['t14',4,'Pilot terbatas',15,3],['t15',4,'Berita acara dan laporan hasil pilot',18,1],['t16',5,'Implementasi bertahap dan review KPI',19,4]];
+const D=[['Project Charter','t3'],['Daftar stakeholder dan jadwal User Interview','t5'],['Form panduan dan catatan User Interview','t6'],['Dokumen Needs Assessment','t8'],['Dokumen Solution Validation / Scope','t9'],['Timeline dan Work Plan','t10'],['Dokumen pengujian dan evaluasi prototipe','t13'],['Berita acara atau laporan hasil pilot','t15']];
+const DS=['Belum','Draft','Review','Final'];
+const IS=['Belum dijadwalkan','Terjadwal','Selesai','Ditunda'];
+const CAT=['C-Level','C-Level','Unit BD','Unit BD','Tim Konten','Tim Konten','Divisi 1','Divisi 2','Divisi 3','Divisi 4','SDM','SDM','Lainnya'];
+// pertanyaan: [kelompok, [[teks, tambahan?]]]
+const Q=[['A. Umum, seluruh stakeholder',[['Bagaimana alur kerja Anda saat ini pada area terkait?'],['Bagian mana yang paling memakan waktu atau sering menimbulkan kendala?'],['Alat atau kanal apa yang digunakan saat ini?'],['Seperti apa hasil yang Anda anggap berhasil?'],['Ceritakan kejadian terakhir saat hal ini menyulitkan Anda. Apa yang terjadi?',1],['Seberapa sering dan berapa lama hal itu terjadi dalam seminggu?',1],['Apa yang sudah Anda coba untuk mengatasinya, dan mengapa belum cukup?',1],['Jika hanya satu hal yang bisa diperbaiki, apa itu?',1],['Siapa lagi yang sebaiknya kami ajak bicara?',1]]],
+['B. Radar BD, C-Level dan unit BD',[['Tahapan prospecting mana yang layak diotomatisasi, dan mana yang harus tetap manual?'],['Kanal dan sumber kontak apa yang boleh digunakan atas nama perusahaan?'],['Pada titik mana persetujuan manusia diperlukan sebelum pesan atau surat dikirim?'],['Bagaimana ketentuan perusahaan terkait pelindungan data pribadi dalam pengumpulan kontak?'],['Metrik apa yang menunjukkan Radar BD berhasil?'],['Berapa prospek yang dihubungi per minggu, dan berapa yang berujung meeting?',1],['Siapa yang menandatangani surat audiensi, dan apa syaratnya?',1],['Apa yang tidak boleh dilakukan agen atas nama perusahaan?',1]]],
+['C. Aplikasi Narasio Hub, divisi dan SDM',[['Informasi dan proses apa yang paling sering dicari atau terhambat antardivisi?'],['Fitur apa yang wajib ada pada ruang kerja divisi Anda?'],['Apa kebutuhan C-Level terhadap ruang khusus, dan siapa pengguna langsungnya?'],['Informasi apa yang tidak boleh terlihat lintas divisi?',1],['Seberapa lama biasanya Anda mencari satu informasi antardivisi?',1]]],
+['D. Content Hub, tim konten',[['Bagaimana alur dari ide hingga publikasi saat ini?'],['Bagian mana yang paling sering terlewat atau terulang?'],['Informasi apa yang perlu tampil pada dashboard?'],['Berapa persen konten tayang sesuai jadwal bulan lalu?',1],['Di tahap mana brief paling sering direvisi?',1]]],
+['E. Ruang Tunggu Digital, BD dan C-Level',[['Apa kesan yang ingin disampaikan kepada client saat menunggu?'],['Konten apa yang layak ditampilkan, dan siapa yang menyetujuinya?'],['Berapa lama client biasanya menunggu sebelum meeting mulai?',1],['Apa yang pernah ditanyakan client saat menunggu?',1]]]];
+const GUIDE=['Tanyakan perilaku nyata di masa lalu, bukan pendapat tentang solusi.','Jangan menyebut solusi lebih dulu agar jawaban tidak terarah.','Catat kutipan asli dan angka yang disebut narasumber.','Satu kebutuhan baru masuk Needs Assessment jika didukung minimal dua narasumber.','Akhiri dengan merangkum jawaban dan minta narasumber mengoreksi.'];
+const CH=[['Tujuan','Merealisasikan empat inovasi prioritas (Aplikasi Narasio Hub, Content Hub, Ruang Tunggu Digital, Radar BD) melalui User Interview, validasi scope, prototipe, dan pilot terbatas.'],
+['Dalam ruang lingkup','Empat inovasi prioritas, 13 target stakeholder interview, empat dokumen scope, empat prototipe, pilot terbatas.'],
+['Di luar ruang lingkup','Enam gagasan pipeline (Strategy Clips, Narasio Intern Development, Modul Belajar Certified Anthropic, BD Desk, Website Narasio Data, Narasio Pulse). Implementasi penuh Radar BD tanpa persetujuan manajemen.'],
+['Peran','Pemilik keputusan: C-Level. Arahan prioritas: Ibu Suryani. Penanggung jawab program: Ronald Farrell Wardhana, Business Development. Narasumber: unit BD, tim konten, empat divisi, SDM.'],
+['Batasan dan asumsi','Initial meeting dilakukan manusia. Radar BD berjalan sebagai pilot dengan persetujuan manusia. Semua tahap mengikuti kebijakan dan kewenangan perusahaan, termasuk UU Pelindungan Data Pribadi.'],
+['Gerbang keputusan','Persetujuan prioritas, interview selesai, kebutuhan dikonfirmasi, persetujuan scope, review internal, lolos kriteria uji, persetujuan peluncuran.'],
+['Anggaran','Mengacu pada Bagian 12 proposal. Total perlu diselaraskan satuannya sebelum disetujui.']];
+const def=()=>({start:'',t:{t1:'done'},iv:CAT.map(k=>({k,n:'',d:'',s:IS[0],x:''})),d:{},c:'Belum',log:[],upd:0});
+let S=def(),edit=false,saveFn=null;
+const nw=wk=>S.start?new Date(new Date(S.start).getTime()+wk*6048e5).toLocaleDateString('id-ID',{day:'numeric',month:'short'}):'Mgg '+(wk+1);
+const ts=id=>S.t[id]||'todo';
+const pct=()=>Math.round(T.reduce((a,t)=>a+({done:1,doing:.5,todo:0}[ts(t[0])]),0)/T.length*100);
+const curPh=()=>{for(let p=0;p<6;p++)if(T.some(t=>t[1]==p&&ts(t[0])!='done'))return p;return 5};
+const ago=()=>{if(!S.upd)return 'belum ada pembaruan';const d=Math.floor((Date.now()-S.upd)/864e5);return d<1?'hari ini':d+' hari lalu'};
+const pill=s=>`<span class="pill ${s=='done'?'done':s=='doing'?'doing':''}">${ST[s]}</span>`;
+const sel=(opts,val,att)=>`<select ${att}>${opts.map(o=>`<option${o==val?' selected':''}>${o}</option>`).join('')}</select>`;
+const stSel=(id)=>edit?`<select data-t="${id}">${Object.keys(ST).map(k=>`<option value="${k}"${ts(id)==k?' selected':''}>${ST[k]}</option>`).join('')}</select>`:pill(ts(id));
+function dash(){
+ const p=pct(),cp=curPh(),ivDone=S.iv.filter(i=>i.s=='Selesai').length,ivSch=S.iv.filter(i=>i.s=='Terjadwal').length,docF=D.filter(d=>S.d[d[0]]=='Final').length,doing=T.filter(t=>ts(t[0])=='doing');
+ $('v-ringkasan').innerHTML=`<h2>Posisi program saat ini</h2><p class="sub">Terakhir diperbarui: ${ago()}.</p>
+ <div class="steps">${PH.map((n,i)=>`<div class="st ${i<cp?'done':i==cp?'cur':''}"><b>Fase ${i}</b>${n}${i==cp?'<br>Sedang berjalan':''}</div>`).join('')}</div>
+ <div class="grid" style="margin-top:12px"><div class="card"><b class="n">${p}%</b><span>progres tugas (selesai 1, dikerjakan ½)</span><div class="prog"><i style="width:${p}%"></i></div></div>
+ <div class="card"><b class="n">${ivDone}/13</b><span>interview selesai${ivSch?`, ${ivSch} terjadwal`:''}</span><div class="prog"><i style="width:${ivDone/13*100}%"></i></div></div>
+ <div class="card"><b class="n">${docF}/8</b><span>dokumen berstatus final</span><div class="prog"><i style="width:${docF/8*100}%"></i></div></div>
+ <div class="card"><b class="n" style="font-size:20px">${S.c=='Ya'?'Disetujui':'Menunggu'}</b><span>persetujuan Project Charter</span></div></div>
+ <h2>Sedang dikerjakan</h2><div class="card">${doing.length?doing.map(t=>`<div class="row"><span>${t[2]}<small>Fase ${t[1]}: ${PH[t[1]]}, rencana ${nw(t[3])} sampai ${nw(t[3]+t[4]-1)}</small></span>${pill('doing')}</div>`).join(''):'<span class="sub">Belum ada tugas berstatus dikerjakan.</span>'}</div>
+ <h2>Tugas berikutnya</h2><div class="card">${T.filter(t=>ts(t[0])=='todo').slice(0,3).map(t=>`<div class="row"><span>${t[2]}<small>Rencana mulai ${nw(t[3])}</small></span>${pill('todo')}</div>`).join('')||'<span class="sub">Semua tugas sudah berjalan atau selesai.</span>'}</div>
+ <h2>Catatan aktivitas</h2><div class="card">${S.log.length?S.log.slice(0,8).map(l=>`<div class="row"><span>${esc(l.m)}</span><small>${new Date(l.t).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</small></div>`).join(''):'<span class="sub">Belum ada aktivitas. Setiap perubahan status akan tercatat di sini.</span>'}</div>`}
+function charter(){$('v-charter').innerHTML=`<h2>Project Charter</h2><p class="sub">Program pengembangan inovasi internal Narasio Data. Isi bersumber dari proposal.</p><div class="card ch">${CH.map(c=>`<h3>${c[0]}</h3><p style="margin:0">${c[1]}</p>`).join('')}</div>
+ <h2>Persetujuan</h2><div class="card"><div class="row"><span>Status persetujuan C-Level<small>Nama penyetuju dan tanggal dicatat pada dokumen charter final.</small></span>${edit?sel(['Belum','Ya'],S.c,'data-c="1"'):`<span class="pill ${S.c=='Ya'?'done':''}">${S.c=='Ya'?'Disetujui':'Menunggu'}</span>`}</div></div>`}
+function interview(){const done=S.iv.filter(i=>i.s=='Selesai').length;
+ $('v-interview').innerHTML=`<h2>Jadwal User Interview</h2><p class="sub">Target 13 narasumber. Pembagian slot per kelompok adalah usulan, sesuaikan dengan daftar stakeholder final. ${done} selesai.</p><div class="prog"><i style="width:${done/13*100}%"></i></div>
+ <div class="scroll"><table><tr><th>Kelompok</th><th>Narasumber</th><th>Tanggal</th><th>Status</th><th>Catatan kunci</th></tr>${S.iv.map((r,i)=>`<tr><td>${r.k}</td>${edit?`<td><input type="text" data-i="${i}" data-f="n" value="${esc(r.n)}"></td><td><input type="date" data-i="${i}" data-f="d" value="${esc(r.d)}"></td><td>${sel(IS,r.s,`data-i="${i}" data-f="s"`)}</td><td><input type="text" data-i="${i}" data-f="x" value="${esc(r.x)}"></td>`:`<td>${esc(r.n)||'-'}</td><td>${esc(r.d)||'-'}</td><td>${r.s}</td><td>${esc(r.x)||'-'}</td>`}</tr>`).join('')}</table></div>
+ <h2>Pedoman agar hasil interview valid</h2><div class="card">${GUIDE.map(g=>`<div class="q">${g}</div>`).join('')}</div>
+ <h2>Daftar pertanyaan</h2><p class="sub">Pertanyaan dari proposal, ditambah pertanyaan bertanda “Tambahan” untuk menggali bukti nyata dan angka baseline.</p>${Q.map((g,i)=>`<details${i==0?' open':''}><summary>${g[0]}</summary>${g[1].map(q=>`<div class="q">${q[0]}${q[1]?'<em>Tambahan</em>':''}</div>`).join('')}</details>`).join('')}`}
+function plan(){let h='',last=-1;
+ for(const t of T){if(t[1]!=last){last=t[1];h+=`<tr class="ph"><td colspan="4">Fase ${t[1]}: ${PH[t[1]]}</td></tr>`}
+ const s=ts(t[0]);h+=`<tr><td>${t[2]}</td><td style="white-space:nowrap">${nw(t[3])}${t[4]>1?' - '+nw(t[3]+t[4]-1):''}</td><td><div class="gt"><i class="${s}" style="left:${t[3]/24*100}%;width:${t[4]/24*100}%"></i></div></td><td>${stSel(t[0])}</td></tr>`}
+ $('v-rencana').innerHTML=`<h2>Timeline dan work plan</h2><p class="sub">Jadwal usulan dalam minggu relatif. Isi tanggal mulai agar kolom waktu menjadi tanggal.</p>
+ <div class="card"><div class="row"><span>Tanggal mulai program</span>${edit?`<input type="date" id="st" value="${esc(S.start)}">`:`<span>${S.start||'Belum ditetapkan'}</span>`}</div></div>
+ <div class="note i">Durasi dan urutan berstatus rekomendasi sampai ada arahan manajemen.</div><div class="scroll" style="margin-top:10px"><table><tr><th style="width:36%">Tugas</th><th>Rencana</th><th style="width:30%">Garis waktu</th><th>Status</th></tr>${h}</table></div>`}
+function docs(){$('v-dokumen').innerHTML=`<h2>Dokumen program</h2><p class="sub">Delapan dokumen yang harus disiapkan, dikaitkan ke tugas pada work plan.</p><div class="card">${D.map(d=>{const v=S.d[d[0]]||DS[0];return `<div class="row"><span>${d[0]}<small>Terkait tugas: ${T.find(t=>t[0]==d[1])[2]}</small></span>${edit?sel(DS,v,`data-d="${esc(d[0])}"`):`<span class="pill ${v=='Final'?'done':v=='Belum'?'':'doing'}">${v}</span>`}</div>`}).join('')}</div>`}
+function render(){dash();charter();interview();plan();docs();$('mode').textContent=edit?'Mode penyunting: Anda dapat memperbarui status':'Mode lihat: pantau progres program'}
+const TABS=[['ringkasan','Ringkasan'],['charter','Charter'],['interview','Interview'],['rencana','Rencana kerja'],['dokumen','Dokumen']];
+function route(){const h=(location.hash||'#ringkasan').slice(1),k=TABS.some(t=>t[0]==h)?h:'ringkasan';TABS.forEach(t=>{$('v-'+t[0]).classList.toggle('on',t[0]==k)});$('nav').innerHTML=TABS.map(t=>`<a href="#${t[0]}"${t[0]==k?' class="on"':''}>${t[1]}</a>`).join('')}
+addEventListener('hashchange',route);route();render();
+function commit(msg){S.upd=Date.now();if(msg){S.log.unshift({t:Date.now(),m:msg});S.log=S.log.slice(0,30)}render();if(saveFn)saveFn(S).catch(()=>{$('mode').textContent='Gagal menyimpan. Coba lagi.'})}
+document.addEventListener('change',e=>{if(!edit)return;const el=e.target,d=el.dataset;
+ if(d.t){S.t[d.t]=el.value;commit(`${T.find(t=>t[0]==d.t)[2]}: ${ST[el.value]}`)}
+ else if(d.c){S.c=el.value;commit('Persetujuan Project Charter: '+el.value)}
+ else if(d.d){S.d[d.d]=el.value;commit(`${d.d}: ${el.value}`)}
+ else if(d.i!==undefined){S.iv[+d.i][d.f]=el.value;commit(d.f=='s'?`Interview ${S.iv[+d.i].k}: ${el.value}`:'')}
+ else if(el.id=='st'){S.start=el.value;commit('Tanggal mulai program ditetapkan')}});
+(async()=>{try{const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+ if(!db){$('mode').textContent='Mode lihat: data bersama tidak tersedia';return}
+ edit=user?await user.canEdit():false;const ref=db.doc('program/state');saveFn=s=>ref.set(JSON.parse(JSON.stringify(s)));
+ const tm=setTimeout(()=>{$('mode').textContent='Data belum bisa dijangkau, tampilan mungkin belum terbaru'},10000);
+ ref.onSnapshot(s=>{clearTimeout(tm);if(s.exists){const x=s.data();S={...def(),...x,t:{...x.t},iv:x.iv&&x.iv.length?x.iv:def().iv,d:{...x.d},log:x.log||[]}}render()},()=>{clearTimeout(tm);$('mode').textContent='Data tidak dapat dimuat'})}catch(e){$('mode').textContent='Mode lihat: data bersama tidak tersedia'}})();
+</script></body></html>
