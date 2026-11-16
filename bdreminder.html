@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Narasio Pulse – Follow-up & Konten</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f7f7;--card:#fff;--ink:#0f1b2d;--mut:#5b6b7e;--line:#e4e8ee;--pri:#2f6fd0;--pri2:#e3edfc;--blue:#4a8ceb;--yel:#ffe347;--pur:#a85cf7;--pnk:#ff8ae6;--ok:#12805c;--ok2:#dcf3ea;--warn:#7a6200;--warn2:#fff4b8;--bad:#b4362f;--bad2:#fbe3e0;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Nunito Sans","Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,.num{font-family:"Quicksand","Segoe UI",system-ui,sans-serif;letter-spacing:-.02em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.shell{max-width:1040px;margin:auto;display:grid;grid-template-columns:1fr}
+nav{position:fixed;z-index:20;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;border:0;background:none;display:grid;justify-items:center;gap:2px;padding:6px 0;font-size:11.5px;color:var(--mut);border-radius:12px;position:relative}
+nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button[aria-selected=true]{color:var(--pri);font-weight:600}
+nav button[aria-selected=true]::before{content:"";position:absolute;top:-7px;width:26px;height:3px;border-radius:3px;background:var(--pri)}
+main{padding:18px 16px 110px;min-width:0}
+.in{animation:rise .28s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.top p{margin:0;color:var(--mut);font-size:13px}
+h1{font-size:25px;line-height:1.15;margin:2px 0 0;max-width:20ch}
+.live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ok);background:var(--ok2);padding:5px 10px;border-radius:99px;white-space:nowrap}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(18,128,92,.5)}100%{box-shadow:0 0 0 8px rgba(18,128,92,0)}}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 8px 10px;background-image:radial-gradient(var(--line) 1px,transparent 1.2px);background-size:16px 16px;overflow:hidden}
+.hero svg{width:100%;height:auto;display:block}
+.stage text{font:600 12px "Nunito Sans",sans-serif;fill:var(--ink)}
+.stage .c{font:700 15px "Quicksand",sans-serif;fill:var(--pri)}
+.ring{transform-box:fill-box;transform-origin:center;animation:ring 2.6s ease-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.2);opacity:0}}
+.kp{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.k{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.k .num{font-size:28px;font-weight:700;display:block;line-height:1.1}
+.k span{font-size:12.5px;color:var(--mut)}
+.k:first-child{background:var(--pri);border-color:var(--pri);color:#fff}.k:first-child span{color:#d4eef6}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px}
+.sec h2{font-size:17px;margin:0 0 8px}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:0 -16px 12px;padding:0 16px}
+.chips button{border:1px solid var(--line);background:var(--card);padding:6px 13px;border-radius:99px;white-space:nowrap;font-size:13.5px;transition:.15s}
+.chips button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.it{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
+.hd{display:flex;gap:12px;align-items:center;width:100%;border:0;background:none;padding:12px 14px;text-align:left}
+.av{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font:700 14px "Quicksand",sans-serif;flex:none}
+.hd b{display:block;font-weight:600}.hd small{color:var(--mut);font-size:12.5px}
+.hd .grow{flex:1;min-width:0}
+.pill{font-size:12px;padding:3px 10px;border-radius:99px;white-space:nowrap;font-weight:500}
+.ok{background:var(--ok2);color:var(--ok)}.warn{background:var(--warn2);color:var(--warn)}.bad{background:var(--bad2);color:var(--bad)}.pri{background:var(--pri2);color:var(--pri)}
+.dtl{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.dtl.o{grid-template-rows:1fr}.dtl>div{overflow:hidden}
+.dtl .pad{padding:0 14px 14px}
+.bub{max-width:86%;padding:8px 12px;border-radius:14px;margin:6px 0;font-size:14px}
+.bub.a{background:var(--pri2);border-bottom-left-radius:4px}
+.bub.c{background:#eef1f5;margin-left:auto;border-bottom-right-radius:4px}
+.btn{border:0;background:var(--pri);color:#fff;padding:9px 16px;border-radius:12px;font-weight:600;transition:transform .15s}
+.btn:active{transform:scale(.97)}.btn.g{background:var(--pri2);color:var(--pri)}
+.tl{position:relative;margin:0;padding:0 0 0 22px;list-style:none}
+.tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl li{position:relative;padding:0 0 14px}
+.tl li::before{content:"";position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--card);border:2px solid var(--pri)}
+.tl li.ok::before{border-color:var(--ok)}.tl li.warn::before{border-color:#e6c200}.tl small{display:block;color:var(--mut);font-size:12.5px}
+.day{font-weight:600;font-size:13px;color:var(--pri);margin:6px 0 8px -22px;padding-left:22px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input{flex:1;min-width:120px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.kc{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.kc:last-child{border:0}
+.dt{width:54px;text-align:center;border-radius:14px;background:var(--pri2);color:var(--pri);padding:6px 0;flex:none}
+.dt b{display:block;font:700 22px/1 "Quicksand",sans-serif}.dt span{font-size:11.5px}
+.kc .grow{flex:1;min-width:0}.kc small{color:var(--mut)}
+.tk{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+.bx{width:22px;height:22px;border-radius:8px;border:2px solid var(--line);flex:none;display:grid;place-items:center;transition:.2s}
+.bx svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;stroke-dashoffset:20;transition:.25s}
+.tk.d .bx{background:var(--ok);border-color:var(--ok)}.tk.d .bx svg{stroke-dashoffset:0}
+.tk.d .t{text-decoration:line-through;color:var(--mut)}
+.note{font-size:12.5px;color:var(--mut);margin:8px 0 0}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes tw{0%,86%,100%{opacity:1}93%{opacity:.3}}
+.px{transform-box:fill-box;transform-origin:center;animation:tw 7s infinite}
+.first .px{animation:pop .4s both,tw 7s infinite}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.brand svg{width:46px;height:auto;flex:none}
+.bt{font:700 24px/1 "Quicksand",sans-serif;color:var(--blue);letter-spacing:-.01em}
+.bt small{display:block;font-size:10.5px;letter-spacing:.34em;color:var(--pri);margin-top:5px;font-weight:700}
+.k::before{content:"";display:block;width:10px;height:10px;margin-bottom:8px;background:var(--yel)}
+.k:nth-child(2)::before{background:var(--pur)}.k:nth-child(3)::before{background:var(--pnk)}.k:nth-child(4)::before{background:var(--blue)}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;font-size:13.5px;opacity:0;pointer-events:none;transition:.3s;z-index:30;max-width:90vw}
+#toast.s{opacity:1;transform:translate(-50%,0)}
+@media(min-width:860px){
+ .shell{grid-template-columns:200px 1fr;gap:10px}
+ nav{position:sticky;top:0;grid-column:1;height:100vh;flex-direction:column;justify-content:flex-start;gap:4px;background:none;border:0;backdrop-filter:none;padding:28px 8px}
+ nav button{grid-auto-flow:column;justify-content:start;gap:10px;font-size:14px;padding:10px 12px}
+ nav button[aria-selected=true]{background:var(--card)}nav button[aria-selected=true]::before{display:none}
+ main{padding:28px 20px 40px}.kp{grid-template-columns:repeat(4,1fr)}#toast{bottom:30px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell"><nav id="nav" aria-label="Menu utama"></nav><main id="v"></main></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+var L=[
+{n:"PT Maju Data",s:"Lead",last:"Hari ini 09:12",st:"Sudah dibalas",m:[["a","Halo, terima kasih sudah menghubungi Narasio Data."],["c","Kami tertarik dashboard penjualan."]]},
+{n:"CV Kopi Senja",s:"Client",last:"Kemarin 15:40",st:"Menunggu balasan",m:[["a","Kak, laporan bulan ini sudah siap ya."],["a","Boleh kami jadwalkan presentasi?"]]},
+{n:"Klinik Sehat",s:"Lead",last:"30 Okt 11:05",st:"Belum dibalas",m:[["a","Halo, ini ringkasan layanan kami."]]},
+{n:"Toko Bangunan Jaya",s:"Client",last:"29 Okt 10:00",st:"Sudah dibalas",m:[["a","Bagaimana pengalaman dengan laporan kemarin?"],["c","Sangat membantu, terima kasih!"]]},
+{n:"Yayasan Cerdas",s:"Lead",last:"27 Okt 13:20",st:"Dingin lebih dari 7 hari",m:[["a","Kami punya studi kasus yang mungkin relevan."]]}];
+var J=[["Senin, 2 Nov","10:00","Follow-up pertama ke Klinik Sehat"],["Senin, 2 Nov","14:00","Kirim penawaran ke PT Maju Data"],["Selasa, 3 Nov","09:00","Follow-up kedua ke CV Kopi Senja"],["Rabu, 4 Nov","10:00","Kirim studi kasus ke Yayasan Cerdas"]];
+var K=[{d:"3",b:"Nov",x:"Dokumentasi kegiatan tim Narasio Data",a:"Lead dan client",c:"Terjadwal"},{d:"5",b:"Nov",x:"Tips data untuk UMKM (carousel)",a:"Lead",c:"Menunggu persetujuan"},{d:"7",b:"Nov",x:"Testimoni client dan ajakan konsultasi",a:"Lead",c:"Menunggu persetujuan"},{d:"10",b:"Nov",x:"Info produk baru untuk client",a:"Client",c:"Terjadwal"}];
+var NX=["Kirim penawaran hari ini 14:00","Follow-up kedua 3 Nov 09:00","Follow-up pertama hari ini 10:00","Cek kepuasan 5 Nov 11:00","Kirim studi kasus 4 Nov 10:00"];
+var A=[["Hari ini 09:12","ok","Otomasi membalas pertanyaan PT Maju Data tentang dashboard penjualan"],["Hari ini 09:05","ok","Follow-up kedua terkirim ke CV Kopi Senja"],["Hari ini 08:30","pri","Lead baru dari form website masuk dan tercatat di CRM"],["Hari ini 08:00","ok","Konten dokumentasi kegiatan terkirim ke 42 lead dan client"],["Kemarin 16:00","warn","Yayasan Cerdas tidak membalas lebih dari 7 hari, ditandai dingin"],["Kemarin 11:20","warn","Pertanyaan harga dari Toko Bangunan Jaya diteruskan ke tim"],["Kemarin 09:00","ok","Rekap chat mingguan dibuat dan disimpan"]];
+var tabs=[["home","Beranda","M3 11l9-8 9 8M5 10v10h14V10"],["chat","Chat","M4 5h16v11H9l-5 4z"],["jd","Jadwal","M12 7v5l3 2M12 3a9 9 0 100 18 9 9 0 000-18z"],["kn","Konten","M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"],["ak","Aktivitas","M3 12h4l3-8 4 16 3-8h4"]];
+var s={t:"home",f:"Semua",o:-1},pal=[["#e3edfc","#2f6fd0"],["#fff4b8","#7a6200"],["#efe1fe","#7a2fd0"],["#ffe3f8","#a02a86"]];
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function e(x){var d=document.createElement("div");d.textContent=x;return d.innerHTML}
+function cl(t){return t=="Sudah dibalas"?"ok":t=="Menunggu balasan"?"warn":t=="Belum dibalas"||t.indexOf("Dingin")==0?"bad":"pri"}
+function ini(n){return n.split(" ").slice(0,2).map(function(w){return w[0]}).join("")}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.className="s";clearTimeout(toast.h);toast.h=setTimeout(function(){t.className=""},2400)}
+function cnt(){document.querySelectorAll("[data-n]").forEach(function(el){var n=+el.dataset.n;if(rm){el.textContent=n;return}var t0=null;(function f(t){t0=t0||t;var p=Math.min((t-t0)/900,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(performance.now())})}
+function hero(){
+ var P="M40 100 C120 100,140 60,220 60 S340 110,420 110 S520 60,600 60";
+ var st=[[40,100,"Lead masuk",5,"#ffe347"],[220,60,"Dichat",4,"#4a8ceb"],[420,110,"Follow-up",4,"#a85cf7"],[600,60,"Client",2,"#ff8ae6"]];
+ var cs=["#ffe347","#4a8ceb","#a85cf7","#ff8ae6","#4a8ceb","#ffe347"];
+ var g='<svg viewBox="0 0 640 170" role="img" aria-label="Alur lead dari masuk, dichat, follow-up, sampai menjadi client"><path id="fp" d="'+P+'" fill="none" stroke="#4a8ceb" stroke-opacity=".3" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>';
+ if(!rm)for(var i=0;i<6;i++)g+='<rect x="-5" y="-5" width="10" height="10" fill="'+cs[i]+'"><animateMotion dur="7s" begin="'+(i*1.15)+'s" repeatCount="indefinite"><mpath href="#fp"/></animateMotion></rect>';
+ st.forEach(function(a,i){g+='<g class="stage">'+(rm?'':'<rect class="ring" x="'+(a[0]-13)+'" y="'+(a[1]-13)+'" width="26" height="26" fill="'+a[4]+'" fill-opacity=".5" style="animation-delay:'+(i*.6)+'s"/>')+'<rect x="'+(a[0]-13)+'" y="'+(a[1]-13)+'" width="26" height="26" fill="'+a[4]+'"/><text class="c" x="'+a[0]+'" y="'+(a[1]-22)+'" text-anchor="middle">'+a[3]+'</text><text x="'+a[0]+'" y="'+(a[1]+36)+'" text-anchor="middle">'+a[2]+'</text></g>'});
+ return g+'</svg>'}
+var first=true;
+function brand(){
+ var C={y:"#ffe347",b:"#4a8ceb",p:"#a85cf7",k:"#ff8ae6"},cells=[[0,0,"y"],[2,0,"b"],[4,0,"y"],[1,1,"p"],[3,1,"k"],[5,1,"p"],[2,2,"y"],[4,2,"b"],[3,3,"p"],[5,3,"k"]];
+ return '<div class="brand'+(first&&!rm?' first':'')+'"><svg viewBox="0 0 300 200" aria-hidden="true">'+cells.map(function(c,i){var d=first&&!rm?(i*.06)+'s,'+(1+i*.6)+'s':(i*.7)+'s';return '<rect class="px" x="'+(c[0]*50)+'" y="'+(c[1]*50)+'" width="47" height="47" fill="'+C[c[2]]+'" style="animation-delay:'+d+'"/>'}).join("")+'</svg><span class="bt">Narasio<small>DATA</small></span></div>'}
+function home(){
+ var w=L.filter(function(l){return l.st!="Sudah dibalas"}).length;
+ return '<div class="top"><div><p>Senin, 2 November</p><h1>Otomasi sudah mengerjakan '+A.filter(function(a){return a[0].indexOf("Hari")==0}).length+' hal hari ini</h1></div><span class="live"><i></i>Otomasi aktif</span></div>'
+ +'<div class="hero">'+hero()+'</div>'
+ +'<div class="kp"><div class="k"><span class="num" data-n="18">0</span><span>Pesan terkirim</span></div><div class="k"><span class="num" data-n="6">0</span><span>Balasan masuk</span></div><div class="k"><span class="num" data-n="'+J.length+'">0</span><span>Follow-up terjadwal</span></div><div class="k"><span class="num" data-n="'+K.length+'">0</span><span>Konten terjadwal</span></div></div>'
+ +'<div class="sec"><h2>Aktivitas terbaru</h2><ul class="tl">'+A.slice(0,3).map(function(a){return '<li class="'+a[1]+'">'+e(a[2])+'<small>'+e(a[0])+'</small></li>'}).join("")+'</ul><p class="note">Halaman ini hanya untuk melihat laporan. Semua dikerjakan otomatis. Data contoh, nanti terhubung ke CRM dan WhatsApp Business API.</p></div>'}
+function chat(){
+ var fs=["Semua","Lead","Client","Perlu follow-up"];
+ var h='<div class="top"><div><p>Riwayat percakapan otomatis</p><h1>Siapa saja yang sudah dichat</h1></div></div><div class="chips">'+fs.map(function(f){return '<button data-f="'+f+'" aria-pressed="'+(s.f==f)+'">'+f+'</button>'}).join("")+'</div>';
+ L.forEach(function(l,i){
+  if(s.f=="Lead"&&l.s!="Lead"||s.f=="Client"&&l.s!="Client"||s.f=="Perlu follow-up"&&l.st=="Sudah dibalas")return;
+  var c=pal[i%4],o=s.o==i;
+  h+='<div class="it"><button class="hd" data-o="'+i+'" aria-expanded="'+o+'"><span class="av" style="background:'+c[0]+';color:'+c[1]+'">'+e(ini(l.n))+'</span><span class="grow"><b>'+e(l.n)+'</b><small>'+l.s+', chat terakhir '+e(l.last)+'</small></span><span class="pill '+cl(l.st)+'">'+e(l.st)+'</span></button>'
+  +'<div class="dtl'+(o?' o':'')+'"><div><div class="pad">'+l.m.map(function(m){return '<div class="bub '+m[0]+'">'+e(m[1])+'</div>'}).join("")+'<p class="note">Langkah otomatis berikutnya: '+e(NX[i])+'</p></div></div></div></div>'});
+ return h}
+function jd(){
+ var h='<div class="top"><div><p>Dijalankan otomatis lewat WhatsApp</p><h1>Jadwal follow-up</h1></div></div><div class="sec"><ul class="tl">',last="";
+ J.forEach(function(j){if(j[0]!=last){h+='<li class="day" style="padding-bottom:6px">'+e(j[0])+'</li>';last=j[0]}h+='<li>'+e(j[2])+'<small>'+e(j[1])+' WIB</small></li>'});
+ return h+'</ul></div>'}
+function kn(){
+ return '<div class="top"><div><p>Untuk lead dan client</p><h1>Kalender posting</h1></div></div><div class="sec">'+K.map(function(k){return '<div class="kc"><div class="dt"><b>'+k.d+'</b><span>'+k.b+'</span></div><div class="grow"><b>'+e(k.x)+'</b><br><small>'+k.a+'</small></div><span class="pill '+(k.c=="Terjadwal"?"ok":"warn")+'">'+k.c+'</span></div>'}).join("")+'<p class="note">Draf dibuat AI. Posting berjalan otomatis setelah draf disetujui.</p></div>'}
+function ak(){
+ return '<div class="top"><div><p>Catatan kerja otomasi</p><h1>Apa yang sudah dikerjakan</h1></div></div><div class="sec"><ul class="tl">'+A.map(function(a){return '<li class="'+a[1]+'">'+e(a[2])+'<small>'+e(a[0])+'</small></li>'}).join("")+'</ul></div>'}
+function go(a){
+ var m=document.getElementById("v");
+ document.getElementById("nav").innerHTML=tabs.map(function(t){return '<button data-t="'+t[0]+'" aria-selected="'+(t[0]==s.t)+'"><svg viewBox="0 0 24 24"><path d="'+t[2]+'"/></svg>'+t[1]+'</button>'}).join("");
+ m.innerHTML=brand()+{home:home,chat:chat,jd:jd,kn:kn,ak:ak}[s.t]();
+ if(a){m.classList.remove("in");void m.offsetWidth;m.classList.add("in")}
+ if(s.t=="home")cnt();
+}
+document.addEventListener("click",function(ev){
+ var b=ev.target.closest("button");if(!b)return;var d=b.dataset;
+ if(d.t){s.t=d.t;go(1);scrollTo(0,0)}
+ else if(d.f){s.f=d.f;s.o=-1;go()}
+ else if(d.o!==undefined){s.o=s.o==+d.o?-1:+d.o;go()}
+});
+go(0);first=false;
+</script>
+</body>
+</html>
