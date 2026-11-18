@@ -1214,6 +1214,8 @@ Object.assign(window,{addToCart,removeFromCart,changeQty,openCart,closeCart,chec
     };
 
     /* ✏️ EDIT: Ganti dengan nomor WA kamu (format tanpa +) */
+    // Backend pembayaran (Cloudflare Worker). Kosongkan ('') jika domain sudah dipindah ke Cloudflare.
+    const API = /workers\.dev$|^localhost$/.test(location.hostname) ? '' : 'https://naldstudio-com.ronfarel8.workers.dev';
     const WA_NUMBER = '6285190050010'; // hanya untuk CS & konsultasi custom
     const BIZ_ADDRESS = ''; // ✏️ isi alamat usaha (ditampilkan di bagian Hubungi Kami)
     if (BIZ_ADDRESS) document.getElementById('bizAddr').textContent = ' Alamat: ' + BIZ_ADDRESS + '.';
@@ -1322,7 +1324,7 @@ Object.assign(window,{addToCart,removeFromCart,changeQty,openCart,closeCart,chec
     };
     async function checkOrder(orderId) {
       try {
-        const r = await fetch('/api/order-status?order_id=' + encodeURIComponent(orderId));
+        const r = await fetch(API + '/api/order-status?order_id=' + encodeURIComponent(orderId));
         const d = await r.json();
         const m = STATUS_MSG[d.status] || ['Status pesanan ' + orderId + ': ' + (d.status || 'tidak ditemukan'), ''];
         showOrder(m[0] + ' <small>(No. pesanan ' + orderId + ')</small>', m[1]);
@@ -1344,7 +1346,7 @@ Object.assign(window,{addToCart,removeFromCart,changeQty,openCart,closeCart,chec
       if (!f.checkValidity()) { f.reportValidity(); return; }
       btn.disabled = true; btn.lastChild.textContent = ' Memproses…';
       try {
-        const r = await fetch('/api/checkout', {
+        const r = await fetch(API + '/api/checkout', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             items: cart.map(i => ({ id: i.id, qty: i.qty })),
