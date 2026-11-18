@@ -16,3 +16,5 @@ export async function sha512(str) {
   const buf = await crypto.subtle.digest('SHA-512', new TextEncoder().encode(str));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
+// Website yang boleh memanggil API ini dari domain lain
+export const ALLOWED_ORIGINS = ['https://naldstudio.com', 'https://www.naldstudio.com'];
