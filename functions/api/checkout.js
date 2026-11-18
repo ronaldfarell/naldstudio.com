@@ -1,15 +1,15 @@
-import { json, sb, isProd, snapHost } from '../_lib/server.js';
+import { json, sb, isProd, snapHost, ALLOWED_ORIGINS } from '../_lib/server.js';
 
 const clean = (v, max) => String(v ?? '').replace(/[\u0000-\u001f<>]/g, ' ').trim().slice(0, max);
 
-export async function onRequestPost({ request, env }) {
+async function handle({ request, env }) {
   if (!env.MIDTRANS_SERVER_KEY || !env.MIDTRANS_CLIENT_KEY || !env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY)
     return json({ error: 'Pembayaran belum dikonfigurasi. Hubungi CS.' }, 500);
 
-  const origin = new URL(request.url).origin;
+  const selfOrigin = new URL(request.url).origin;
   const reqOrigin = request.headers.get('Origin');
-  if (reqOrigin && reqOrigin !== origin && reqOrigin.replace('://www.', '://') !== origin.replace('://www.', '://'))
-    return json({ error: 'Forbidden' }, 403);
+  if (reqOrigin && reqOrigin !== selfOrigin && !ALLOWED_ORIGINS.includes(reqOrigin)) return json({ error: 'Forbidden' }, 403);
+  const origin = ALLOWED_ORIGINS.includes(reqOrigin) ? reqOrigin : selfOrigin; // halaman tujuan setelah bayar
 
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Permintaan tidak valid.' }, 400); }
@@ -47,7 +47,7 @@ export async function onRequestPost({ request, env }) {
     method: 'POST', headers: { Prefer: 'return=minimal' },
     body: JSON.stringify({ order_id: orderId, status: 'pending', gross_amount: gross, items, customer_name: cust.name, customer_email: cust.email, customer_phone: cust.phone, address: cust.address, city: cust.city, postal_code: cust.postal, note: cust.note || null })
   });
-  if (!ins.ok) { console.error('supabase insert', ins.status, await ins.text()); return json({ error: 'Pesanan gagal disimpan. Coba lagi.' }, 502); }
+  if (!ins.ok) { console.error('supabase insert', ins.status, await ins.text()); return json({ error: `Pesanan gagal disimpan (kode: DB_${ins.status}). Coba lagi atau hubungi CS.` }, 502); }
 
   const [first, ...rest] = cust.name.split(' ');
   const addr = { first_name: first, last_name: rest.join(' '), phone: cust.phone, address: cust.address, city: cust.city, postal_code: cust.postal, country_code: 'IDN' };
@@ -66,9 +66,17 @@ export async function onRequestPost({ request, env }) {
   if (!mid.ok || !m.token) {
     console.error('midtrans', mid.status, JSON.stringify(m));
     await sb(env, `orders?order_id=eq.${orderId}`, { method: 'PATCH', body: JSON.stringify({ status: 'failed' }) });
-    return json({ error: 'Pembayaran belum bisa dibuat. Coba lagi atau hubungi CS.' }, 502);
+    return json({ error: `Pembayaran belum bisa dibuat (kode: MIDTRANS_${mid.status}). Coba lagi atau hubungi CS.` }, 502);
   }
   await sb(env, `orders?order_id=eq.${orderId}`, { method: 'PATCH', body: JSON.stringify({ snap_token: m.token, redirect_url: m.redirect_url }) });
 
   return json({ order_id: orderId, token: m.token, redirect_url: m.redirect_url, client_key: env.MIDTRANS_CLIENT_KEY, snap_url: `${snapHost(env)}/snap/snap.js`, production: isProd(env) });
+}
+
+export async function onRequestPost(ctx) {
+  try { return await handle(ctx); }
+  catch (e) {
+    console.error('checkout exception', e && e.message);
+    return json({ error: `Terjadi kesalahan server (kode: EXC - ${String((e && e.message) || e).slice(0, 60)}). Hubungi CS.` }, 500);
+  }
 }
