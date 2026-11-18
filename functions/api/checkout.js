@@ -3,8 +3,8 @@ import { json, sb, isProd, snapHost, ALLOWED_ORIGINS } from '../_lib/server.js';
 const clean = (v, max) => String(v ?? '').replace(/[\u0000-\u001f<>]/g, ' ').trim().slice(0, max);
 
 async function handle({ request, env }) {
-  if (!env.MIDTRANS_SERVER_KEY || !env.MIDTRANS_CLIENT_KEY || !env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY)
-    return json({ error: 'Pembayaran belum dikonfigurasi. Hubungi CS.' }, 500);
+  const missing = ['MIDTRANS_SERVER_KEY', 'MIDTRANS_CLIENT_KEY', 'SUPABASE_URL', 'SUPABASE_SERVICE_KEY'].filter((k) => !env[k]);
+  if (missing.length) return json({ error: `Pembayaran belum dikonfigurasi (kurang: ${missing.join(', ')}). Hubungi CS.` }, 500);
 
   const selfOrigin = new URL(request.url).origin;
   const reqOrigin = request.headers.get('Origin');
