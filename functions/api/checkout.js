@@ -62,11 +62,14 @@ async function handle({ request, env }) {
       expiry: { unit: 'hours', duration: 24 }
     })
   });
-  const m = await mid.json().catch(() => ({}));
+  const raw = await mid.text();
+  let m = {};
+  try { m = JSON.parse(raw); } catch { /* bukan JSON */ }
   if (!mid.ok || !m.token) {
-    console.error('midtrans', mid.status, JSON.stringify(m));
+    console.error('midtrans', mid.status, raw.slice(0, 300));
     await sb(env, `orders?order_id=eq.${orderId}`, { method: 'PATCH', body: JSON.stringify({ status: 'failed' }) });
-    return json({ error: `Pembayaran belum bisa dibuat (kode: MIDTRANS_${mid.status}). Coba lagi atau hubungi CS.` }, 502);
+    const reason = String((m.error_messages && m.error_messages[0]) || m.status_message || m.message || raw || '').replace(/\s+/g, ' ').slice(0, 140);
+    return json({ error: `Pembayaran belum bisa dibuat (kode: MIDTRANS_${mid.status}${reason ? ' - ' + reason : ''}). Coba lagi atau hubungi CS.` }, 502);
   }
   await sb(env, `orders?order_id=eq.${orderId}`, { method: 'PATCH', body: JSON.stringify({ snap_token: m.token, redirect_url: m.redirect_url }) });
 
