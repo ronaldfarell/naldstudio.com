@@ -53,7 +53,7 @@ async function handle({ request, env }) {
   const addr = { first_name: first, last_name: rest.join(' '), phone: cust.phone, address: cust.address, city: cust.city, postal_code: cust.postal, country_code: 'IDN' };
   const mid = await fetch(`${snapHost(env)}/snap/v1/transactions`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: 'Basic ' + btoa(env.MIDTRANS_SERVER_KEY + ':') },
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'User-Agent': 'naldstudio-checkout/1.0', Authorization: 'Basic ' + btoa(env.MIDTRANS_SERVER_KEY + ':') },
     body: JSON.stringify({
       transaction_details: { order_id: orderId, gross_amount: gross },
       item_details: items,
